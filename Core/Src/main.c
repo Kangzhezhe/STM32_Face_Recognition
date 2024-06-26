@@ -34,17 +34,28 @@
 #include "network_data.h"
 #include "network_1.h"
 #include "network_1_data.h"
+#include "utils.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+AI_ALIGNED(32) ai_u8 buf_common[AI_NETWORK_1_DATA_ACTIVATIONS_SIZE];
+
 //AI_ALIGNED(32) ai_u8 activations[AI_NETWORK_DATA_ACTIVATIONS_SIZE];
-AI_ALIGNED(32) ai_u8 activations1[AI_NETWORK_1_DATA_ACTIVATIONS_SIZE];
+//AI_ALIGNED(32) ai_u8 activations1[AI_NETWORK_1_DATA_ACTIVATIONS_SIZE];
+ai_u8 *activations1 = buf_common;
+ai_u8 *activations = buf_common;
+
+/* Data payload*/
+static int8_t*in_data=(int8_t*)buf_common;
+AI_ALIGNED(32) static float out_data[AI_NETWORK_OUT_1_SIZE];
+AI_ALIGNED(32) static int8_t out_data1[AI_NETWORK_1_OUT_1_SIZE];
+
+
 ai_buffer * ai_input1;
 ai_buffer * ai_output1;
 ai_handle network1;
 
-ai_u8 *activations = activations1;
 ai_buffer * ai_input;
 ai_buffer * ai_output;
 ai_handle network;
@@ -83,7 +94,7 @@ static void AI_Run(const void *pIn, float *pOut)
   }
 }
 
-static void AI_Run1(const void *pIn, float *pOut)
+static void AI_Run1(const void *pIn, int8_t *pOut)
 {
   ai_i32 batch;
   ai_error err;
@@ -119,15 +130,10 @@ void SystemClock_Config(void);
 static void MPU_Config(void);
 /* USER CODE BEGIN PFP */
 void post_process();
-//AI_ALIGNED(32) static int8_t in_data[AI_NETWORK_IN_1_SIZE];
-static int8_t*in_data=(int8_t*)activations1;
-/* or static ai_u8 in_data[AI_NETWORK_IN_1_SIZE_BYTES]; */
 
-/* Data payload for the output tensor */
-AI_ALIGNED(32) static float out_data[AI_NETWORK_OUT_1_SIZE];
+
 int x1, y1, x2, y2;
 
-static int8_t *in_data1=(int8_t*)activations1;
 
 uint8_t anchors[5][2] = { {7,15},{20,47},{43,106},{85,168},{185,188}};
 //uint16_t img_data[256*256]__attribute__((section(".sram_data2")));//__attribute__((at(0x30020000)));//__attribute__((section(".sram_data2")));
@@ -151,6 +157,7 @@ void prepare_yolo_data()
 	}
 }
 
+static int8_t* temp=(int8_t *)buf_common + AI_NETWORK_1_IN_1_SIZE;
 void prepare_facenet_data(u8 x1, u8 y1, u8 x2, u8 y2)
 {
 	u8 h = y2-y1+1;
@@ -161,11 +168,12 @@ void prepare_facenet_data(u8 x1, u8 y1, u8 x2, u8 y2)
 		{
 			u16 color=LCD_ReadPoint(j+x1,i+y1);
 			//img_data[j+i*256] = color;
-			in_data[(i*w + j)*3] = (int8_t)((color&0xF800)>>9) - 128;
-			in_data[(i*w + j)*3+1] = (int8_t)((color&0x07E0)>>3) - 128;
-			in_data[(i*w + j)*3+2] = (int8_t)((color&0x001F)<<3) - 128;
+			temp[(i*w + j)*3] = (int8_t)((color&0xF800)>>9) - 128;
+			temp[(i*w + j)*3+1] = (int8_t)((color&0x07E0)>>3) - 128;
+			temp[(i*w + j)*3+2] = (int8_t)((color&0x001F)<<3) - 128;
 		}
 	}
+	cv_resize_s8(temp,h,w,in_data,112,96);
 }
 
 void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
@@ -229,14 +237,14 @@ void post_process()
 				if(x1>0&&y1>0&&x2<256&&y2<256)
 				{
 					LCD_DrawRectangle(x1,y1,x2,y2);
-				LCD_ShowString(10,300,100,16,16,"isface"); 
+					LCD_ShowString(10,300,100,16,16,"isface"); 
 					//LCD_Fill(0,0,256,256,WHITE);
 	      	LCD_SetCursor(0,0);
 	        LCD_WriteRAM_Prepare();	
-	HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_CONTINUOUS, (uint32_t)&(LCD->LCD_RAM), 1);
+					HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_CONTINUOUS, (uint32_t)&(LCD->LCD_RAM), 1);
 					
 					prepare_facenet_data(x1,x2,y1,y2);
-					AI_Run(in_data,out_data);
+					AI_Run1(in_data,out_data1);
 					return;
 				}
 				
@@ -244,7 +252,7 @@ void post_process()
 				LCD_ShowString(10,300,200,16,16,"noface"); 
 	     	LCD_SetCursor(0,0);
 	      LCD_WriteRAM_Prepare();
-	HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_CONTINUOUS, (uint32_t)&(LCD->LCD_RAM), 1);
+				HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_CONTINUOUS, (uint32_t)&(LCD->LCD_RAM), 1);
 					return;
 				}
 			}
