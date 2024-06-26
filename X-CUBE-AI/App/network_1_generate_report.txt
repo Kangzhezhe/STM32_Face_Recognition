@@ -1,32 +1,32 @@
 Neural Network Tools for STM32 family v1.7.0 (stm.ai v8.1.0-19520)
-Created date          : 2024-06-26 11:07:37
-Parameters            : generate --name network_1 -m D:/linux/MobileFaceNet_Pytorch/mobilefacenet_quantized1.onnx --type onnx --compression high --verbosity 1 --workspace C:\Users\19178\AppData\Local\Temp\mxAI_workspace100921561410011668498530763016930 --output C:\Users\19178\.stm32cubemx\network_output --allocate-inputs --series stm32h7 -O ram --allocate-outputs
+Created date          : 2024-06-26 20:17:20
+Parameters            : generate --name network_1 -m D:/linux/MobileFaceNet_Pytorch/mobilefacenet_quantized1.onnx --type onnx --compression high --verbosity 1 --workspace C:\Users\19178\AppData\Local\Temp\mxAI_workspace3399603330900015604122592240578976 --output C:\Users\19178\.stm32cubemx\network_output --allocate-inputs --series stm32h7 -O ram --allocate-outputs
 
 Exec/report summary (generate)
------------------------------------------------------------------------------------------------------------
-model file         :   D:\linux\MobileFaceNet_Pytorch\mobilefacenet_quantized1.onnx                        
-type               :   onnx                                                                                
-c_name             :   network_1                                                                           
-compression        :   high                                                                                
-options            :   allocate-inputs, allocate-outputs                                                   
-optimization       :   ram                                                                                 
-target/series      :   stm32h7                                                                             
-workspace dir      :   C:\Users\19178\AppData\Local\Temp\mxAI_workspace100921561410011668498530763016930   
-output dir         :   C:\Users\19178\.stm32cubemx\network_output                                          
-model_fmt          :   ss/sa per channel                                                                   
-model_name         :   mobilefacenet_quantized1                                                            
-model_hash         :   743062d41dbb134cd1869ff5cdf5cac1                                                    
-params #           :   989,760 items (3.78 MiB)                                                            
------------------------------------------------------------------------------------------------------------
-input 1/1          :   'input' (domain:activations/**default**)                                            
-                   :   32256 items, 31.50 KiB, ai_i8, s=0.00781250, zp=0, (1,3,112,96)                     
-output 1/1         :   '_linear1_conv_Conv_0' (domain:activations/**default**)                             
-                   :   128 items, 128 B, ai_i8, s=0.02010482, zp=-6, (1,1,1,128)                           
-macc               :   194,476,864                                                                         
-weights (ro)       :   1,019,136 B (995.25 KiB) (1 segment) / -2,939,904(-74.3%) vs float model            
-activations (rw)   :   353,408 B (345.12 KiB) (1 segment) *                                                
-ram (total)        :   353,408 B (345.12 KiB) = 353,408 + 0 + 0                                            
------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------
+model file         :   D:\linux\MobileFaceNet_Pytorch\mobilefacenet_quantized1.onnx                         
+type               :   onnx                                                                                 
+c_name             :   network_1                                                                            
+compression        :   high                                                                                 
+options            :   allocate-inputs, allocate-outputs                                                    
+optimization       :   ram                                                                                  
+target/series      :   stm32h7                                                                              
+workspace dir      :   C:\Users\19178\AppData\Local\Temp\mxAI_workspace3399603330900015604122592240578976   
+output dir         :   C:\Users\19178\.stm32cubemx\network_output                                           
+model_fmt          :   ss/sa per channel                                                                    
+model_name         :   mobilefacenet_quantized1                                                             
+model_hash         :   743062d41dbb134cd1869ff5cdf5cac1                                                     
+params #           :   989,760 items (3.78 MiB)                                                             
+------------------------------------------------------------------------------------------------------------
+input 1/1          :   'input' (domain:activations/**default**)                                             
+                   :   32256 items, 31.50 KiB, ai_i8, s=0.00781250, zp=0, (1,3,112,96)                      
+output 1/1         :   '_linear1_conv_Conv_0' (domain:activations/**default**)                              
+                   :   128 items, 128 B, ai_i8, s=0.02010482, zp=-6, (1,1,1,128)                            
+macc               :   194,476,864                                                                          
+weights (ro)       :   1,019,136 B (995.25 KiB) (1 segment) / -2,939,904(-74.3%) vs float model             
+activations (rw)   :   353,408 B (345.12 KiB) (1 segment) *                                                 
+ram (total)        :   353,408 B (345.12 KiB) = 353,408 + 0 + 0                                             
+------------------------------------------------------------------------------------------------------------
 (*) 'input'/'output' buffers can be used from the activations buffer
 
 Model name - mobilefacenet_quantized1 ['input'] ['_linear1_conv_Conv_0']
