@@ -40,7 +40,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-AI_ALIGNED(32) ai_u8 buf_common[AI_NETWORK_1_DATA_ACTIVATIONS_SIZE];
+AI_ALIGNED(32) ai_u8 buf_common[AI_NETWORK_1_DATA_ACTIVATIONS_SIZE]__attribute__((section(".RW_IRAM2")));
 // AI_ALIGNED(32) ai_u8 activations[AI_NETWORK_1_DATA_ACTIVATIONS_SIZE];
 
 //AI_ALIGNED(32) ai_u8 activations[AI_NETWORK_DATA_ACTIVATIONS_SIZE];
@@ -56,10 +56,10 @@ ai_u8 *activations = buf_common;
 static int8_t*in_data=(int8_t*)buf_common;
 /* Data payload for the output tensor */
 AI_ALIGNED(32)
-static float out_data[AI_NETWORK_OUT_1_SIZE];
+static float out_data[AI_NETWORK_OUT_1_SIZE]__attribute__((section(".RW_IRAM2")));
 
 AI_ALIGNED(32) 
-static int8_t out_data1[AI_NETWORK_1_OUT_1_SIZE];
+static int8_t out_data1[AI_NETWORK_1_OUT_1_SIZE]__attribute__((section(".RW_IRAM2")));
 
 
 ai_buffer * ai_input1;
@@ -213,7 +213,7 @@ float sigmod(float x)
 	return y;
 }
 
-char logStr[200];
+char logStr[1024]__attribute__((section(".RW_IRAM2")));
 void post_process()
 {
 	int grid_x, grid_y;
@@ -223,8 +223,8 @@ void post_process()
 		for(int j = 0; j < 5; j++)
 		{
 			float conf = out_data[i*30+j*6+4];
-			// sprintf(logStr,"%5.2f",conf);
-			// LCD_ShowString(10,350,100,16,16,logStr);
+			 //sprintf(logStr,"%5.2f",conf);
+			 //LCD_ShowString(10,350,100,16,16,"HELLO");
 
 			if(conf > 1)
 			{
@@ -243,8 +243,8 @@ void post_process()
 				y = (sigmod(y)+grid_x) * 16;
 				w = expf(w) * anchors[j][1];
 				h = expf(h) * anchors[j][0];
-				y1 = (x - w/2);
-				y2 = (x + w/2);
+				y2 = (x - w/2);
+				y1 = (x + w/2);
 				x1 = y - h/2;
 				x2 = y + h/2;
 				if(x1 < 0) x1 = 0;
@@ -255,7 +255,7 @@ void post_process()
                 sprintf(logStr,"%3d %3d %3d %3d",x1,x2,y1,y2);
                 LCD_ShowString(10,400,200,16,16,logStr);
 
-				if((x1<x2)&&(y1<y2)&&x1>=0&&y1>=0&&x2<256&&y2<256)
+				if(x1>=0&&y1>=0&&x2<256&&y2<256)
 				{
 					//LCD_DrawRectangle(x1,y1,x2,y2);
 					LCD_ShowString(10,300,100,16,16,"isface"); 
