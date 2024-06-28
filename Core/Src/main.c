@@ -35,11 +35,13 @@
 #include "network_1.h"
 #include "network_1_data.h"
 #include "utils.h"
+#include "stdio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 AI_ALIGNED(32) ai_u8 buf_common[AI_NETWORK_1_DATA_ACTIVATIONS_SIZE];
+// AI_ALIGNED(32) ai_u8 activations[AI_NETWORK_1_DATA_ACTIVATIONS_SIZE];
 
 //AI_ALIGNED(32) ai_u8 activations[AI_NETWORK_DATA_ACTIVATIONS_SIZE];
 //AI_ALIGNED(32) ai_u8 activations1[AI_NETWORK_1_DATA_ACTIVATIONS_SIZE];
@@ -47,9 +49,17 @@ ai_u8 *activations1 = buf_common;
 ai_u8 *activations = buf_common;
 
 /* Data payload*/
+//static int8_t*in_data=(int8_t*)buf_common;
+//AI_ALIGNED(32) static float out_data[AI_NETWORK_OUT_1_SIZE];
+
+
 static int8_t*in_data=(int8_t*)buf_common;
-AI_ALIGNED(32) static float out_data[AI_NETWORK_OUT_1_SIZE];
-AI_ALIGNED(32) static int8_t out_data1[AI_NETWORK_1_OUT_1_SIZE];
+/* Data payload for the output tensor */
+AI_ALIGNED(32)
+static float out_data[AI_NETWORK_OUT_1_SIZE];
+
+AI_ALIGNED(32) 
+static int8_t out_data1[AI_NETWORK_1_OUT_1_SIZE];
 
 
 ai_buffer * ai_input1;
@@ -72,14 +82,16 @@ static void AI_Init(void)
   ai_input = ai_network_inputs_get(network, NULL);
   ai_output = ai_network_outputs_get(network, NULL);
 	
-	
+	const ai_handle act_addr1[] = { activations1 };
   /* Create an instance of the model */
-  err = ai_network_create_and_init(&network1, act_addr, NULL);
+  err = ai_network_create_and_init(&network1, act_addr1, NULL);
   if (err.type != AI_ERROR_NONE) {
 		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_14,1);
   }
   ai_input1 = ai_network_inputs_get(network1, NULL);
   ai_output1 = ai_network_outputs_get(network1, NULL);
+	
+	
 }
 static void AI_Run(const void *pIn, float *pOut)
 {
@@ -96,15 +108,15 @@ static void AI_Run(const void *pIn, float *pOut)
 
 static void AI_Run1(const void *pIn, int8_t *pOut)
 {
-  ai_i32 batch;
-  ai_error err;
-  /* Update IO handlers with the data payload */
-  ai_input1[0].data = AI_HANDLE_PTR(pIn);
-  ai_output1[0].data = AI_HANDLE_PTR(pOut);
-  batch = ai_network_run(network1, ai_input, ai_output);
-  if (batch != 1) {
-    err = ai_network_get_error(network1);
-  }
+ ai_i32 batch;
+ ai_error err;
+ /* Update IO handlers with the data payload */
+ ai_input1[0].data = AI_HANDLE_PTR(pIn);
+ ai_output1[0].data = AI_HANDLE_PTR(pOut);
+ batch = ai_network_run(network1, ai_input1, ai_output1);
+ if (batch != 1) {
+   err = ai_network_get_error(network1);
+ }
 }
 
 /* USER CODE END PTD */
@@ -136,7 +148,7 @@ int x1, y1, x2, y2;
 
 
 uint8_t anchors[5][2] = { {7,15},{20,47},{43,106},{85,168},{185,188}};
-//uint16_t img_data[256*256]__attribute__((section(".sram_data2")));//__attribute__((at(0x30020000)));//__attribute__((section(".sram_data2")));
+//volatile uint16_t img_data[256*256]__attribute__((section(".RW_IRAM1")));//__attribute__((at(0x30020000)));//__attribute__((section(".sram_data2")));
 uint16_t isok=0;
 /* USER CODE END PFP */
 
@@ -157,6 +169,11 @@ void prepare_yolo_data()
 	}
 }
 
+// use   :112 x 96 x 3   H:W:C
+
+// input :3 x 112 x 96   C:H:W
+
+// permute
 static int8_t* temp=(int8_t *)buf_common + AI_NETWORK_1_IN_1_SIZE;
 void prepare_facenet_data(u8 x1, u8 y1, u8 x2, u8 y2)
 {
@@ -173,7 +190,7 @@ void prepare_facenet_data(u8 x1, u8 y1, u8 x2, u8 y2)
 			temp[(i*w + j)*3+2] = (int8_t)((color&0x001F)<<3) - 128;
 		}
 	}
-	cv_resize_s8(temp,h,w,in_data,112,96);
+	cv_resize_s8_CHW(temp,h,w,in_data,112,96);
 }
 
 void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
@@ -196,8 +213,9 @@ float sigmod(float x)
 	return y;
 }
 
+char logStr[200];
 void post_process()
-{char logStr[100];
+{
 	int grid_x, grid_y;
 	float x, y, w ,h;
 	for(int i = 0; i < 256; i++)
@@ -205,9 +223,9 @@ void post_process()
 		for(int j = 0; j < 5; j++)
 		{
 			float conf = out_data[i*30+j*6+4];
-			//sprintf(logStr,"%8.6f",conf);
-			//LCD_ShowString(10,400,100,16,16,logStr);
-			
+			// sprintf(logStr,"%5.2f",conf);
+			// LCD_ShowString(10,350,100,16,16,logStr);
+
 			if(conf > 1)
 			{
 				grid_x = i % 16;
@@ -225,26 +243,31 @@ void post_process()
 				y = (sigmod(y)+grid_x) * 16;
 				w = expf(w) * anchors[j][1];
 				h = expf(h) * anchors[j][0];
-				y2 = (x - w/2);
-				y1 = (x + w/2);
+				y1 = (x - w/2);
+				y2 = (x + w/2);
 				x1 = y - h/2;
 				x2 = y + h/2;
 				if(x1 < 0) x1 = 0;
 				if(y1 < 0) y1 = 0;
 				if(x2 > 255) x2 = 255;
 				if(y2 > 255) y2 = 255;
-				
-				if(x1>0&&y1>0&&x2<256&&y2<256)
+
+                sprintf(logStr,"%3d %3d %3d %3d",x1,x2,y1,y2);
+                LCD_ShowString(10,400,200,16,16,logStr);
+
+				if((x1<x2)&&(y1<y2)&&x1>=0&&y1>=0&&x2<256&&y2<256)
 				{
-					LCD_DrawRectangle(x1,y1,x2,y2);
+					//LCD_DrawRectangle(x1,y1,x2,y2);
 					LCD_ShowString(10,300,100,16,16,"isface"); 
-					//LCD_Fill(0,0,256,256,WHITE);
-	      	LCD_SetCursor(0,0);
-	        LCD_WriteRAM_Prepare();	
-					HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_CONTINUOUS, (uint32_t)&(LCD->LCD_RAM), 1);
-					
-					prepare_facenet_data(x1,x2,y1,y2);
+                    prepare_facenet_data(0,0,255,255);
 					AI_Run1(in_data,out_data1);
+
+					//LCD_Fill(0,0,256,256,WHITE);
+                    LCD_SetCursor(0,0);
+                    LCD_WriteRAM_Prepare();	
+					HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_CONTINUOUS, (uint32_t)&(LCD->LCD_RAM), 1);
+
+					
 					return;
 				}
 				
@@ -312,25 +335,28 @@ int main(void)
   MX_FMC_Init();
   MX_USB_OTG_FS_PCD_Init();
   /* USER CODE BEGIN 2 */
-AI_Init();
+	AI_Init();
  LCD_Init();
  HAL_Delay(50);
-	while(OV5640_Init())//³õÊ¼»¯OV2640
+	while(OV5640_Init())//ï¿½ï¿½Ê¼ï¿½ï¿½OV2640
 	{
 		LCD_ShowString(30,130,240,16,16,"OV5640 ERR");
 	}
 	LCD_ShowString(30,130,200,16,16,"OV5640 OK"); 
 	OV5640_RGB565_Mode();	//RGB565Ä£Ê½ 
 	OV5640_Focus_Init();
-	OV5640_Light_Mode(0);	//×Ô¶¯Ä£Ê½
-	OV5640_Color_Saturation(3);//É«²Ê±¥ºÍ¶È0
-	OV5640_Brightness(4);	//ÁÁ¶È0
-	OV5640_Contrast(3);		//¶Ô±È¶È0
-	OV5640_Sharpness(33);	//×Ô¶¯Èñ¶È
-	OV5640_Focus_Constant();//Æô¶¯³ÖÐø¶Ô½¹
+	OV5640_Light_Mode(0);	//ï¿½Ô¶ï¿½Ä£Ê½
+	OV5640_Color_Saturation(3);//É«ï¿½Ê±ï¿½ï¿½Í¶ï¿½0
+	OV5640_Brightness(4);	//ï¿½ï¿½ï¿½ï¿½0
+	OV5640_Contrast(3);		//ï¿½Ô±È¶ï¿½0
+	OV5640_Sharpness(33);	//ï¿½Ô¶ï¿½ï¿½ï¿½ï¿???
+	OV5640_Focus_Constant();//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô½ï¿½
   LCD_Set_Window(0,0,256,400);
 	OV5640_OutSize_Set(16,4,256,256);
 		DCMI_Start();
+	
+
+	
   /* USER CODE END 2 */
 
   /* Infinite loop */

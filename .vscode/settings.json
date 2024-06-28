@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.tcc": "c",
+        "cstdio": "c",
+        "lcd.h": "c"
+    }
+}

@@ -1,7 +1,7 @@
 {
     "_allocate_inputs": 4,
     "_allocate_outputs": 4,
-    "cli_parameters": "generate --name network_1 -m D:/linux/MobileFaceNet_Pytorch/mobilefacenet_quantized1.onnx --type onnx --compression high --verbosity 1 --workspace C:\\Users\\19178\\AppData\\Local\\Temp\\mxAI_workspace100921561410011668498530763016930 --output C:\\Users\\19178\\.stm32cubemx\\network_output --allocate-inputs --series stm32h7 -O ram --allocate-outputs",
+    "cli_parameters": "generate --name network_1 -m D:/linux/MobileFaceNet_Pytorch/mobilefacenet_quantized1.onnx --type onnx --compression none --verbosity 1 --workspace C:\\Users\\19178\\AppData\\Local\\Temp\\mxAI_workspace12785562164640016920726415095972305 --output C:\\Users\\19178\\.stm32cubemx\\network_output --allocate-inputs --series stm32h7 -O ram --allocate-outputs",
     "cli_version": {
         "major": 1,
         "micro": 0,
@@ -13,12 +13,12 @@
         "factor": null,
         "layers": {}
     },
-    "date_time": "Wed Jun 26 11:07:36 2024",
+    "date_time": "Thu Jun 27 22:21:37 2024",
     "error": 0,
     "error_str": [],
     "exec_cmd": "generate",
     "exec_duration": 0.0,
-    "hash": "743062d41dbb134cd1869ff5cdf5cac1",
+    "hash": "b055b2a572dbfb35b844655343cb62d4",
     "inputs": [
         "input"
     ],

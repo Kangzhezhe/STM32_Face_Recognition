@@ -1,7 +1,7 @@
 {
     "_allocate_inputs": 4,
     "_allocate_outputs": 4,
-    "cli_parameters": "generate --name network -m D:/linux/MobileFaceNet_Pytorch/st_yolo_lc_v1_256_int8.tflite --type tflite --compression none --verbosity 1 --workspace C:\\Users\\19178\\AppData\\Local\\Temp\\mxAI_workspace33948270082299801363035757667700 --output C:\\Users\\19178\\.stm32cubemx\\network_output --allocate-inputs --series stm32h7 --allocate-outputs",
+    "cli_parameters": "generate --name network -m D:/linux/MobileFaceNet_Pytorch/st_yolo_lc_v1_256_int8.tflite --type tflite --compression none --verbosity 1 --workspace C:\\Users\\19178\\AppData\\Local\\Temp\\mxAI_workspace12780125219030011348095383549415994 --output C:\\Users\\19178\\.stm32cubemx\\network_output --allocate-inputs --series stm32h7 --allocate-outputs",
     "cli_version": {
         "major": 1,
         "micro": 0,
@@ -13,7 +13,7 @@
         "factor": null,
         "layers": {}
     },
-    "date_time": "Wed Jun 26 20:17:01 2024",
+    "date_time": "Thu Jun 27 22:21:17 2024",
     "error": 0,
     "error_str": [],
     "exec_cmd": "generate",
