@@ -159,18 +159,20 @@ uint16_t isok=0;
 /* USER CODE BEGIN 0 */
 void prepare_yolo_data()
 {
-	for(int i = 0; i < 56; i++)
+    int8_t* temp = (int8_t*)buf_common + AI_NETWORK_IN_1_SIZE;
+	for(int i = 0; i < 256; i++)
 	{
-		for(int j = 0; j < 56; j++)
+		for(int j = 0; j < 256; j++)
 		{
 			// u16 color=LCD_ReadPoint(j,i);
-			u16 color=img_data[j,i];
+			u16 color=img_data[i*256+j];
 			//img_data[j+i*256] = color;
-			in_data[(j+i*256)*3] = (int8_t)((color&0xF800)>>9) - 128;
-			in_data[(j+i*256)*3+1] = (int8_t)((color&0x07E0)>>3) - 128;
-			in_data[(j+i*256)*3+2] = (int8_t)((color&0x001F)<<3) - 128;
+			temp[(j+i*256)*3] = (int8_t)((color&0xF800)>>9) - 128;
+			temp[(j+i*256)*3+1] = (int8_t)((color&0x07E0)>>3) - 128;
+			temp[(j+i*256)*3+2] = (int8_t)((color&0x001F)<<3) - 128;
 		}
 	}
+    cv_resize_s8(temp, 256, 256, in_data, 56, 56);
 }
 
 
@@ -253,6 +255,8 @@ float sigmod(float x)
 	return y;
 }
 
+#define W_SCALE (255/55)
+#define H_SCALE (255/55)
 char logStr[1024]__attribute__((section(".RW_IRAM2")));
 void post_process()
 {
@@ -269,6 +273,8 @@ void post_process()
 			int8_t conf = out_data[i*18+j*6+4];
             // 这里的-9是根据网络量化的缩放偏移量计算的，对应的是70%的置信度
             // sigmod((conf+15)*0.14218327403068542) < 0.7 ==> conf > -9
+            sprintf(logStr,"conf = %4d",conf);
+            LCD_ShowString(10,350,200,16,16,logStr);
 			if(conf > -9)
 			{
 				grid_x = i % 7;
@@ -287,20 +293,24 @@ void post_process()
 				y1 = (x + w/2);
 				x1 = y - h/2;
 				x2 = y + h/2;
+                sprintf(logStr,"%5d,%5d,%5d,%5d",x1,x2,y1,y2);
+                LCD_ShowString(10,400,200,16,16,logStr);
 				if(x1 < 0) x1 = 0;
 				if(y1 < 0) y1 = 0;
 				if(x2 > 55) x2 = 55;
 				if(y2 > 55) y2 = 55;
+                
+                // LCD_DrawRectangle(x1*H_SCALE,y1*W_SCALE,x2*H_SCALE,y2*W_SCALE);
                 // 绘制方框，左上角坐标为(x1, y1)，左下角坐标为(x2, y2)
                 // 注意，如果输入图像是缩放到56*56再输入网络的话，这里的坐标还要乘以图像的缩放系数
 
-                // sprintf(logStr,"%3d %3d %3d %3d",x1,x2,y1,y2);
-                // LCD_ShowString(10,400,200,16,16,logStr);
+                
 
 				// if(x1>=0&&y1>=0&&x2<256&&y2<256)
 				// {
 				// 	//LCD_DrawRectangle(x1,y1,x2,y2);
-				// 	LCD_ShowString(10,300,100,16,16,"isface"); 
+					LCD_ShowString(10,300,100,16,16,"isface"); 
+                    return;
                 //     prepare_facenet_data(0,0,255,255);
 				// 	AI_Run1(in_data,out_data1);
 
@@ -318,8 +328,8 @@ void post_process()
 			}
 		}
 	}
-	        //   LCD_ShowString(10,300,200,16,16,"noface"); 
-		      	DCMI_Start();
+	          LCD_ShowString(10,300,200,16,16,"noface"); 
+		      	// DCMI_Start();
 }
 /* USER CODE END 0 */
 
@@ -402,10 +412,8 @@ int main(void)
   {
 
     if(isok){
-        LCD_DrawRectangle(10,10,300,300);
-        sprintf(logStr,"%3d %3d %3d %3d",x1,x2,y1,y2);
-        LCD_ShowString(10,400,200,16,16,logStr);
-        LCD_DrawRectangle(20,20,350,350);
+        AI_Run(in_data,out_data);
+        post_process();
         DCMI_Start();
         isok = 0;
     }
