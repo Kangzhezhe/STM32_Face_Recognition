@@ -190,8 +190,9 @@ void prepare_facenet_data(u8 x1, u8 y1, u8 x2, u8 y2)
 	{
 		for(int j = 0; j < w; j++)
 		{
-			u16 color=LCD_ReadPoint(j+x1,i+y1);
-			//img_data[j+i*256] = color;
+			// u16 color=LCD_ReadPoint(j+x1,i+y1);
+			u16 color=img_data[j+i*256];
+			// img_data[j+i*256] = color;
 			temp[(i*w + j)*3] = (int8_t)((color&0xF800)>>9) - 128;
 			temp[(i*w + j)*3+1] = (int8_t)((color&0x07E0)>>3) - 128;
 			temp[(i*w + j)*3+2] = (int8_t)((color&0x001F)<<3) - 128;
@@ -255,8 +256,11 @@ float sigmod(float x)
 	return y;
 }
 
+
+
 #define W_SCALE (255/55)
 #define H_SCALE (255/55)
+uint8_t cnt_detected = 0;
 char logStr[1024]__attribute__((section(".RW_IRAM2")));
 void post_process()
 {
@@ -300,7 +304,7 @@ void post_process()
 				if(x2 > 55) x2 = 55;
 				if(y2 > 55) y2 = 55;
                 
-                LCD_DrawRectangle(x1*H_SCALE,y1*W_SCALE,x2*H_SCALE,y2*W_SCALE);
+                // LCD_DrawRectangle(x1*H_SCALE,y1*W_SCALE,x2*H_SCALE,y2*W_SCALE);
                 // 绘制方框，左上角坐标为(x1, y1)，左下角坐标为(x2, y2)
                 // 注意，如果输入图像是缩放到56*56再输入网络的话，这里的坐标还要乘以图像的缩放系数
 
@@ -309,10 +313,17 @@ void post_process()
 				// if(x1>=0&&y1>=0&&x2<256&&y2<256)
 				// {
 				// 	//LCD_DrawRectangle(x1,y1,x2,y2);
-					LCD_ShowString(10,300,100,16,16,"isface"); 
-                    return;
-                //     prepare_facenet_data(0,0,255,255);
-				// 	AI_Run1(in_data,out_data1);
+                LCD_ShowString(10,300,100,16,16,"isface"); 
+                // sprintf(logStr,"%3d",cnt_detected);
+                // LCD_ShowString(40,300,100,16,16,logStr); 
+                cnt_detected++;
+                if(cnt_detected == 5){
+                    LCD_ShowString(100,300,100,16,16,"detected"); 
+                    prepare_facenet_data(50,10,216,245);
+                    AI_Run1(in_data,out_data1);
+                    cnt_detected=0;
+                }
+                return;
 
 				// 	//LCD_Fill(0,0,256,256,WHITE);
                 //    DCMI_Start();
@@ -328,7 +339,11 @@ void post_process()
 			}
 		}
 	}
-	          LCD_ShowString(10,300,200,16,16,"noface"); 
+    if(cnt_detected > 0){
+        LCD_ShowString(100,300,100,16,16,"        "); 
+        cnt_detected = 0;
+    }
+    LCD_ShowString(10,300,200,16,16,"noface"); 
 		      	// DCMI_Start();
 }
 /* USER CODE END 0 */
@@ -410,8 +425,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
     if(isok){
+        LCD_DrawRectangle(50,10,216,245);
         AI_Run(in_data,out_data);
         post_process();
         DCMI_Start();
