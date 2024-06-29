@@ -56,7 +56,7 @@ ai_u8 *activations = buf_common;
 static int8_t*in_data=(int8_t*)buf_common;
 /* Data payload for the output tensor */
 AI_ALIGNED(32)
-static float out_data[AI_NETWORK_OUT_1_SIZE]__attribute__((section(".RW_IRAM2")));
+static int8_t out_data[AI_NETWORK_OUT_1_SIZE]__attribute__((section(".RW_IRAM2")));
 
 AI_ALIGNED(32) 
 static int8_t out_data1[AI_NETWORK_1_OUT_1_SIZE]__attribute__((section(".RW_IRAM2")));
@@ -289,8 +289,8 @@ void post_process()
 				y = (sigmod(y)+grid_y) * 8;
 				w = expf(w) * anchors[j][0];
 				h = expf(h) * anchors[j][1];
-				y2 = (x - w/2);
-				y1 = (x + w/2);
+				y1 = (x - w/2);
+				y2 = (x + w/2);
 				x1 = y - h/2;
 				x2 = y + h/2;
                 sprintf(logStr,"%5d,%5d,%5d,%5d",x1,x2,y1,y2);
@@ -300,7 +300,7 @@ void post_process()
 				if(x2 > 55) x2 = 55;
 				if(y2 > 55) y2 = 55;
                 
-                // LCD_DrawRectangle(x1*H_SCALE,y1*W_SCALE,x2*H_SCALE,y2*W_SCALE);
+                LCD_DrawRectangle(x1*H_SCALE,y1*W_SCALE,x2*H_SCALE,y2*W_SCALE);
                 // 绘制方框，左上角坐标为(x1, y1)，左下角坐标为(x2, y2)
                 // 注意，如果输入图像是缩放到56*56再输入网络的话，这里的坐标还要乘以图像的缩放系数
 
