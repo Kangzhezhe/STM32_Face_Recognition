@@ -144,23 +144,27 @@ static void MPU_Config(void);
 void post_process();
 
 
+// 人脸方框的左上右下像素坐标
 int x1, y1, x2, y2;
+// yoloface的anchor尺寸
+uint8_t anchors[3][2] = {{9, 14}, {12, 17}, {22, 21}};
 
 
-uint8_t anchors[5][2] = { {7,15},{20,47},{43,106},{85,168},{185,188}};
-//volatile uint16_t img_data[256*256]__attribute__((section(".RW_IRAM1")));//__attribute__((at(0x30020000)));//__attribute__((section(".sram_data2")));
+uint16_t img_data[256*256]__attribute__((section(".RW_IRAM2")));//__attribute__((at(0x30020000)));//__attribute__((section(".sram_data2")));
 uint16_t isok=0;
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 void prepare_yolo_data()
 {
-	for(int i = 0; i < 256; i++)
+	for(int i = 0; i < 56; i++)
 	{
-		for(int j = 0; j < 256; j++)
+		for(int j = 0; j < 56; j++)
 		{
-			u16 color=LCD_ReadPoint(j,i);
+			// u16 color=LCD_ReadPoint(j,i);
+			u16 color=img_data[j,i];
 			//img_data[j+i*256] = color;
 			in_data[(j+i*256)*3] = (int8_t)((color&0xF800)>>9) - 128;
 			in_data[(j+i*256)*3+1] = (int8_t)((color&0x07E0)>>3) - 128;
@@ -168,6 +172,7 @@ void prepare_yolo_data()
 		}
 	}
 }
+
 
 // use   :112 x 96 x 3   H:W:C
 
@@ -193,20 +198,55 @@ void prepare_facenet_data(u8 x1, u8 y1, u8 x2, u8 y2)
 	cv_resize_s8_CHW(temp,h,w,in_data,112,96);
 }
 
+u8 ram_ready = 0;
 void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
 {
+    HAL_DCMI_Suspend(hdcmi);
 	  HAL_DCMI_Stop(hdcmi);
     prepare_yolo_data();
 //		HAL_DCMI_Stop(hdcmi);
 //		LCD_Fillimg(0,0,55,55,img_data); //0 0 55 55
-		isok=1;
+		// isok=1;
 //	LCD_SetCursor(0,0);
 //	LCD_WriteRAM_Prepare();	
 //////	//__HAL_DCMI_ENABLE(&hdcmi);	
-//	__HAL_DCMI_ENABLE_IT(hdcmi, DCMI_IT_FRAME);
-//	DCMI->CR|=DCMI_CR_CAPTURE;          //DCMI????	
-//	HAL_DCMI_Start_DMA(hdcmi, DCMI_MODE_CONTINUOUS, (uint32_t)&(LCD->LCD_RAM), 1);
+	
+    ram_ready = 0;
+    LCD_Set_Window(0,0,256,256);
+    // LCD_SetCursor(0,0);
+    LCD_WriteRAM_Prepare();
+//      for (int i = 0; i < 256; i++)
+//      {
+//          for (int j = 0; j < 256; j++)
+//          {
+//              LCD->LCD_RAM=img_data[j+i*256];  
+//          }
+//      }
+   // DCMI_Start();
+		 
+	HAL_DMA_Start_IT(&hdma_memtomem_dma2_stream6, (uint32_t) img_data, (uint32_t) &LCD->LCD_RAM,
+												 65535);
+	LCD_WriteRAM_Prepare();
 }
+
+
+
+void TransferComplete(DMA_HandleTypeDef *_hdma)
+{
+	// LCD_WriteRAM_Prepare();
+	// 	LCD_DrawRectangle(10,10,100,100);
+    HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_14);
+    // DCMI_Start();
+
+    // LCD_Set_Window(0,0,480,800);
+    // LCD_SetCursor(0,0);
+
+    // ram_ready = 1;
+    
+    isok=1;
+    
+}
+
 float sigmod(float x)
 {
 	float y = 1/(1+expf(x));
@@ -218,73 +258,68 @@ void post_process()
 {
 	int grid_x, grid_y;
 	float x, y, w ,h;
-	for(int i = 0; i < 256; i++)
+	for(int i = 0; i < 49; i++)
 	{
-		for(int j = 0; j < 5; j++)
+		for(int j = 0; j < 3; j++)
 		{
-			float conf = out_data[i*30+j*6+4];
-			 //sprintf(logStr,"%5.2f",conf);
-			 //LCD_ShowString(10,350,100,16,16,"HELLO");
-
-			if(conf > 1)
+			  // 网络输出维度是1*7*7*18
+            // 其中18维度包含了每个像素预测的三个锚框，每个锚框对应6个维度，依次为x y w h conf class
+            // 当然因为这个网络是单类检测，所以class这一维度没有用
+            // 如果对YOLO不熟悉的话，建议去学习一下yolov3
+			int8_t conf = out_data[i*18+j*6+4];
+            // 这里的-9是根据网络量化的缩放偏移量计算的，对应的是70%的置信度
+            // sigmod((conf+15)*0.14218327403068542) < 0.7 ==> conf > -9
+			if(conf > -9)
 			{
-				grid_x = i % 16;
-				grid_y = (i - grid_x)/16;
-				// conf is larger than threshold
-//				x = ((float)out_data[i*30+j*6]+32)*0.0625f;
-//				y = ((float)out_data[i*30+j*6+1]+32)*0.0625f;
-//				w = ((float)out_data[i*30+j*6+2]+32)*0.0625f;
-//				h = ((float)out_data[i*30+j*6+3]+32)*0.0625f;
-				x = (float)out_data[i*30+j*6];
-				y = (float)out_data[i*30+j*6+1];
-				w = (float)out_data[i*30+j*6+2];
-				h = (float)out_data[i*30+j*6+3];
-				x = (sigmod(x)+grid_y) * 16;
-				y = (sigmod(y)+grid_x) * 16;
-				w = expf(w) * anchors[j][1];
-				h = expf(h) * anchors[j][0];
+				grid_x = i % 7;
+				grid_y = (i - grid_x)/7;
+				// 这里的15和0.14218327403068542就是网络量化后给出的缩放偏移量
+				x = ((float)out_data[i*18+j*6]+15)*0.14218327403068542f;
+				y = ((float)out_data[i*18+j*6+1]+15)*0.14218327403068542f;
+				w = ((float)out_data[i*18+j*6+2]+15)*0.14218327403068542f;
+				h = ((float)out_data[i*18+j*6+3]+15)*0.14218327403068542f;
+                // 网络下采样三次，缩小了8倍，这里给还原回56*56的尺度
+				x = (sigmod(x)+grid_x) * 8;
+				y = (sigmod(y)+grid_y) * 8;
+				w = expf(w) * anchors[j][0];
+				h = expf(h) * anchors[j][1];
 				y2 = (x - w/2);
 				y1 = (x + w/2);
 				x1 = y - h/2;
 				x2 = y + h/2;
 				if(x1 < 0) x1 = 0;
 				if(y1 < 0) y1 = 0;
-				if(x2 > 255) x2 = 255;
-				if(y2 > 255) y2 = 255;
+				if(x2 > 55) x2 = 55;
+				if(y2 > 55) y2 = 55;
+                // 绘制方框，左上角坐标为(x1, y1)，左下角坐标为(x2, y2)
+                // 注意，如果输入图像是缩放到56*56再输入网络的话，这里的坐标还要乘以图像的缩放系数
 
-                sprintf(logStr,"%3d %3d %3d %3d",x1,x2,y1,y2);
-                LCD_ShowString(10,400,200,16,16,logStr);
+                // sprintf(logStr,"%3d %3d %3d %3d",x1,x2,y1,y2);
+                // LCD_ShowString(10,400,200,16,16,logStr);
 
-				if(x1>=0&&y1>=0&&x2<256&&y2<256)
-				{
-					//LCD_DrawRectangle(x1,y1,x2,y2);
-					LCD_ShowString(10,300,100,16,16,"isface"); 
-                    prepare_facenet_data(0,0,255,255);
-					AI_Run1(in_data,out_data1);
+				// if(x1>=0&&y1>=0&&x2<256&&y2<256)
+				// {
+				// 	//LCD_DrawRectangle(x1,y1,x2,y2);
+				// 	LCD_ShowString(10,300,100,16,16,"isface"); 
+                //     prepare_facenet_data(0,0,255,255);
+				// 	AI_Run1(in_data,out_data1);
 
-					//LCD_Fill(0,0,256,256,WHITE);
-                    LCD_SetCursor(0,0);
-                    LCD_WriteRAM_Prepare();	
-					HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_CONTINUOUS, (uint32_t)&(LCD->LCD_RAM), 1);
-
+				// 	//LCD_Fill(0,0,256,256,WHITE);
+                //    DCMI_Start();
 					
-					return;
-				}
+				// 	return;
+				// }
 				
-				else{
-				LCD_ShowString(10,300,200,16,16,"noface"); 
-	     	LCD_SetCursor(0,0);
-	      LCD_WriteRAM_Prepare();
-				HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_CONTINUOUS, (uint32_t)&(LCD->LCD_RAM), 1);
-					return;
-				}
+				// else{
+				// LCD_ShowString(10,300,200,16,16,"noface"); 
+                //     DCMI_Start();
+				// 	return;
+				// }
 			}
 		}
 	}
-	          LCD_ShowString(10,300,200,16,16,"noface"); 
-		      	LCD_SetCursor(0,0);
-	        LCD_WriteRAM_Prepare();	 
-	HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_CONTINUOUS, (uint32_t)&(LCD->LCD_RAM), 1);
+	        //   LCD_ShowString(10,300,200,16,16,"noface"); 
+		      	DCMI_Start();
 }
 /* USER CODE END 0 */
 
@@ -335,6 +370,7 @@ int main(void)
   MX_FMC_Init();
   MX_USB_OTG_FS_PCD_Init();
   /* USER CODE BEGIN 2 */
+	 HAL_DMA_RegisterCallback(&hdma_memtomem_dma2_stream6,HAL_DMA_XFER_CPLT_CB_ID,TransferComplete);
 	AI_Init();
  LCD_Init();
  HAL_Delay(50);
@@ -349,10 +385,11 @@ int main(void)
 	OV5640_Color_Saturation(3);//色锟绞憋拷锟酵讹拷0
 	OV5640_Brightness(4);	//锟斤拷锟斤拷0
 	OV5640_Contrast(3);		//锟皆比讹拷0
-	OV5640_Sharpness(33);	//锟皆讹拷锟斤拷锟???
+	OV5640_Sharpness(33);	//锟皆讹拷锟斤拷锟????
 	OV5640_Focus_Constant();//锟斤拷锟斤拷锟斤拷锟斤拷锟皆斤拷
-  LCD_Set_Window(0,0,256,400);
+//   LCD_Set_Window(0,0,256,400);
 	OV5640_OutSize_Set(16,4,256,256);
+
 		DCMI_Start();
 	
 
@@ -363,13 +400,25 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		if(isok)
-	{
-		AI_Run(in_data,out_data);
-	  post_process();
-		isok=0;
-		HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_14);
-	}
+
+    if(isok){
+        LCD_DrawRectangle(10,10,300,300);
+        sprintf(logStr,"%3d %3d %3d %3d",x1,x2,y1,y2);
+        LCD_ShowString(10,400,200,16,16,logStr);
+        LCD_DrawRectangle(20,20,350,350);
+        DCMI_Start();
+        isok = 0;
+    }
+
+
+
+	// 	if(isok)
+	// {
+	// 	AI_Run(in_data,out_data);
+	//   post_process();
+	// 	isok=0;
+	// 	HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_14);
+	// }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

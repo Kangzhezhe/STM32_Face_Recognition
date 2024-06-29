@@ -199,13 +199,16 @@ void HAL_DCMI_MspDeInit(DCMI_HandleTypeDef* dcmiHandle)
 }
 
 /* USER CODE BEGIN 1 */
+extern uint16_t img_data[256*256];
 void DCMI_Start(void)  //??DCMI??,
 {
-	LCD_SetCursor(0,0);
-	LCD_WriteRAM_Prepare();	
-	//__HAL_DCMI_ENABLE(&hdcmi);	
+	// LCD_SetCursor(0,0);
+	LCD_WriteRAM_Prepare();
 	__HAL_DCMI_ENABLE_IT(&hdcmi, DCMI_IT_FRAME);
 	DCMI->CR|=DCMI_CR_CAPTURE;          //DCMI????	
-	HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_CONTINUOUS, (uint32_t)&(LCD->LCD_RAM), 1);
+	// HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_CONTINUOUS, (uint32_t)&(LCD->LCD_RAM), 1);
+	HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_SNAPSHOT, (uint32_t)&(img_data), 65535);
+//HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_CONTINUOUS, (uint32_t)&(img_data), 1);
+   
 }
 /* USER CODE END 1 */

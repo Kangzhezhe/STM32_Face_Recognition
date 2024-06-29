@@ -2100,6 +2100,21 @@ void LCD_Fill(u16 sx,u16 sy,u16 ex,u16 ey,u32 color)
     }
 }
 
+void LCD_Address_Set(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2)
+{
+  LCD_WR_REG(0x2a);//列地址设置
+  LCD_WR_DATA(x1>>8);
+  LCD_WR_DATA(x1&0x00ff);
+  LCD_WR_DATA(x2>>8);
+  LCD_WR_DATA(x2&0x00ff);
+  LCD_WR_REG(0x2b);//行地址设置
+  LCD_WR_DATA(y1>>8);
+  LCD_WR_DATA(y1&0x00ff);
+  LCD_WR_DATA(y2>>8);
+  LCD_WR_DATA(y2&0x00ff);
+  LCD_WR_REG(0x2c);//储存器写(2C命令之后开始写颜色数据)
+}
+
 //在指定区域内填充指定颜色块
 //(sx,sy),(ex,ey):填充矩形对角坐标,区域大小为:(ex-sx+1)*(ey-sy+1)
 //color:要填充的颜色

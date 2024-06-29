@@ -2,6 +2,7 @@
     "files.associations": {
         "*.tcc": "c",
         "cstdio": "c",
-        "lcd.h": "c"
+        "lcd.h": "c",
+        "cstdint": "c"
     }
 }
