@@ -167,7 +167,7 @@ void prepare_yolo_data()
 			// u16 color=LCD_ReadPoint(j,i);
 			u16 color=img_data[i*256+j];
 			//img_data[j+i*256] = color;
-			temp[(j+i*256)*3] = (int8_t)((color&0xF800)>>9) - 128;
+			temp[(j+i*256)*3] = (int8_t)((color&0xF800)>>8) - 128;
 			temp[(j+i*256)*3+1] = (int8_t)((color&0x07E0)>>3) - 128;
 			temp[(j+i*256)*3+2] = (int8_t)((color&0x001F)<<3) - 128;
 		}
@@ -184,21 +184,27 @@ void prepare_yolo_data()
 static int8_t* temp=(int8_t *)buf_common + AI_NETWORK_1_IN_1_SIZE;
 void prepare_facenet_data(u8 x1, u8 y1, u8 x2, u8 y2)
 {
-	u8 h = y2-y1+1;
-	u8 w = x2-x1+1;
+	u8 h = y2-y1+1; //236
+	u8 w = x2-x1+1;	//167
 	for(int i = 0; i < h; i++)
 	{
 		for(int j = 0; j < w; j++)
 		{
 			// u16 color=LCD_ReadPoint(j+x1,i+y1);
-			u16 color=img_data[j+i*256];
+			u16 color=img_data[(j+x1)+(i+y1)*256];
 			// img_data[j+i*256] = color;
-			temp[(i*w + j)*3] = (int8_t)((color&0xF800)>>9) - 128;
+			temp[(i*w + j)*3] = (int8_t)((color&0xF800)>>8) - 128;
 			temp[(i*w + j)*3+1] = (int8_t)((color&0x07E0)>>3) - 128;
 			temp[(i*w + j)*3+2] = (int8_t)((color&0x001F)<<3) - 128;
 		}
 	}
-	cv_resize_s8_CHW(temp,h,w,in_data,112,96);
+	cv_resize_s8(temp,h,w,in_data,112,96);
+}
+
+void post_process_facenet(){
+	for(int i = 0;i<128;i++){
+		out_data1[i] += 6;
+	}
 }
 
 u8 ram_ready = 0;
@@ -304,7 +310,7 @@ void post_process()
 				if(x2 > 55) x2 = 55;
 				if(y2 > 55) y2 = 55;
                 
-                // LCD_DrawRectangle(x1*H_SCALE,y1*W_SCALE,x2*H_SCALE,y2*W_SCALE);
+                //LCD_DrawRectangle(x1*H_SCALE,y1*W_SCALE,x2*H_SCALE,y2*W_SCALE);
                 // 绘制方框，左上角坐标为(x1, y1)，左下角坐标为(x2, y2)
                 // 注意，如果输入图像是缩放到56*56再输入网络的话，这里的坐标还要乘以图像的缩放系数
 
@@ -321,6 +327,7 @@ void post_process()
                     LCD_ShowString(100,300,100,16,16,"detected"); 
                     prepare_facenet_data(50,10,216,245);
                     AI_Run1(in_data,out_data1);
+										post_process_facenet();
                     cnt_detected=0;
                 }
                 return;

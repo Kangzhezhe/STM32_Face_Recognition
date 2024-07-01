@@ -3,6 +3,11 @@
         "*.tcc": "c",
         "cstdio": "c",
         "lcd.h": "c",
-        "cstdint": "c"
+        "cstdint": "c",
+        "network_1_config.h": "c",
+        "network_1_data_params.h": "c",
+        "array": "c",
+        "string": "c",
+        "string_view": "c"
     }
 }
