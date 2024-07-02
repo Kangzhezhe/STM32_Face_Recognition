@@ -203,7 +203,7 @@ extern uint16_t img_data[256*256];
 void DCMI_Start(void)  //??DCMI??,
 {
 	// LCD_SetCursor(0,0);
-	LCD_WriteRAM_Prepare();
+	// LCD_WriteRAM_Prepare();
 	__HAL_DCMI_ENABLE_IT(&hdcmi, DCMI_IT_FRAME);
 	DCMI->CR|=DCMI_CR_CAPTURE;          //DCMI????	
 	// HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_CONTINUOUS, (uint32_t)&(LCD->LCD_RAM), 1);

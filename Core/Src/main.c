@@ -45,14 +45,12 @@ AI_ALIGNED(32) ai_u8 buf_common[AI_NETWORK_1_DATA_ACTIVATIONS_SIZE]__attribute__
 const ai_handle activations[] = { buf_common };
 const ai_handle activations1[] = { buf_common };
 /* Data payload*/
-//static int8_t*in_data=(int8_t*)buf_common;
-//AI_ALIGNED(32) static float out_data[AI_NETWORK_OUT_1_SIZE];
 
-
-static int8_t*in_data=(int8_t*)buf_common;
+static float*in_data=(float*)buf_common;
+static int8_t*in_data1=(int8_t*)buf_common;
 /* Data payload for the output tensor */
 AI_ALIGNED(32)
-static int8_t out_data[AI_NETWORK_OUT_1_SIZE]__attribute__((section(".RW_IRAM2")));
+static float out_data[AI_NETWORK_OUT_1_SIZE]__attribute__((section(".RW_IRAM2")));
 
 AI_ALIGNED(32) 
 static int8_t out_data1[AI_NETWORK_1_OUT_1_SIZE]__attribute__((section(".RW_IRAM2")));
@@ -182,7 +180,8 @@ uint16_t isok=0;
 /* USER CODE BEGIN 0 */
 void prepare_yolo_data()
 {
-    int8_t* temp = (int8_t*)buf_common + AI_NETWORK_IN_1_SIZE;
+    int8_t* temp = (int8_t*)buf_common + AI_NETWORK_IN_1_SIZE*4;
+    int8_t* temp1 = (int8_t*)buf_common + AI_NETWORK_IN_1_SIZE*4+(256*256*3);
 	for(int i = 0; i < 256; i++)
 	{
 		for(int j = 0; j < 256; j++)
@@ -195,7 +194,11 @@ void prepare_yolo_data()
 			temp[(j+i*256)*3+2] = (int8_t)((color&0x001F)<<3) - 128;
 		}
 	}
-    cv_resize_s8(temp, 256, 256, in_data, 56, 56);
+    cv_resize_s8(temp, 256, 256, temp1, 56, 56);
+    for (int i = 0; i < AI_NETWORK_IN_1_SIZE; i++)
+    {
+        in_data[i] = 0.00392157 * ((float)temp1[i] + 128) ;
+    }
 }
 
 
@@ -221,7 +224,7 @@ void prepare_facenet_data(u8 x1, u8 y1, u8 x2, u8 y2)
 			temp[(i*w + j)*3+2] = (int8_t)((color&0x001F)<<3) - 128;
 		}
 	}
-	cv_resize_s8(temp,h,w,in_data,112,96);
+	cv_resize_s8(temp,h,w,in_data1,112,96);
 }
 #define N 4
 const int8_t database[N*128];
@@ -338,41 +341,43 @@ void post_process()
             // 其中18维度包含了每个像素预测的三个锚框，每个锚框对应6个维度，依次为x y w h conf class
             // 当然因为这个网络是单类检测，所以class这一维度没有用
             // 如果对YOLO不熟悉的话，建议去学习一下yolov3
-			int8_t conf = out_data[i*18+j*6+4];
+			float conf = out_data[i*18+j*6+4];
             // 这里的-9是根据网络量化的缩放偏移量计算的，对应的是70%的置信度
             // sigmod((conf+15)*0.14218327403068542) < 0.7 ==> conf > -9
-            snprintf(logStr,20,"conf = %4d",conf);
-            LCD_ShowString(10,350,200,16,16,logStr);
-			if(conf > -9)
+            snprintf(logStr,13,"conf = %3.2f",conf);
+            LCD_ShowString(10,350,200,16,16,(u8*)logStr);
+			if(conf > 2)
 			{
-//				grid_x = i % 7;
-//				grid_y = (i - grid_x)/7;
-//				// 这里的15和0.14218327403068542就是网络量化后给出的缩放偏移量
-//				x = ((float)out_data[i*18+j*6]+15)*0.14218327403068542f;
-//				y = ((float)out_data[i*18+j*6+1]+15)*0.14218327403068542f;
-//				w = ((float)out_data[i*18+j*6+2]+15)*0.14218327403068542f;
-//				h = ((float)out_data[i*18+j*6+3]+15)*0.14218327403068542f;
-//                // 网络下采样三次，缩小了8倍，这里给还原回56*56的尺度
-//				x = (sigmod(x)+grid_x) * 8;
-//				y = (sigmod(y)+grid_y) * 8;
-//				w = expf(w) * anchors[j][0];
-//				h = expf(h) * anchors[j][1];
-//				y1 = (x - w/2);
-//				y2 = (x + w/2);
-//				x1 = y - h/2;
-//				x2 = y + h/2;
-//                sprintf(logStr,"%5d,%5d,%5d,%5d",x1,x2,y1,y2);
-//                LCD_ShowString(10,400,200,16,16,logStr);
-//				if(x1 < 0) x1 = 0;
-//				if(y1 < 0) y1 = 0;
-//				if(x2 > 55) x2 = 55;
-//				if(y2 > 55) y2 = 55;
+                // grid_x = i % 7;
+				// grid_y = (i - grid_x)/7;
+				// // 这里的15和0.14218327403068542就是网络量化后给出的缩放偏移量
+				// // x = ((float)out_data[i*18+j*6]+15)*0.14218327403068542f;
+				// // y = ((float)out_data[i*18+j*6+1]+15)*0.14218327403068542f;
+				// // w = ((float)out_data[i*18+j*6+2]+15)*0.14218327403068542f;
+				// // h = ((float)out_data[i*18+j*6+3]+15)*0.14218327403068542f;
+                // x = ((float)out_data[i*18+j*6]);
+				// y = ((float)out_data[i*18+j*6+1]);
+				// w = ((float)out_data[i*18+j*6+2]);
+				// h = ((float)out_data[i*18+j*6+3]);
+                // // 网络下采样三次，缩小了8倍，这里给还原回56*56的尺度
+				// x = (sigmod(x)+grid_x) * 8;
+				// y = (sigmod(y)+grid_y) * 8;
+				// w = expf(w) * anchors[j][0];
+				// h = expf(h) * anchors[j][1];
+				// y1 = (x - w/2);
+				// y2 = (x + w/2);
+				// x1 = y - h/2;
+				// x2 = y + h/2;
+                // snprintf(logStr,1024,"%5d,%5d,%5d,%5d",x1,x2,y1,y2);
+                // LCD_ShowString(10,400,200,16,16,(u8*)logStr);
+				// if(x1 < 0) x1 = 0;
+				// if(y1 < 0) y1 = 0;
+				// if(x2 > 55) x2 = 55;
+				// if(y2 > 55) y2 = 55;
                 
                 //LCD_DrawRectangle(x1*H_SCALE,y1*W_SCALE,x2*H_SCALE,y2*W_SCALE);
                 // 绘制方框，左上角坐标为(x1, y1)，左下角坐标为(x2, y2)
                 // 注意，如果输入图像是缩放到56*56再输入网络的话，这里的坐标还要乘以图像的缩放系数
-
-                
 
 				// if(x1>=0&&y1>=0&&x2<256&&y2<256)
 				// {
@@ -384,7 +389,7 @@ void post_process()
                 if(cnt_detected == 5){
                     LCD_ShowString(100,300,100,16,16,"detected"); 
                     prepare_facenet_data(50,10,216,245);
-                    AI_Run1(in_data,out_data1);
+                    AI_Run1(in_data1,out_data1);
                     int max_index = post_process_facenet();
                     snprintf(logStr,30,"score[%d] = %4.2f",max_index,score[max_index]);
                     LCD_ShowString(10,400,200,16,16,logStr);
