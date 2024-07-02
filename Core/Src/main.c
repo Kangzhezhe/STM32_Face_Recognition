@@ -200,11 +200,37 @@ void prepare_facenet_data(u8 x1, u8 y1, u8 x2, u8 y2)
 	}
 	cv_resize_s8(temp,h,w,in_data,112,96);
 }
+#define N 2
+int8_t database[N*128];
+double cosine_similarity(int8_t* vec1, int8_t* vec2, int size) {
+    double dot_product = 0.0;
+    double magnitude1 = 0.0;
+    double magnitude2 = 0.0;
 
+    for (int i = 0; i < size; i++) {
+        dot_product += vec1[i] * vec2[i];
+        magnitude1 += vec1[i] * vec1[i];
+        magnitude2 += vec2[i] * vec2[i];
+    }
+
+    magnitude1 = sqrt(magnitude1);
+    magnitude2 = sqrt(magnitude2);
+
+    if (magnitude1 == 0.0 || magnitude2 == 0.0) {
+        return 0.0;
+    }
+
+    return dot_product / (magnitude1 * magnitude2);
+}
+double score[N];
 void post_process_facenet(){
 	for(int i = 0;i<128;i++){
-		out_data1[i] += 6;
+		out_data1[i] += 10;
 	}
+    for (int i = 0; i < N; i++)
+    {
+        score[i] = cosine_similarity(out_data1, database + i * 128, 128);
+    }
 }
 
 u8 ram_ready = 0;
@@ -267,7 +293,7 @@ float sigmod(float x)
 #define W_SCALE (255/55)
 #define H_SCALE (255/55)
 uint8_t cnt_detected = 0;
-char logStr[1024]__attribute__((section(".RW_IRAM2")));
+char logStr[1024]__attribute__((section(".RW_IRAM1")));
 void post_process()
 {
 	int grid_x, grid_y;
@@ -287,28 +313,28 @@ void post_process()
             LCD_ShowString(10,350,200,16,16,logStr);
 			if(conf > -9)
 			{
-				grid_x = i % 7;
-				grid_y = (i - grid_x)/7;
-				// 这里的15和0.14218327403068542就是网络量化后给出的缩放偏移量
-				x = ((float)out_data[i*18+j*6]+15)*0.14218327403068542f;
-				y = ((float)out_data[i*18+j*6+1]+15)*0.14218327403068542f;
-				w = ((float)out_data[i*18+j*6+2]+15)*0.14218327403068542f;
-				h = ((float)out_data[i*18+j*6+3]+15)*0.14218327403068542f;
-                // 网络下采样三次，缩小了8倍，这里给还原回56*56的尺度
-				x = (sigmod(x)+grid_x) * 8;
-				y = (sigmod(y)+grid_y) * 8;
-				w = expf(w) * anchors[j][0];
-				h = expf(h) * anchors[j][1];
-				y1 = (x - w/2);
-				y2 = (x + w/2);
-				x1 = y - h/2;
-				x2 = y + h/2;
-                sprintf(logStr,"%5d,%5d,%5d,%5d",x1,x2,y1,y2);
-                LCD_ShowString(10,400,200,16,16,logStr);
-				if(x1 < 0) x1 = 0;
-				if(y1 < 0) y1 = 0;
-				if(x2 > 55) x2 = 55;
-				if(y2 > 55) y2 = 55;
+//				grid_x = i % 7;
+//				grid_y = (i - grid_x)/7;
+//				// 这里的15和0.14218327403068542就是网络量化后给出的缩放偏移量
+//				x = ((float)out_data[i*18+j*6]+15)*0.14218327403068542f;
+//				y = ((float)out_data[i*18+j*6+1]+15)*0.14218327403068542f;
+//				w = ((float)out_data[i*18+j*6+2]+15)*0.14218327403068542f;
+//				h = ((float)out_data[i*18+j*6+3]+15)*0.14218327403068542f;
+//                // 网络下采样三次，缩小了8倍，这里给还原回56*56的尺度
+//				x = (sigmod(x)+grid_x) * 8;
+//				y = (sigmod(y)+grid_y) * 8;
+//				w = expf(w) * anchors[j][0];
+//				h = expf(h) * anchors[j][1];
+//				y1 = (x - w/2);
+//				y2 = (x + w/2);
+//				x1 = y - h/2;
+//				x2 = y + h/2;
+//                sprintf(logStr,"%5d,%5d,%5d,%5d",x1,x2,y1,y2);
+//                LCD_ShowString(10,400,200,16,16,logStr);
+//				if(x1 < 0) x1 = 0;
+//				if(y1 < 0) y1 = 0;
+//				if(x2 > 55) x2 = 55;
+//				if(y2 > 55) y2 = 55;
                 
                 //LCD_DrawRectangle(x1*H_SCALE,y1*W_SCALE,x2*H_SCALE,y2*W_SCALE);
                 // 绘制方框，左上角坐标为(x1, y1)，左下角坐标为(x2, y2)
@@ -327,7 +353,7 @@ void post_process()
                     LCD_ShowString(100,300,100,16,16,"detected"); 
                     prepare_facenet_data(50,10,216,245);
                     AI_Run1(in_data,out_data1);
-										post_process_facenet();
+                    post_process_facenet();
                     cnt_detected=0;
                 }
                 return;
@@ -348,7 +374,7 @@ void post_process()
 	}
     if(cnt_detected > 0){
         LCD_ShowString(100,300,100,16,16,"        "); 
-        cnt_detected = 0;
+        cnt_detected--;
     }
     LCD_ShowString(10,300,200,16,16,"noface"); 
 		      	// DCMI_Start();
@@ -521,6 +547,268 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
+
+int8_t database[N*128]={
+7,
+-2,
+-4,
+-9,
+-23,
+83,
+11,
+1,
+-4,
+-8,
+-40,
+64,
+4,
+3,
+-4,
+-8,
+-57,
+55,
+-12,
+3,
+-4,
+-10,
+0,
+67,
+-8,
+2,
+-3,
+-9,
+-31,
+52,
+-3,
+3,
+-3,
+-8,
+-39,
+40,
+-13,
+-1,
+-4,
+-9,
+-27,
+70,
+-15,
+-1,
+-3,
+-9,
+-51,
+56,
+-8,
+3,
+-3,
+-8,
+-67,
+43,
+-7,
+-5,
+-4,
+-10,
+-34,
+76,
+-6,
+2,
+-3,
+-8,
+-60,
+62,
+-1,
+6,
+-3,
+-8,
+-67,
+52,
+-5,
+0,
+-3,
+-9,
+-30,
+72,
+-2,
+4,
+-2,
+-9,
+-41,
+64,
+-1,
+9,
+-4,
+-9,
+-58,
+52,
+-8,
+-5,
+-4,
+-10,
+-36,
+74,
+-9,
+4,
+-3,
+-8,
+-51,
+64,
+-11,
+8,
+-4,
+-8,
+-59,
+52,
+-6,
+-2,
+-5,
+-8,
+-31,
+78,
+-10,
+2,
+-5,
+-8,
+-59,
+59,
+-18,
+4,
+-5,
+-8,
+-83,
+42,
+-1,
+-8,
+    //g0
+-11,
+-2,
+-10,
+-12,
+-22,
+66,
+-6,
+1,
+-8,
+-11,
+-46,
+51,
+0,
+2,
+-9,
+-12,
+-54,
+39,
+-7,
+-5,
+-8,
+-12,
+-34,
+58,
+-7,
+1,
+-7,
+-11,
+-44,
+49,
+-5,
+4,
+-8,
+-13,
+-51,
+38,
+-16,
+-2,
+-8,
+-13,
+-39,
+64,
+-17,
+1,
+-7,
+-12,
+-49,
+53,
+-11,
+3,
+-8,
+-13,
+-68,
+40,
+-5,
+5,
+-9,
+-13,
+-42,
+73,
+-2,
+7,
+-8,
+-12,
+-64,
+57,
+-4,
+8,
+-7,
+-12,
+-68,
+47,
+-9,
+0,
+-7,
+-13,
+-25,
+62,
+-9,
+3,
+-7,
+-13,
+-37,
+51,
+-6,
+7,
+-8,
+-13,
+-63,
+36,
+-19,
+0,
+-8,
+-13,
+-28,
+69,
+-15,
+4,
+-7,
+-12,
+-52,
+57,
+-10,
+5,
+-7,
+-12,
+-61,
+44,
+-16,
+-4,
+-8,
+-13,
+-35,
+74,
+-20,
+3,
+-8,
+-12,
+-58,
+57,
+-22,
+6,
+-9,
+-12,
+-87,
+40,
+-12,
+-15
+
+
+};
 /* USER CODE END 4 */
 
  /* MPU Configuration */

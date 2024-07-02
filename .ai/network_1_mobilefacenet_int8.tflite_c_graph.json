@@ -49464,7 +49464,7 @@
         }
     ],
     "c_activations_count": 1,
-    "date_time": "Mon Jul  1 13:02:40 2024",
+    "date_time": "Tue Jul  2 11:16:27 2024",
     "model_name": "mobilefacenet_int8",
     "tool_version": {
         "major": 1,
@@ -50425,8 +50425,8 @@
         "buffer_c_data": []
     }},
     "memory_footprint": {
-        "kernel_ram": 34548,
-        "kernel_flash": 127265,
+        "kernel_ram": 34204,
+        "kernel_flash": 125819,
         "io": [
             0,
             0

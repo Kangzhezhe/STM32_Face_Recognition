@@ -1,7 +1,7 @@
 {
     "_allocate_inputs": 4,
     "_allocate_outputs": 4,
-    "cli_parameters": "generate --name network -m D:/linux/yoloface-50k/tflite/yoloface_int8.tflite --type tflite --compression none --verbosity 1 --workspace C:\\Users\\19178\\AppData\\Local\\Temp\\mxAI_workspace8398863499080015942928196035920445 --output C:\\Users\\19178\\.stm32cubemx\\network_output --allocate-inputs --series stm32h7 --allocate-outputs",
+    "cli_parameters": "generate --name network -m D:/linux/yoloface-50k/tflite/yoloface_int8.tflite --type tflite --compression none --verbosity 1 --workspace C:\\Users\\19178\\AppData\\Local\\Temp\\mxAI_workspace353457893752009794974631686012240 --output C:\\Users\\19178\\.stm32cubemx\\network_output --allocate-inputs --series stm32h7 --allocate-outputs",
     "cli_version": {
         "major": 1,
         "micro": 0,
@@ -13,7 +13,7 @@
         "factor": null,
         "layers": {}
     },
-    "date_time": "Sat Jun 29 10:04:27 2024",
+    "date_time": "Tue Jul  2 11:16:10 2024",
     "error": 0,
     "error_str": [],
     "exec_cmd": "generate",
