@@ -49464,7 +49464,7 @@
         }
     ],
     "c_activations_count": 1,
-    "date_time": "Tue Jul  2 11:16:27 2024",
+    "date_time": "Tue Jul  2 17:12:24 2024",
     "model_name": "mobilefacenet_int8",
     "tool_version": {
         "major": 1,
@@ -50431,9 +50431,12 @@
             0,
             0
         ],
-        "series": "generic",
+        "series": "stm32h7",
         "activations": 380416,
-        "weights": 1019136
+        "toolchain_flash": 0,
+        "toolchain_ram": 0,
+        "weights": 1019136,
+        "toolchain": "'DOSKEY' 不是内部或外部命令，也不是可运行的程序"
     },
     "version": "1.2",
     "tool_api_version": {

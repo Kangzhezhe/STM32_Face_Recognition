@@ -41,13 +41,9 @@
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 AI_ALIGNED(32) ai_u8 buf_common[AI_NETWORK_1_DATA_ACTIVATIONS_SIZE]__attribute__((section(".RW_IRAM2")));
-// AI_ALIGNED(32) ai_u8 activations[AI_NETWORK_1_DATA_ACTIVATIONS_SIZE];
 
-//AI_ALIGNED(32) ai_u8 activations[AI_NETWORK_DATA_ACTIVATIONS_SIZE];
-//AI_ALIGNED(32) ai_u8 activations1[AI_NETWORK_1_DATA_ACTIVATIONS_SIZE];
-ai_u8 *activations1 = buf_common;
-ai_u8 *activations = buf_common;
-
+const ai_handle activations[] = { buf_common };
+const ai_handle activations1[] = { buf_common };
 /* Data payload*/
 //static int8_t*in_data=(int8_t*)buf_common;
 //AI_ALIGNED(32) static float out_data[AI_NETWORK_OUT_1_SIZE];
@@ -73,25 +69,52 @@ static void AI_Init(void)
 {
   ai_error err;
   /* Create a local array with the addresses of the activations buffers */
-  const ai_handle act_addr[] = { activations };
+  
   /* Create an instance of the model */
-  err = ai_network_create_and_init(&network, act_addr, NULL);
+  err = ai_network_create_and_init(&network, activations, NULL);
   if (err.type != AI_ERROR_NONE) {
 		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_14,1);
   }
   ai_input = ai_network_inputs_get(network, NULL);
   ai_output = ai_network_outputs_get(network, NULL);
 	
-	const ai_handle act_addr1[] = { activations1 };
+	
   /* Create an instance of the model */
-  err = ai_network_create_and_init(&network1, act_addr1, NULL);
+  err = ai_network_1_create_and_init(&network1, activations1, NULL);
   if (err.type != AI_ERROR_NONE) {
 		HAL_GPIO_WritePin(GPIOB,GPIO_PIN_14,1);
   }
-  ai_input1 = ai_network_inputs_get(network1, NULL);
-  ai_output1 = ai_network_outputs_get(network1, NULL);
+  ai_input1 = ai_network_1_inputs_get(network1, NULL);
+  ai_output1 = ai_network_1_outputs_get(network1, NULL);
 	
-	
+//	int a,b,c;
+//	ai_network_report report;
+//	ai_network_report report1;
+//	    if (ai_network_get_report(network, &report) != true) {
+//				return;
+//    }
+//			if (ai_network_get_report(network1, &report1) != true) {
+//				return;
+//    }
+//ai_input = &report.inputs[0];
+//    ai_output = &report.outputs[0];
+//		ai_input1 = &report1.inputs[0];
+//    ai_output1 = &report1.outputs[0];
+//	 a = AI_BUFFER_SHAPE_ELEM(ai_input1, AI_SHAPE_HEIGHT);
+// b = AI_BUFFER_SHAPE_ELEM(ai_input1, AI_SHAPE_WIDTH);
+//   c = AI_BUFFER_SHAPE_ELEM(ai_input1, AI_SHAPE_CHANNEL);
+//	
+//	 a = AI_BUFFER_SHAPE_ELEM(ai_output1, AI_SHAPE_HEIGHT);
+// b = AI_BUFFER_SHAPE_ELEM(ai_output1, AI_SHAPE_WIDTH);
+//  c = AI_BUFFER_SHAPE_ELEM(ai_output1, AI_SHAPE_CHANNEL);
+//	
+//	a = AI_BUFFER_SHAPE_ELEM(ai_input, AI_SHAPE_HEIGHT);
+// b = AI_BUFFER_SHAPE_ELEM(ai_input, AI_SHAPE_WIDTH);
+//  c = AI_BUFFER_SHAPE_ELEM(ai_input, AI_SHAPE_CHANNEL);
+//	
+//	a = AI_BUFFER_SHAPE_ELEM(ai_output, AI_SHAPE_HEIGHT);
+// b = AI_BUFFER_SHAPE_ELEM(ai_output, AI_SHAPE_WIDTH);
+//  c = AI_BUFFER_SHAPE_ELEM(ai_output, AI_SHAPE_CHANNEL);
 }
 static void AI_Run(const void *pIn, float *pOut)
 {
@@ -200,8 +223,8 @@ void prepare_facenet_data(u8 x1, u8 y1, u8 x2, u8 y2)
 	}
 	cv_resize_s8(temp,h,w,in_data,112,96);
 }
-#define N 2
-int8_t database[N*128];
+#define N 4
+const int8_t database[N*128];
 double cosine_similarity(int8_t* vec1, int8_t* vec2, int size) {
     double dot_product = 0.0;
     double magnitude1 = 0.0;
@@ -223,7 +246,7 @@ double cosine_similarity(int8_t* vec1, int8_t* vec2, int size) {
     return dot_product / (magnitude1 * magnitude2);
 }
 double score[N];
-void post_process_facenet(){
+int post_process_facenet(){
 	for(int i = 0;i<128;i++){
 		out_data1[i] += 10;
 	}
@@ -231,6 +254,15 @@ void post_process_facenet(){
     {
         score[i] = cosine_similarity(out_data1, database + i * 128, 128);
     }
+    int max_index = 0;
+    for (int i = 1; i < N; i++)
+    {
+        if (score[i] > score[max_index])
+        {
+            max_index = i;
+        }
+    }
+    return max_index;
 }
 
 u8 ram_ready = 0;
@@ -309,7 +341,7 @@ void post_process()
 			int8_t conf = out_data[i*18+j*6+4];
             // 这里的-9是根据网络量化的缩放偏移量计算的，对应的是70%的置信度
             // sigmod((conf+15)*0.14218327403068542) < 0.7 ==> conf > -9
-            sprintf(logStr,"conf = %4d",conf);
+            snprintf(logStr,20,"conf = %4d",conf);
             LCD_ShowString(10,350,200,16,16,logStr);
 			if(conf > -9)
 			{
@@ -353,7 +385,9 @@ void post_process()
                     LCD_ShowString(100,300,100,16,16,"detected"); 
                     prepare_facenet_data(50,10,216,245);
                     AI_Run1(in_data,out_data1);
-                    post_process_facenet();
+                    int max_index = post_process_facenet();
+                    snprintf(logStr,30,"score[%d] = %4.2f",max_index,score[max_index]);
+                    LCD_ShowString(10,400,200,16,16,logStr);
                     cnt_detected=0;
                 }
                 return;
@@ -374,6 +408,7 @@ void post_process()
 	}
     if(cnt_detected > 0){
         LCD_ShowString(100,300,100,16,16,"        "); 
+        LCD_ShowString(10,400,200,16,16,"                  ");
         cnt_detected--;
     }
     LCD_ShowString(10,300,200,16,16,"noface"); 
@@ -547,268 +582,14 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
-
-int8_t database[N*128]={
-7,
--2,
--4,
--9,
--23,
-83,
-11,
-1,
--4,
--8,
--40,
-64,
-4,
-3,
--4,
--8,
--57,
-55,
--12,
-3,
--4,
--10,
-0,
-67,
--8,
-2,
--3,
--9,
--31,
-52,
--3,
-3,
--3,
--8,
--39,
-40,
--13,
--1,
--4,
--9,
--27,
-70,
--15,
--1,
--3,
--9,
--51,
-56,
--8,
-3,
--3,
--8,
--67,
-43,
--7,
--5,
--4,
--10,
--34,
-76,
--6,
-2,
--3,
--8,
--60,
-62,
--1,
-6,
--3,
--8,
--67,
-52,
--5,
-0,
--3,
--9,
--30,
-72,
--2,
-4,
--2,
--9,
--41,
-64,
--1,
-9,
--4,
--9,
--58,
-52,
--8,
--5,
--4,
--10,
--36,
-74,
--9,
-4,
--3,
--8,
--51,
-64,
--11,
-8,
--4,
--8,
--59,
-52,
--6,
--2,
--5,
--8,
--31,
-78,
--10,
-2,
--5,
--8,
--59,
-59,
--18,
-4,
--5,
--8,
--83,
-42,
--1,
--8,
-    //g0
--11,
--2,
--10,
--12,
--22,
-66,
--6,
-1,
--8,
--11,
--46,
-51,
-0,
-2,
--9,
--12,
--54,
-39,
--7,
--5,
--8,
--12,
--34,
-58,
--7,
-1,
--7,
--11,
--44,
-49,
--5,
-4,
--8,
--13,
--51,
-38,
--16,
--2,
--8,
--13,
--39,
-64,
--17,
-1,
--7,
--12,
--49,
-53,
--11,
-3,
--8,
--13,
--68,
-40,
--5,
-5,
--9,
--13,
--42,
-73,
--2,
-7,
--8,
--12,
--64,
-57,
--4,
-8,
--7,
--12,
--68,
-47,
--9,
-0,
--7,
--13,
--25,
-62,
--9,
-3,
--7,
--13,
--37,
-51,
--6,
-7,
--8,
--13,
--63,
-36,
--19,
-0,
--8,
--13,
--28,
-69,
--15,
-4,
--7,
--12,
--52,
-57,
--10,
-5,
--7,
--12,
--61,
-44,
--16,
--4,
--8,
--13,
--35,
-74,
--20,
-3,
--8,
--12,
--58,
-57,
--22,
-6,
--9,
--12,
--87,
-40,
--12,
--15
-
+const int8_t database[N*128]={
+-22,-6,-44,-21,-8,6,-7,-8,66,20,-20,-13,12,20,4,-20,44,-9,-12,-35,14,-9,-12,-11,-32,-23,-15,-10,6,9,4,-13,22,3,43,41,-67,3,15,-12,1,33,-4,-8,-3,-10,9,-37,-1,-5,-16,3,2,-63,4,0,10,35,-14,10,-2,-48,-48,-26,37,47,3,-26,38,11,6,3,7,44,-16,2,21,23,8,-25,-29,-36,3,2,-29,-5,19,-8,-5,-11,-23,19,-32,18,21,39,13,-32,43,-41,-4,1,-14,12,18,17,-10,8,37,-7,-25,20,41,-32,16,-8,16,-28,35,26,29,8,-25,43,2,-13,-9,-13,
+-5,24,15,47,11,-3,-18,12,37,-32,6,20,3,-20,-5,37,-22,-17,31,19,56,-4,33,30,-4,27,-23,-6,14,22,27,-63,53,-20,9,8,18,-36,4,9,-10,-8,26,-28,9,-6,15,42,-20,9,7,-12,17,15,8,-38,-7,28,-24,-23,22,9,-10,-20,5,30,9,-24,-12,-2,-12,-38,1,-24,-35,3,38,-33,2,38,9,9,35,-2,4,4,13,13,21,-11,41,30,26,21,8,28,20,-50,-6,-4,-5,-6,-25,19,4,-3,-4,11,5,-31,-6,31,20,-9,-1,19,-16,-33,-19,-20,-27,5,27,-19,21,29,7,-3,
+59,30,-6,0,-1,6,2,-11,-17,-32,-22,-8,10,-5,-4,-41,-24,45,35,-3,0,1,12,-49,-14,7,-9,-19,-6,30,47,8,-3,-19,21,17,28,-7,16,5,-10,-27,24,18,-9,-10,2,1,15,24,16,-2,4,-20,8,-16,28,-35,9,47,10,14,1,15,33,-8,30,15,0,22,-3,49,-17,-28,-3,18,31,-17,-32,24,5,-8,8,-2,1,-22,10,-3,25,48,14,2,0,17,15,2,44,21,-25,-12,11,12,-9,-34,32,-11,-10,0,-27,-6,16,-1,0,1,0,14,-1,31,24,-1,-23,1,-14,6,46,54,-51,-3,
+18,-5,10,14,-7,-32,1,-1,14,-41,-2,73,-9,27,12,-19,-1,-18,-10,2,-25,0,27,-47,-5,-3,-9,-18,-59,48,-6,-23,32,-12,2,15,-1,-15,-2,22,11,-10,9,-30,9,-10,-19,-17,0,9,-14,-8,-21,5,-10,13,10,-17,35,5,12,-27,-23,-7,16,-15,3,19,10,-16,-22,18,14,23,-4,30,37,-44,-36,2,18,-3,43,14,6,-35,20,-1,6,23,0,19,-20,-19,-6,-5,24,-8,1,0,14,7,-56,-6,75,21,-19,3,6,11,3,7,1,11,-5,37,3,-9,26,39,-9,23,0,5,18,3,14,-5
 
 };
+
 /* USER CODE END 4 */
 
  /* MPU Configuration */
