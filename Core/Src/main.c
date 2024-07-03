@@ -39,6 +39,9 @@
 #include "stdio.h"
 #include "delay.h"
 #include "touch.h"
+#include "lv_port_disp.h"
+#include "lvgl.h"
+#include "lv_port_indev.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -433,6 +436,37 @@ int fputc(int ch, FILE *f)
     HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);//更具实际情况更改驱动
     return (ch);
 }
+
+
+//lvgl test
+static lv_obj_t * label;
+
+static void slider_event_cb(lv_event_t * e)
+{
+    lv_obj_t * slider = lv_event_get_target(e);
+
+    /*Refresh the text*/
+    lv_label_set_text_fmt(label, "%"LV_PRId32, lv_slider_get_value(slider));
+    lv_obj_align_to(label, slider, LV_ALIGN_OUT_TOP_MID, 0, -15);    /*Align top of the slider*/
+}
+
+/**
+ * Create a slider and write its value on a label.
+ */
+void lv_example_get_started_1(void)
+{
+    /*Create a slider in the center of the display*/
+    lv_obj_t * slider = lv_slider_create(lv_screen_active());
+    lv_obj_set_width(slider, 200);                          /*Set the width*/
+    lv_obj_center(slider);                                  /*Align to the center of the parent (screen)*/
+    lv_obj_add_event_cb(slider, slider_event_cb, LV_EVENT_VALUE_CHANGED, NULL);     /*Assign an event function*/
+
+    /*Create a label above the slider*/
+    label = lv_label_create(lv_screen_active());
+    lv_label_set_text(label, "0");
+    lv_obj_align_to(label, slider, LV_ALIGN_OUT_TOP_MID, 0, -15);    /*Align top of the slider*/
+	
+}
 /* USER CODE END 0 */
 
 /**
@@ -509,7 +543,11 @@ int main(void)
     TP_Init();
 	LCD_Clear(WHITE);//清屏
 	
-
+	//lvgl
+	lv_init();
+	lv_port_disp_init();
+	lv_port_indev_init();
+	lv_example_get_started_1();
 	
   /* USER CODE END 2 */
 
@@ -525,8 +563,10 @@ int main(void)
     //     isok = 0;
     // }
     // printf("hello\r\n");
-    tp_dev.scan(0);
-
+    //tp_dev.scan(0);
+		lv_timer_handler();
+    HAL_Delay(1);
+		lv_tick_inc(5);
 	// 	if(isok)
 	// {
 	// 	AI_Run(in_data,out_data);
