@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
 #include "crc.h"
 #include "dcmi.h"
 #include "dma.h"
@@ -167,6 +168,7 @@ static void AI_Run1(const void *pIn, int8_t *pOut)
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MPU_Config(void);
+void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 void post_process();
 
@@ -517,7 +519,7 @@ int main(void)
   MX_USB_OTG_FS_PCD_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-  delay_init(480);
+  delay_init();
 	 HAL_DMA_RegisterCallback(&hdma_memtomem_dma2_stream6,HAL_DMA_XFER_CPLT_CB_ID,TransferComplete);
 	AI_Init();
  LCD_Init();
@@ -543,13 +545,17 @@ int main(void)
     TP_Init();
 	LCD_Clear(WHITE);//ÇåÆÁ
 	
-	//lvgl
-	lv_init();
-	lv_port_disp_init();
-	lv_port_indev_init();
-	lv_example_get_started_1();
+	
 	
   /* USER CODE END 2 */
+
+  /* Call init function for freertos objects (in cmsis_os2.c) */
+  MX_FREERTOS_Init();
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -683,6 +689,27 @@ void MPU_Config(void)
   /* Enables the MPU */
   HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
 
+}
+
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM6 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM6) {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+
+  /* USER CODE END Callback 1 */
 }
 
 /**
