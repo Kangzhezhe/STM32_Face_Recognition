@@ -28,6 +28,7 @@
 #include "lv_port_disp.h"
 #include "lvgl.h"
 #include "lv_port_indev.h"
+#include "dcmi.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -172,6 +173,7 @@ void StartDefaultTask(void const * argument)
 * @retval None
 */
 extern void lv_example_get_started_1(void);
+extern void lv_cam_canvas(void);
 /* USER CODE END Header_StartTask */
 void StartTask(void const * argument)
 {
@@ -183,8 +185,11 @@ void StartTask(void const * argument)
         lv_port_disp_init();
         lv_port_indev_init();
         lv_example_get_started_1();
+        lv_cam_canvas();
+        HAL_Delay(1000);
         xSemaphoreGive(Sem_lvglHandle);
     }
+    DCMI_Start();
   
   osThreadResume(myTask_lvglHandle);
   vTaskDelete(start_taskHandle);

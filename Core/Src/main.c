@@ -277,34 +277,44 @@ int post_process_facenet(){
 }
 
 u8 ram_ready = 0;
-void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
+static lv_obj_t * canvas_cam;
+extern osSemaphoreId Sem_lvglHandle;
+void HAL_DCMI_VsyncEventCallback(DCMI_HandleTypeDef *hdcmi)
 {
-    HAL_DCMI_Suspend(hdcmi);
-	  HAL_DCMI_Stop(hdcmi);
-    prepare_yolo_data();
-//		HAL_DCMI_Stop(hdcmi);
-//		LCD_Fillimg(0,0,55,55,img_data); //0 0 55 55
-		// isok=1;
-//	LCD_SetCursor(0,0);
-//	LCD_WriteRAM_Prepare();	
-//////	//__HAL_DCMI_ENABLE(&hdcmi);	
+//     HAL_DCMI_Suspend(hdcmi);
+// 	  HAL_DCMI_Stop(hdcmi);
+//     prepare_yolo_data();
+// //		HAL_DCMI_Stop(hdcmi);
+// //		LCD_Fillimg(0,0,55,55,img_data); //0 0 55 55
+// 		// isok=1;
+// //	LCD_SetCursor(0,0);
+// //	LCD_WriteRAM_Prepare();	
+// //////	//__HAL_DCMI_ENABLE(&hdcmi);	
 	
-    ram_ready = 0;
-    LCD_Set_Window(0,0,256,256);
-    // LCD_SetCursor(0,0);
-    LCD_WriteRAM_Prepare();
-//      for (int i = 0; i < 256; i++)
-//      {
-//          for (int j = 0; j < 256; j++)
-//          {
-//              LCD->LCD_RAM=img_data[j+i*256];  
-//          }
-//      }
-   // DCMI_Start();
+//     ram_ready = 0;
+//     LCD_Set_Window(0,0,256,256);
+//     // LCD_SetCursor(0,0);
+//     LCD_WriteRAM_Prepare();
+// //      for (int i = 0; i < 256; i++)
+// //      {
+// //          for (int j = 0; j < 256; j++)
+// //          {
+// //              LCD->LCD_RAM=img_data[j+i*256];  
+// //          }
+// //      }
+//    // DCMI_Start();
 		 
-	HAL_DMA_Start_IT(&hdma_memtomem_dma2_stream6, (uint32_t) img_data, (uint32_t) &LCD->LCD_RAM,
-												 65535);
-	LCD_WriteRAM_Prepare();
+// 	HAL_DMA_Start_IT(&hdma_memtomem_dma2_stream6, (uint32_t) img_data, (uint32_t) &LCD->LCD_RAM,
+// 												 65535);
+// 	LCD_WriteRAM_Prepare();
+		
+        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+		if(pdTRUE == xSemaphoreTakeFromISR(Sem_lvglHandle,&xHigherPriorityTaskWoken))    
+    {
+            lv_obj_invalidate(canvas_cam);        
+            xSemaphoreGiveFromISR(Sem_lvglHandle ,&xHigherPriorityTaskWoken);
+            portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    }
 }
 
 
@@ -439,7 +449,6 @@ int fputc(int ch, FILE *f)
     return (ch);
 }
 
-
 //lvgl test
 static lv_obj_t * label;
 
@@ -468,6 +477,17 @@ void lv_example_get_started_1(void)
     lv_label_set_text(label, "0");
     lv_obj_align_to(label, slider, LV_ALIGN_OUT_TOP_MID, 0, -15);    /*Align top of the slider*/
 	
+}
+
+void lv_cam_canvas(void){
+    // 创建对象
+    canvas_cam = lv_canvas_create(lv_screen_active());
+    lv_canvas_set_buffer(canvas_cam, img_data, 256, 256, LV_COLOR_FORMAT_RGB565);
+    lv_canvas_fill_bg(canvas_cam, lv_color_hex(0x000000), 255);
+
+    lv_obj_set_pos(canvas_cam, 0, 0);
+    lv_obj_set_size(canvas_cam, 256, 256);
+    lv_obj_set_scrollbar_mode(canvas_cam, LV_SCROLLBAR_MODE_OFF);
 }
 /* USER CODE END 0 */
 
