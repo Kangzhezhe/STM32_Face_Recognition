@@ -9,6 +9,14 @@
         "array": "c",
         "string": "c",
         "string_view": "c",
-        "dcmi.h": "c"
+        "dcmi.h": "c",
+        "stdio.h": "c",
+        "string.h": "c",
+        "crtdefs.h": "c",
+        "touch.h": "c",
+        "main.h": "c",
+        "math.h": "c",
+        "stdlib.h": "c",
+        "gt911.h": "c"
     }
 }

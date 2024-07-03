@@ -34,7 +34,7 @@ void SCCB_SDA_OUT()
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 		HAL_GPIO_WritePin(GPIOB,SDA_Pin,1);
 }
-void delay_us(u16 time)
+static void delay_us(u16 time)
 {    
    u32 i=0;  
    while(time--)

@@ -1,7 +1,7 @@
 {
     "_allocate_inputs": 4,
     "_allocate_outputs": 4,
-    "cli_parameters": "generate --name network_1 -m D:/linux/MobileFaceNet_Pytorch/mobilefacenet_quantized1.onnx --type onnx --compression none --verbosity 1 --workspace C:\\Users\\19178\\AppData\\Local\\Temp\\mxAI_workspace8400994155280011381974596942859515 --output C:\\Users\\19178\\.stm32cubemx\\network_output --allocate-inputs --series stm32h7 -O ram --allocate-outputs",
+    "cli_parameters": "generate --name network_1 -m D:/linux/MobileFaceNet_Pytorch/model/mobilefacenet_int8.tflite --type tflite --compression none --verbosity 1 --workspace C:\\Users\\19178\\AppData\\Local\\Temp\\mxAI_workspace4916445956820016091701367379039096 --output C:\\Users\\19178\\.stm32cubemx\\network_output --allocate-inputs --series stm32h7 --allocate-outputs",
     "cli_version": {
         "major": 1,
         "micro": 0,
@@ -13,18 +13,20 @@
         "factor": null,
         "layers": {}
     },
-    "date_time": "Sat Jun 29 10:04:48 2024",
+    "date_time": "Wed Jul  3 10:12:13 2024",
     "error": 0,
     "error_str": [],
     "exec_cmd": "generate",
     "exec_duration": 0.0,
-    "hash": "b055b2a572dbfb35b844655343cb62d4",
+    "hash": "e6432b76c75a87b29403ea7ed086b587",
     "inputs": [
-        "input"
+        "serving_default_input_10"
     ],
     "layers": [
         {
-            "c_id": [],
+            "c_id": [
+                0
+            ],
             "extras": {
                 "n_macc": 0,
                 "n_params": 0,
@@ -35,9 +37,9 @@
                         "format": "int8_t"
                     },
                     "shape": [
-                        3,
                         112,
                         96,
+                        3,
                         1
                     ]
                 },
@@ -45,48 +47,44 @@
             },
             "id": 0,
             "inputs": [],
-            "name": "input",
+            "name": "serving_default_input_10",
             "original": "",
             "type": "Input"
         },
         {
             "c_id": [],
             "extras": {
-                "n_macc": 64512,
+                "n_macc": 0,
                 "n_params": 0,
                 "psize": 0,
+                "rom_output": {
+                    "c_size": 33516,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        114,
+                        98,
+                        3,
+                        1
+                    ]
+                },
                 "rom_size": 0
             },
-            "id": 1,
+            "id": 0,
             "inputs": [
-                "input"
+                "serving_default_input_10"
             ],
-            "name": "input_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 64512,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 102,
-            "inputs": [
-                "input_QuantizeLinear_Output"
-            ],
-            "name": "input_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
+            "name": "pad_0",
+            "original": "PAD",
+            "type": "Pad"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 4644928,
                 "n_params": 1792,
-                "psize": 7168,
+                "psize": 1984,
                 "rom_output": {
                     "c_size": 172032,
                     "fmt": {
@@ -101,45 +99,13 @@
                 },
                 "rom_size": 0
             },
-            "id": 103,
+            "id": 1,
             "inputs": [
-                "input_DequantizeLinear_Output"
+                "pad_0"
             ],
-            "name": "_conv1_conv_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_1",
+            "original": "CONV_2D",
             "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 344064,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 104,
-            "inputs": [
-                "_conv1_conv_Conv_output_0"
-            ],
-            "name": "_conv1_conv_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 344064,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 105,
-            "inputs": [
-                "_conv1_conv_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_conv1_conv_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [
@@ -148,55 +114,23 @@
             "extras": {
                 "n_macc": 344064,
                 "n_params": 64,
-                "psize": 256,
+                "psize": 64,
                 "rom_size": 2048
             },
-            "id": 106,
+            "id": 2,
             "inputs": [
-                "_conv1_conv_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_1"
             ],
-            "name": "_conv1_prelu_PRelu_output_0",
-            "original": "PRelu",
+            "name": "nl_2",
+            "original": "PRELU",
             "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 344064,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 107,
-            "inputs": [
-                "_conv1_prelu_PRelu_output_0"
-            ],
-            "name": "_conv1_prelu_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 344064,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 108,
-            "inputs": [
-                "_conv1_prelu_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_conv1_prelu_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 1548352,
                 "n_params": 640,
-                "psize": 2560,
+                "psize": 832,
                 "rom_output": {
                     "c_size": 172032,
                     "fmt": {
@@ -211,102 +145,39 @@
                 },
                 "rom_size": 0
             },
-            "id": 109,
+            "id": 3,
             "inputs": [
-                "_conv1_prelu_PRelu_output_0_DequantizeLinear_Output"
+                "nl_2"
             ],
-            "name": "_dw_conv1_conv_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_3",
+            "original": "DEPTHWISE_CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 344064,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 110,
-            "inputs": [
-                "_dw_conv1_conv_Conv_output_0"
-            ],
-            "name": "_dw_conv1_conv_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 344064,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 111,
-            "inputs": [
-                "_dw_conv1_conv_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_dw_conv1_conv_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                2
+                2,
+                3
             ],
             "extras": {
                 "n_macc": 344064,
                 "n_params": 64,
-                "psize": 256,
+                "psize": 64,
                 "rom_size": 896
             },
-            "id": 112,
+            "id": 4,
             "inputs": [
-                "_dw_conv1_conv_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_3"
             ],
-            "name": "_dw_conv1_prelu_PRelu_output_0",
-            "original": "PRelu",
+            "name": "nl_4",
+            "original": "PRELU",
             "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 344064,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 113,
-            "inputs": [
-                "_dw_conv1_prelu_PRelu_output_0"
-            ],
-            "name": "_dw_conv1_prelu_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 344064,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 114,
-            "inputs": [
-                "_dw_conv1_prelu_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_dw_conv1_prelu_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 22020224,
                 "n_params": 8320,
-                "psize": 33280,
+                "psize": 8704,
                 "rom_output": {
                     "c_size": 344064,
                     "fmt": {
@@ -321,384 +192,56 @@
                 },
                 "rom_size": 0
             },
-            "id": 115,
+            "id": 5,
             "inputs": [
-                "_dw_conv1_prelu_PRelu_output_0_DequantizeLinear_Output"
+                "nl_4"
             ],
-            "name": "_blocks_blocks_0_conv_conv_0_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_5",
+            "original": "CONV_2D",
             "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 688128,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 116,
-            "inputs": [
-                "_blocks_blocks_0_conv_conv_0_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_0_conv_conv_0_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 688128,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 117,
-            "inputs": [
-                "_blocks_blocks_0_conv_conv_0_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_0_conv_conv_0_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [
-                3
-            ],
-            "extras": {
-                "n_macc": 688128,
-                "n_params": 128,
-                "psize": 512,
-                "rom_size": 8832
-            },
-            "id": 118,
-            "inputs": [
-                "_blocks_blocks_0_conv_conv_0_Conv_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_0_conv_conv_2_PRelu_output_0",
-            "original": "PRelu",
-            "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 688128,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 119,
-            "inputs": [
-                "_blocks_blocks_0_conv_conv_2_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_0_conv_conv_2_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 688128,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 120,
-            "inputs": [
-                "_blocks_blocks_0_conv_conv_2_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_0_conv_conv_2_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 774272,
-                "n_params": 1280,
-                "psize": 5120,
-                "rom_output": {
-                    "c_size": 86016,
-                    "fmt": {
-                        "format": "int8_t"
-                    },
-                    "shape": [
-                        28,
-                        24,
-                        128,
-                        1
-                    ]
-                },
-                "rom_size": 0
-            },
-            "id": 121,
-            "inputs": [
-                "_blocks_blocks_0_conv_conv_2_PRelu_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_0_conv_conv_3_Conv_output_0",
-            "original": "Conv",
-            "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 122,
-            "inputs": [
-                "_blocks_blocks_0_conv_conv_3_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_0_conv_conv_3_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 123,
-            "inputs": [
-                "_blocks_blocks_0_conv_conv_3_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_0_conv_conv_3_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [
                 4
             ],
             "extras": {
-                "n_macc": 172032,
+                "n_macc": 688128,
                 "n_params": 128,
-                "psize": 512,
-                "rom_size": 1792
+                "psize": 128,
+                "rom_size": 8832
             },
-            "id": 124,
+            "id": 6,
             "inputs": [
-                "_blocks_blocks_0_conv_conv_3_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_5"
             ],
-            "name": "_blocks_blocks_0_conv_conv_5_PRelu_output_0",
-            "original": "PRelu",
+            "name": "nl_6",
+            "original": "PRELU",
             "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 125,
-            "inputs": [
-                "_blocks_blocks_0_conv_conv_5_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_0_conv_conv_5_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 126,
-            "inputs": [
-                "_blocks_blocks_0_conv_conv_5_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_0_conv_conv_5_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [
-                5
-            ],
-            "extras": {
-                "n_macc": 5505088,
-                "n_params": 8256,
-                "psize": 33024,
-                "rom_output": {
-                    "c_size": 43008,
-                    "fmt": {
-                        "format": "int8_t"
-                    },
-                    "shape": [
-                        28,
-                        24,
-                        64,
-                        1
-                    ]
-                },
-                "rom_size": 8448
-            },
-            "id": 127,
-            "inputs": [
-                "_blocks_blocks_0_conv_conv_5_PRelu_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_0_conv_conv_6_Conv_output_0",
-            "original": "Conv",
-            "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 128,
-            "inputs": [
-                "_blocks_blocks_0_conv_conv_6_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_0_conv_conv_6_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 129,
-            "inputs": [
-                "_blocks_blocks_0_conv_conv_6_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_0_conv_conv_6_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 5505152,
-                "n_params": 8320,
-                "psize": 33280,
-                "rom_output": {
-                    "c_size": 86016,
-                    "fmt": {
-                        "format": "int8_t"
-                    },
-                    "shape": [
-                        28,
-                        24,
-                        128,
-                        1
-                    ]
-                },
-                "rom_size": 0
-            },
-            "id": 130,
-            "inputs": [
-                "_blocks_blocks_0_conv_conv_6_Conv_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_1_conv_conv_0_Conv_output_0",
-            "original": "Conv",
-            "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 131,
-            "inputs": [
-                "_blocks_blocks_1_conv_conv_0_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_1_conv_conv_0_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 132,
-            "inputs": [
-                "_blocks_blocks_1_conv_conv_0_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_1_conv_conv_0_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [
                 6
             ],
             "extras": {
-                "n_macc": 172032,
-                "n_params": 128,
-                "psize": 512,
-                "rom_size": 8832
-            },
-            "id": 133,
-            "inputs": [
-                "_blocks_blocks_1_conv_conv_0_Conv_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_1_conv_conv_2_PRelu_output_0",
-            "original": "PRelu",
-            "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
+                "n_macc": 0,
                 "n_params": 0,
                 "psize": 0,
-                "rom_size": 0
+                "rom_size": 1792
             },
-            "id": 134,
+            "id": 7,
             "inputs": [
-                "_blocks_blocks_1_conv_conv_2_PRelu_output_0"
+                "nl_6"
             ],
-            "name": "_blocks_blocks_1_conv_conv_2_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 135,
-            "inputs": [
-                "_blocks_blocks_1_conv_conv_2_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_1_conv_conv_2_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
+            "name": "pad_7",
+            "original": "PAD",
+            "type": "Pad"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 774272,
                 "n_params": 1280,
-                "psize": 5120,
+                "psize": 1664,
                 "rom_output": {
                     "c_size": 86016,
                     "fmt": {
@@ -713,337 +256,114 @@
                 },
                 "rom_size": 0
             },
-            "id": 136,
+            "id": 8,
             "inputs": [
-                "_blocks_blocks_1_conv_conv_2_PRelu_output_0_DequantizeLinear_Output"
+                "pad_7"
             ],
-            "name": "_blocks_blocks_1_conv_conv_3_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_8",
+            "original": "DEPTHWISE_CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
+            "c_id": [
+                5
+            ],
             "extras": {
                 "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
+                "n_params": 128,
+                "psize": 128,
                 "rom_size": 0
             },
-            "id": 137,
+            "id": 9,
             "inputs": [
-                "_blocks_blocks_1_conv_conv_3_Conv_output_0"
+                "conv2d_8"
             ],
-            "name": "_blocks_blocks_1_conv_conv_3_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 138,
-            "inputs": [
-                "_blocks_blocks_1_conv_conv_3_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_1_conv_conv_3_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
+            "name": "nl_9",
+            "original": "PRELU",
+            "type": "Nonlinearity"
         },
         {
             "c_id": [
                 7
             ],
             "extras": {
-                "n_macc": 172032,
-                "n_params": 128,
-                "psize": 512,
-                "rom_size": 1792
+                "n_macc": 5505088,
+                "n_params": 8256,
+                "psize": 8448,
+                "rom_output": {
+                    "c_size": 43008,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        28,
+                        24,
+                        64,
+                        1
+                    ]
+                },
+                "rom_size": 8448
             },
-            "id": 139,
+            "id": 10,
             "inputs": [
-                "_blocks_blocks_1_conv_conv_3_Conv_output_0_DequantizeLinear_Output"
+                "nl_9"
             ],
-            "name": "_blocks_blocks_1_conv_conv_5_PRelu_output_0",
-            "original": "PRelu",
-            "type": "Nonlinearity"
+            "name": "conv2d_10",
+            "original": "CONV_2D",
+            "type": "Conv2D"
         },
         {
             "c_id": [],
             "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
+                "n_macc": 5505152,
+                "n_params": 8320,
+                "psize": 8704,
+                "rom_output": {
+                    "c_size": 86016,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        28,
+                        24,
+                        128,
+                        1
+                    ]
+                },
                 "rom_size": 0
             },
-            "id": 140,
+            "id": 11,
             "inputs": [
-                "_blocks_blocks_1_conv_conv_5_PRelu_output_0"
+                "conv2d_10"
             ],
-            "name": "_blocks_blocks_1_conv_conv_5_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 141,
-            "inputs": [
-                "_blocks_blocks_1_conv_conv_5_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_1_conv_conv_5_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
+            "name": "conv2d_11",
+            "original": "CONV_2D",
+            "type": "Conv2D"
         },
         {
             "c_id": [
                 8
             ],
             "extras": {
-                "n_macc": 5505088,
-                "n_params": 8256,
-                "psize": 33024,
-                "rom_output": {
-                    "c_size": 43008,
-                    "fmt": {
-                        "format": "int8_t"
-                    },
-                    "shape": [
-                        28,
-                        24,
-                        64,
-                        1
-                    ]
-                },
-                "rom_size": 8448
-            },
-            "id": 142,
-            "inputs": [
-                "_blocks_blocks_1_conv_conv_5_PRelu_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_1_conv_conv_6_Conv_output_0",
-            "original": "Conv",
-            "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 143,
-            "inputs": [
-                "_blocks_blocks_1_conv_conv_6_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_1_conv_conv_6_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 144,
-            "inputs": [
-                "_blocks_blocks_1_conv_conv_6_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_1_conv_conv_6_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [
-                9
-            ],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_output": {
-                    "c_size": 43008,
-                    "fmt": {
-                        "format": "int8_t"
-                    },
-                    "shape": [
-                        28,
-                        24,
-                        64,
-                        1
-                    ]
-                },
-                "rom_size": 0
-            },
-            "id": 145,
-            "inputs": [
-                "_blocks_blocks_0_conv_conv_6_Conv_output_0_DequantizeLinear_Output",
-                "_blocks_blocks_1_conv_conv_6_Conv_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_1_Add_output_0",
-            "original": "Add",
-            "type": "Eltwise"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 146,
-            "inputs": [
-                "_blocks_blocks_1_Add_output_0"
-            ],
-            "name": "_blocks_blocks_1_Add_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 147,
-            "inputs": [
-                "_blocks_blocks_1_Add_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_1_Add_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 5505152,
-                "n_params": 8320,
-                "psize": 33280,
-                "rom_output": {
-                    "c_size": 86016,
-                    "fmt": {
-                        "format": "int8_t"
-                    },
-                    "shape": [
-                        28,
-                        24,
-                        128,
-                        1
-                    ]
-                },
-                "rom_size": 0
-            },
-            "id": 148,
-            "inputs": [
-                "_blocks_blocks_1_Add_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_2_conv_conv_0_Conv_output_0",
-            "original": "Conv",
-            "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 149,
-            "inputs": [
-                "_blocks_blocks_2_conv_conv_0_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_2_conv_conv_0_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 150,
-            "inputs": [
-                "_blocks_blocks_2_conv_conv_0_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_2_conv_conv_0_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [
-                10
-            ],
-            "extras": {
                 "n_macc": 172032,
                 "n_params": 128,
-                "psize": 512,
+                "psize": 128,
                 "rom_size": 8832
             },
-            "id": 151,
+            "id": 12,
             "inputs": [
-                "_blocks_blocks_2_conv_conv_0_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_11"
             ],
-            "name": "_blocks_blocks_2_conv_conv_2_PRelu_output_0",
-            "original": "PRelu",
+            "name": "nl_12",
+            "original": "PRELU",
             "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 152,
-            "inputs": [
-                "_blocks_blocks_2_conv_conv_2_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_2_conv_conv_2_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 153,
-            "inputs": [
-                "_blocks_blocks_2_conv_conv_2_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_2_conv_conv_2_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 774272,
                 "n_params": 1280,
-                "psize": 5120,
+                "psize": 1664,
                 "rom_output": {
                     "c_size": 86016,
                     "fmt": {
@@ -1058,104 +378,41 @@
                 },
                 "rom_size": 0
             },
-            "id": 154,
+            "id": 13,
             "inputs": [
-                "_blocks_blocks_2_conv_conv_2_PRelu_output_0_DequantizeLinear_Output"
+                "nl_12"
             ],
-            "name": "_blocks_blocks_2_conv_conv_3_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_13",
+            "original": "DEPTHWISE_CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
+            "c_id": [
+                9,
+                10
+            ],
             "extras": {
                 "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
+                "n_params": 128,
+                "psize": 128,
+                "rom_size": 1792
             },
-            "id": 155,
+            "id": 14,
             "inputs": [
-                "_blocks_blocks_2_conv_conv_3_Conv_output_0"
+                "conv2d_13"
             ],
-            "name": "_blocks_blocks_2_conv_conv_3_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 156,
-            "inputs": [
-                "_blocks_blocks_2_conv_conv_3_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_2_conv_conv_3_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
+            "name": "nl_14",
+            "original": "PRELU",
+            "type": "Nonlinearity"
         },
         {
             "c_id": [
                 11
             ],
             "extras": {
-                "n_macc": 172032,
-                "n_params": 128,
-                "psize": 512,
-                "rom_size": 1792
-            },
-            "id": 157,
-            "inputs": [
-                "_blocks_blocks_2_conv_conv_3_Conv_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_2_conv_conv_5_PRelu_output_0",
-            "original": "PRelu",
-            "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 158,
-            "inputs": [
-                "_blocks_blocks_2_conv_conv_5_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_2_conv_conv_5_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 159,
-            "inputs": [
-                "_blocks_blocks_2_conv_conv_5_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_2_conv_conv_5_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [
-                12
-            ],
-            "extras": {
                 "n_macc": 5505088,
                 "n_params": 8256,
-                "psize": 33024,
+                "psize": 8448,
                 "rom_output": {
                     "c_size": 43008,
                     "fmt": {
@@ -1170,49 +427,17 @@
                 },
                 "rom_size": 8448
             },
-            "id": 160,
+            "id": 15,
             "inputs": [
-                "_blocks_blocks_2_conv_conv_5_PRelu_output_0_DequantizeLinear_Output"
+                "nl_14"
             ],
-            "name": "_blocks_blocks_2_conv_conv_6_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_15",
+            "original": "CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 161,
-            "inputs": [
-                "_blocks_blocks_2_conv_conv_6_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_2_conv_conv_6_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 162,
-            "inputs": [
-                "_blocks_blocks_2_conv_conv_6_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_2_conv_conv_6_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                13
+                12
             ],
             "extras": {
                 "n_macc": 43008,
@@ -1232,53 +457,21 @@
                 },
                 "rom_size": 0
             },
-            "id": 163,
+            "id": 16,
             "inputs": [
-                "_blocks_blocks_1_Add_output_0_DequantizeLinear_Output",
-                "_blocks_blocks_2_conv_conv_6_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_10",
+                "conv2d_15"
             ],
-            "name": "_blocks_blocks_2_Add_output_0",
-            "original": "Add",
+            "name": "eltwise_16",
+            "original": "ADD",
             "type": "Eltwise"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 164,
-            "inputs": [
-                "_blocks_blocks_2_Add_output_0"
-            ],
-            "name": "_blocks_blocks_2_Add_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 165,
-            "inputs": [
-                "_blocks_blocks_2_Add_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_2_Add_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 5505152,
                 "n_params": 8320,
-                "psize": 33280,
+                "psize": 8704,
                 "rom_output": {
                     "c_size": 86016,
                     "fmt": {
@@ -1293,102 +486,38 @@
                 },
                 "rom_size": 0
             },
-            "id": 166,
+            "id": 17,
             "inputs": [
-                "_blocks_blocks_2_Add_output_0_DequantizeLinear_Output"
+                "eltwise_16"
             ],
-            "name": "_blocks_blocks_3_conv_conv_0_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_17",
+            "original": "CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 167,
-            "inputs": [
-                "_blocks_blocks_3_conv_conv_0_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_3_conv_conv_0_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 168,
-            "inputs": [
-                "_blocks_blocks_3_conv_conv_0_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_3_conv_conv_0_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                14
+                13
             ],
             "extras": {
                 "n_macc": 172032,
                 "n_params": 128,
-                "psize": 512,
+                "psize": 128,
                 "rom_size": 8832
             },
-            "id": 169,
+            "id": 18,
             "inputs": [
-                "_blocks_blocks_3_conv_conv_0_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_17"
             ],
-            "name": "_blocks_blocks_3_conv_conv_2_PRelu_output_0",
-            "original": "PRelu",
+            "name": "nl_18",
+            "original": "PRELU",
             "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 170,
-            "inputs": [
-                "_blocks_blocks_3_conv_conv_2_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_3_conv_conv_2_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 171,
-            "inputs": [
-                "_blocks_blocks_3_conv_conv_2_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_3_conv_conv_2_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 774272,
                 "n_params": 1280,
-                "psize": 5120,
+                "psize": 1664,
                 "rom_output": {
                     "c_size": 86016,
                     "fmt": {
@@ -1403,95 +532,32 @@
                 },
                 "rom_size": 0
             },
-            "id": 172,
+            "id": 19,
             "inputs": [
-                "_blocks_blocks_3_conv_conv_2_PRelu_output_0_DequantizeLinear_Output"
+                "nl_18"
             ],
-            "name": "_blocks_blocks_3_conv_conv_3_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_19",
+            "original": "DEPTHWISE_CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 173,
-            "inputs": [
-                "_blocks_blocks_3_conv_conv_3_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_3_conv_conv_3_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 174,
-            "inputs": [
-                "_blocks_blocks_3_conv_conv_3_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_3_conv_conv_3_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
+                14,
                 15
             ],
             "extras": {
                 "n_macc": 172032,
                 "n_params": 128,
-                "psize": 512,
+                "psize": 128,
                 "rom_size": 1792
             },
-            "id": 175,
+            "id": 20,
             "inputs": [
-                "_blocks_blocks_3_conv_conv_3_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_19"
             ],
-            "name": "_blocks_blocks_3_conv_conv_5_PRelu_output_0",
-            "original": "PRelu",
+            "name": "nl_20",
+            "original": "PRELU",
             "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 176,
-            "inputs": [
-                "_blocks_blocks_3_conv_conv_5_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_3_conv_conv_5_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 177,
-            "inputs": [
-                "_blocks_blocks_3_conv_conv_5_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_3_conv_conv_5_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [
@@ -1500,7 +566,7 @@
             "extras": {
                 "n_macc": 5505088,
                 "n_params": 8256,
-                "psize": 33024,
+                "psize": 8448,
                 "rom_output": {
                     "c_size": 43008,
                     "fmt": {
@@ -1515,45 +581,13 @@
                 },
                 "rom_size": 8448
             },
-            "id": 178,
+            "id": 21,
             "inputs": [
-                "_blocks_blocks_3_conv_conv_5_PRelu_output_0_DequantizeLinear_Output"
+                "nl_20"
             ],
-            "name": "_blocks_blocks_3_conv_conv_6_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_21",
+            "original": "CONV_2D",
             "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 179,
-            "inputs": [
-                "_blocks_blocks_3_conv_conv_6_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_3_conv_conv_6_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 180,
-            "inputs": [
-                "_blocks_blocks_3_conv_conv_6_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_3_conv_conv_6_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [
@@ -1577,53 +611,21 @@
                 },
                 "rom_size": 0
             },
-            "id": 181,
+            "id": 22,
             "inputs": [
-                "_blocks_blocks_2_Add_output_0_DequantizeLinear_Output",
-                "_blocks_blocks_3_conv_conv_6_Conv_output_0_DequantizeLinear_Output"
+                "eltwise_16",
+                "conv2d_21"
             ],
-            "name": "_blocks_blocks_3_Add_output_0",
-            "original": "Add",
+            "name": "eltwise_22",
+            "original": "ADD",
             "type": "Eltwise"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 182,
-            "inputs": [
-                "_blocks_blocks_3_Add_output_0"
-            ],
-            "name": "_blocks_blocks_3_Add_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 183,
-            "inputs": [
-                "_blocks_blocks_3_Add_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_3_Add_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 5505152,
                 "n_params": 8320,
-                "psize": 33280,
+                "psize": 8704,
                 "rom_output": {
                     "c_size": 86016,
                     "fmt": {
@@ -1638,45 +640,13 @@
                 },
                 "rom_size": 0
             },
-            "id": 184,
+            "id": 23,
             "inputs": [
-                "_blocks_blocks_3_Add_output_0_DequantizeLinear_Output"
+                "eltwise_22"
             ],
-            "name": "_blocks_blocks_4_conv_conv_0_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_23",
+            "original": "CONV_2D",
             "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 185,
-            "inputs": [
-                "_blocks_blocks_4_conv_conv_0_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_4_conv_conv_0_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 186,
-            "inputs": [
-                "_blocks_blocks_4_conv_conv_0_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_4_conv_conv_0_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [
@@ -1685,55 +655,23 @@
             "extras": {
                 "n_macc": 172032,
                 "n_params": 128,
-                "psize": 512,
+                "psize": 128,
                 "rom_size": 8832
             },
-            "id": 187,
+            "id": 24,
             "inputs": [
-                "_blocks_blocks_4_conv_conv_0_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_23"
             ],
-            "name": "_blocks_blocks_4_conv_conv_2_PRelu_output_0",
-            "original": "PRelu",
+            "name": "nl_24",
+            "original": "PRELU",
             "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 188,
-            "inputs": [
-                "_blocks_blocks_4_conv_conv_2_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_4_conv_conv_2_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 189,
-            "inputs": [
-                "_blocks_blocks_4_conv_conv_2_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_4_conv_conv_2_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 774272,
                 "n_params": 1280,
-                "psize": 5120,
+                "psize": 1664,
                 "rom_output": {
                     "c_size": 86016,
                     "fmt": {
@@ -1748,104 +686,41 @@
                 },
                 "rom_size": 0
             },
-            "id": 190,
+            "id": 25,
             "inputs": [
-                "_blocks_blocks_4_conv_conv_2_PRelu_output_0_DequantizeLinear_Output"
+                "nl_24"
             ],
-            "name": "_blocks_blocks_4_conv_conv_3_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_25",
+            "original": "DEPTHWISE_CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 191,
-            "inputs": [
-                "_blocks_blocks_4_conv_conv_3_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_4_conv_conv_3_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 192,
-            "inputs": [
-                "_blocks_blocks_4_conv_conv_3_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_4_conv_conv_3_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                19
+                19,
+                20
             ],
             "extras": {
                 "n_macc": 172032,
                 "n_params": 128,
-                "psize": 512,
+                "psize": 128,
                 "rom_size": 1792
             },
-            "id": 193,
+            "id": 26,
             "inputs": [
-                "_blocks_blocks_4_conv_conv_3_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_25"
             ],
-            "name": "_blocks_blocks_4_conv_conv_5_PRelu_output_0",
-            "original": "PRelu",
+            "name": "nl_26",
+            "original": "PRELU",
             "type": "Nonlinearity"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 194,
-            "inputs": [
-                "_blocks_blocks_4_conv_conv_5_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_4_conv_conv_5_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 195,
-            "inputs": [
-                "_blocks_blocks_4_conv_conv_5_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_4_conv_conv_5_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                20
+                21
             ],
             "extras": {
                 "n_macc": 5505088,
                 "n_params": 8256,
-                "psize": 33024,
+                "psize": 8448,
                 "rom_output": {
                     "c_size": 43008,
                     "fmt": {
@@ -1860,49 +735,17 @@
                 },
                 "rom_size": 8448
             },
-            "id": 196,
+            "id": 27,
             "inputs": [
-                "_blocks_blocks_4_conv_conv_5_PRelu_output_0_DequantizeLinear_Output"
+                "nl_26"
             ],
-            "name": "_blocks_blocks_4_conv_conv_6_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_27",
+            "original": "CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 197,
-            "inputs": [
-                "_blocks_blocks_4_conv_conv_6_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_4_conv_conv_6_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 198,
-            "inputs": [
-                "_blocks_blocks_4_conv_conv_6_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_4_conv_conv_6_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                21
+                22
             ],
             "extras": {
                 "n_macc": 43008,
@@ -1922,53 +765,175 @@
                 },
                 "rom_size": 0
             },
-            "id": 199,
+            "id": 28,
             "inputs": [
-                "_blocks_blocks_3_Add_output_0_DequantizeLinear_Output",
-                "_blocks_blocks_4_conv_conv_6_Conv_output_0_DequantizeLinear_Output"
+                "eltwise_22",
+                "conv2d_27"
             ],
-            "name": "_blocks_blocks_4_Add_output_0",
-            "original": "Add",
+            "name": "eltwise_28",
+            "original": "ADD",
             "type": "Eltwise"
         },
         {
             "c_id": [],
             "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
+                "n_macc": 5505152,
+                "n_params": 8320,
+                "psize": 8704,
+                "rom_output": {
+                    "c_size": 86016,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        28,
+                        24,
+                        128,
+                        1
+                    ]
+                },
                 "rom_size": 0
             },
-            "id": 200,
+            "id": 29,
             "inputs": [
-                "_blocks_blocks_4_Add_output_0"
+                "eltwise_28"
             ],
-            "name": "_blocks_blocks_4_Add_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
+            "name": "conv2d_29",
+            "original": "CONV_2D",
+            "type": "Conv2D"
+        },
+        {
+            "c_id": [
+                23
+            ],
+            "extras": {
+                "n_macc": 172032,
+                "n_params": 128,
+                "psize": 128,
+                "rom_size": 8832
+            },
+            "id": 30,
+            "inputs": [
+                "conv2d_29"
+            ],
+            "name": "nl_30",
+            "original": "PRELU",
+            "type": "Nonlinearity"
         },
         {
             "c_id": [],
             "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
+                "n_macc": 774272,
+                "n_params": 1280,
+                "psize": 1664,
+                "rom_output": {
+                    "c_size": 86016,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        28,
+                        24,
+                        128,
+                        1
+                    ]
+                },
                 "rom_size": 0
             },
-            "id": 201,
+            "id": 31,
             "inputs": [
-                "_blocks_blocks_4_Add_output_0_QuantizeLinear_Output"
+                "nl_30"
             ],
-            "name": "_blocks_blocks_4_Add_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
+            "name": "conv2d_31",
+            "original": "DEPTHWISE_CONV_2D",
+            "type": "Conv2D"
+        },
+        {
+            "c_id": [
+                24,
+                25
+            ],
+            "extras": {
+                "n_macc": 172032,
+                "n_params": 128,
+                "psize": 128,
+                "rom_size": 1792
+            },
+            "id": 32,
+            "inputs": [
+                "conv2d_31"
+            ],
+            "name": "nl_32",
+            "original": "PRELU",
+            "type": "Nonlinearity"
+        },
+        {
+            "c_id": [
+                26
+            ],
+            "extras": {
+                "n_macc": 5505088,
+                "n_params": 8256,
+                "psize": 8448,
+                "rom_output": {
+                    "c_size": 43008,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        28,
+                        24,
+                        64,
+                        1
+                    ]
+                },
+                "rom_size": 8448
+            },
+            "id": 33,
+            "inputs": [
+                "nl_32"
+            ],
+            "name": "conv2d_33",
+            "original": "CONV_2D",
+            "type": "Conv2D"
+        },
+        {
+            "c_id": [
+                27
+            ],
+            "extras": {
+                "n_macc": 43008,
+                "n_params": 0,
+                "psize": 0,
+                "rom_output": {
+                    "c_size": 43008,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        28,
+                        24,
+                        64,
+                        1
+                    ]
+                },
+                "rom_size": 0
+            },
+            "id": 34,
+            "inputs": [
+                "eltwise_28",
+                "conv2d_33"
+            ],
+            "name": "eltwise_34",
+            "original": "ADD",
+            "type": "Eltwise"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 11010304,
                 "n_params": 16640,
-                "psize": 66560,
+                "psize": 17408,
                 "rom_output": {
                     "c_size": 172032,
                     "fmt": {
@@ -1983,619 +948,56 @@
                 },
                 "rom_size": 0
             },
-            "id": 202,
+            "id": 35,
             "inputs": [
-                "_blocks_blocks_4_Add_output_0_DequantizeLinear_Output"
+                "eltwise_34"
             ],
-            "name": "_blocks_blocks_5_conv_conv_0_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_35",
+            "original": "CONV_2D",
             "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 344064,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 203,
-            "inputs": [
-                "_blocks_blocks_5_conv_conv_0_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_5_conv_conv_0_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 344064,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 204,
-            "inputs": [
-                "_blocks_blocks_5_conv_conv_0_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_5_conv_conv_0_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [
-                22
-            ],
-            "extras": {
-                "n_macc": 344064,
-                "n_params": 256,
-                "psize": 1024,
-                "rom_size": 17664
-            },
-            "id": 205,
-            "inputs": [
-                "_blocks_blocks_5_conv_conv_0_Conv_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_5_conv_conv_2_PRelu_output_0",
-            "original": "PRelu",
-            "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 344064,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 206,
-            "inputs": [
-                "_blocks_blocks_5_conv_conv_2_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_5_conv_conv_2_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 344064,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 207,
-            "inputs": [
-                "_blocks_blocks_5_conv_conv_2_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_5_conv_conv_2_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 387328,
-                "n_params": 2560,
-                "psize": 10240,
-                "rom_output": {
-                    "c_size": 43008,
-                    "fmt": {
-                        "format": "int8_t"
-                    },
-                    "shape": [
-                        14,
-                        12,
-                        256,
-                        1
-                    ]
-                },
-                "rom_size": 0
-            },
-            "id": 208,
-            "inputs": [
-                "_blocks_blocks_5_conv_conv_2_PRelu_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_5_conv_conv_3_Conv_output_0",
-            "original": "Conv",
-            "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 209,
-            "inputs": [
-                "_blocks_blocks_5_conv_conv_3_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_5_conv_conv_3_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 210,
-            "inputs": [
-                "_blocks_blocks_5_conv_conv_3_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_5_conv_conv_3_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [
-                23
-            ],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 256,
-                "psize": 1024,
-                "rom_size": 3584
-            },
-            "id": 211,
-            "inputs": [
-                "_blocks_blocks_5_conv_conv_3_Conv_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_5_conv_conv_5_PRelu_output_0",
-            "original": "PRelu",
-            "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 212,
-            "inputs": [
-                "_blocks_blocks_5_conv_conv_5_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_5_conv_conv_5_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 213,
-            "inputs": [
-                "_blocks_blocks_5_conv_conv_5_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_5_conv_conv_5_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [
-                24
-            ],
-            "extras": {
-                "n_macc": 5505152,
-                "n_params": 32896,
-                "psize": 131584,
-                "rom_output": {
-                    "c_size": 21504,
-                    "fmt": {
-                        "format": "int8_t"
-                    },
-                    "shape": [
-                        14,
-                        12,
-                        128,
-                        1
-                    ]
-                },
-                "rom_size": 33280
-            },
-            "id": 214,
-            "inputs": [
-                "_blocks_blocks_5_conv_conv_5_PRelu_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_5_conv_conv_6_Conv_output_0",
-            "original": "Conv",
-            "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 215,
-            "inputs": [
-                "_blocks_blocks_5_conv_conv_6_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_5_conv_conv_6_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 216,
-            "inputs": [
-                "_blocks_blocks_5_conv_conv_6_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_5_conv_conv_6_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 5505280,
-                "n_params": 33024,
-                "psize": 132096,
-                "rom_output": {
-                    "c_size": 43008,
-                    "fmt": {
-                        "format": "int8_t"
-                    },
-                    "shape": [
-                        14,
-                        12,
-                        256,
-                        1
-                    ]
-                },
-                "rom_size": 0
-            },
-            "id": 217,
-            "inputs": [
-                "_blocks_blocks_5_conv_conv_6_Conv_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_6_conv_conv_0_Conv_output_0",
-            "original": "Conv",
-            "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 218,
-            "inputs": [
-                "_blocks_blocks_6_conv_conv_0_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_6_conv_conv_0_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 219,
-            "inputs": [
-                "_blocks_blocks_6_conv_conv_0_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_6_conv_conv_0_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [
-                25
-            ],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 256,
-                "psize": 1024,
-                "rom_size": 34048
-            },
-            "id": 220,
-            "inputs": [
-                "_blocks_blocks_6_conv_conv_0_Conv_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_6_conv_conv_2_PRelu_output_0",
-            "original": "PRelu",
-            "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 221,
-            "inputs": [
-                "_blocks_blocks_6_conv_conv_2_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_6_conv_conv_2_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 222,
-            "inputs": [
-                "_blocks_blocks_6_conv_conv_2_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_6_conv_conv_2_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 387328,
-                "n_params": 2560,
-                "psize": 10240,
-                "rom_output": {
-                    "c_size": 43008,
-                    "fmt": {
-                        "format": "int8_t"
-                    },
-                    "shape": [
-                        14,
-                        12,
-                        256,
-                        1
-                    ]
-                },
-                "rom_size": 0
-            },
-            "id": 223,
-            "inputs": [
-                "_blocks_blocks_6_conv_conv_2_PRelu_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_6_conv_conv_3_Conv_output_0",
-            "original": "Conv",
-            "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 224,
-            "inputs": [
-                "_blocks_blocks_6_conv_conv_3_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_6_conv_conv_3_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 225,
-            "inputs": [
-                "_blocks_blocks_6_conv_conv_3_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_6_conv_conv_3_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [
-                26
-            ],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 256,
-                "psize": 1024,
-                "rom_size": 3584
-            },
-            "id": 226,
-            "inputs": [
-                "_blocks_blocks_6_conv_conv_3_Conv_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_6_conv_conv_5_PRelu_output_0",
-            "original": "PRelu",
-            "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 227,
-            "inputs": [
-                "_blocks_blocks_6_conv_conv_5_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_6_conv_conv_5_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 228,
-            "inputs": [
-                "_blocks_blocks_6_conv_conv_5_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_6_conv_conv_5_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [
-                27
-            ],
-            "extras": {
-                "n_macc": 5505152,
-                "n_params": 32896,
-                "psize": 131584,
-                "rom_output": {
-                    "c_size": 21504,
-                    "fmt": {
-                        "format": "int8_t"
-                    },
-                    "shape": [
-                        14,
-                        12,
-                        128,
-                        1
-                    ]
-                },
-                "rom_size": 33280
-            },
-            "id": 229,
-            "inputs": [
-                "_blocks_blocks_6_conv_conv_5_PRelu_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_6_conv_conv_6_Conv_output_0",
-            "original": "Conv",
-            "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 230,
-            "inputs": [
-                "_blocks_blocks_6_conv_conv_6_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_6_conv_conv_6_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 231,
-            "inputs": [
-                "_blocks_blocks_6_conv_conv_6_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_6_conv_conv_6_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [
                 28
             ],
             "extras": {
-                "n_macc": 21504,
+                "n_macc": 344064,
+                "n_params": 256,
+                "psize": 256,
+                "rom_size": 17664
+            },
+            "id": 36,
+            "inputs": [
+                "conv2d_35"
+            ],
+            "name": "nl_36",
+            "original": "PRELU",
+            "type": "Nonlinearity"
+        },
+        {
+            "c_id": [
+                30
+            ],
+            "extras": {
+                "n_macc": 0,
                 "n_params": 0,
                 "psize": 0,
-                "rom_output": {
-                    "c_size": 21504,
-                    "fmt": {
-                        "format": "int8_t"
-                    },
-                    "shape": [
-                        14,
-                        12,
-                        128,
-                        1
-                    ]
-                },
-                "rom_size": 0
+                "rom_size": 3584
             },
-            "id": 232,
+            "id": 37,
             "inputs": [
-                "_blocks_blocks_5_conv_conv_6_Conv_output_0_DequantizeLinear_Output",
-                "_blocks_blocks_6_conv_conv_6_Conv_output_0_DequantizeLinear_Output"
+                "nl_36"
             ],
-            "name": "_blocks_blocks_6_Add_output_0",
-            "original": "Add",
-            "type": "Eltwise"
+            "name": "pad_37",
+            "original": "PAD",
+            "type": "Pad"
         },
         {
             "c_id": [],
             "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 233,
-            "inputs": [
-                "_blocks_blocks_6_Add_output_0"
-            ],
-            "name": "_blocks_blocks_6_Add_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 234,
-            "inputs": [
-                "_blocks_blocks_6_Add_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_6_Add_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 5505280,
-                "n_params": 33024,
-                "psize": 132096,
+                "n_macc": 387328,
+                "n_params": 2560,
+                "psize": 3328,
                 "rom_output": {
                     "c_size": 43008,
                     "fmt": {
@@ -2610,45 +1012,13 @@
                 },
                 "rom_size": 0
             },
-            "id": 235,
+            "id": 38,
             "inputs": [
-                "_blocks_blocks_6_Add_output_0_DequantizeLinear_Output"
+                "pad_37"
             ],
-            "name": "_blocks_blocks_7_conv_conv_0_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_38",
+            "original": "DEPTHWISE_CONV_2D",
             "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 236,
-            "inputs": [
-                "_blocks_blocks_7_conv_conv_0_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_7_conv_conv_0_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 237,
-            "inputs": [
-                "_blocks_blocks_7_conv_conv_0_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_7_conv_conv_0_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [
@@ -2657,158 +1027,16 @@
             "extras": {
                 "n_macc": 86016,
                 "n_params": 256,
-                "psize": 1024,
-                "rom_size": 34048
+                "psize": 256,
+                "rom_size": 0
             },
-            "id": 238,
+            "id": 39,
             "inputs": [
-                "_blocks_blocks_7_conv_conv_0_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_38"
             ],
-            "name": "_blocks_blocks_7_conv_conv_2_PRelu_output_0",
-            "original": "PRelu",
+            "name": "nl_39",
+            "original": "PRELU",
             "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 239,
-            "inputs": [
-                "_blocks_blocks_7_conv_conv_2_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_7_conv_conv_2_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 240,
-            "inputs": [
-                "_blocks_blocks_7_conv_conv_2_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_7_conv_conv_2_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 387328,
-                "n_params": 2560,
-                "psize": 10240,
-                "rom_output": {
-                    "c_size": 43008,
-                    "fmt": {
-                        "format": "int8_t"
-                    },
-                    "shape": [
-                        14,
-                        12,
-                        256,
-                        1
-                    ]
-                },
-                "rom_size": 0
-            },
-            "id": 241,
-            "inputs": [
-                "_blocks_blocks_7_conv_conv_2_PRelu_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_7_conv_conv_3_Conv_output_0",
-            "original": "Conv",
-            "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 242,
-            "inputs": [
-                "_blocks_blocks_7_conv_conv_3_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_7_conv_conv_3_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 243,
-            "inputs": [
-                "_blocks_blocks_7_conv_conv_3_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_7_conv_conv_3_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [
-                30
-            ],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 256,
-                "psize": 1024,
-                "rom_size": 3584
-            },
-            "id": 244,
-            "inputs": [
-                "_blocks_blocks_7_conv_conv_3_Conv_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_7_conv_conv_5_PRelu_output_0",
-            "original": "PRelu",
-            "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 245,
-            "inputs": [
-                "_blocks_blocks_7_conv_conv_5_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_7_conv_conv_5_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 246,
-            "inputs": [
-                "_blocks_blocks_7_conv_conv_5_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_7_conv_conv_5_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [
@@ -2817,7 +1045,7 @@
             "extras": {
                 "n_macc": 5505152,
                 "n_params": 32896,
-                "psize": 131584,
+                "psize": 33280,
                 "rom_output": {
                     "c_size": 21504,
                     "fmt": {
@@ -2832,115 +1060,20 @@
                 },
                 "rom_size": 33280
             },
-            "id": 247,
+            "id": 40,
             "inputs": [
-                "_blocks_blocks_7_conv_conv_5_PRelu_output_0_DequantizeLinear_Output"
+                "nl_39"
             ],
-            "name": "_blocks_blocks_7_conv_conv_6_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_40",
+            "original": "CONV_2D",
             "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 248,
-            "inputs": [
-                "_blocks_blocks_7_conv_conv_6_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_7_conv_conv_6_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 249,
-            "inputs": [
-                "_blocks_blocks_7_conv_conv_6_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_7_conv_conv_6_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [
-                32
-            ],
-            "extras": {
-                "n_macc": 21504,
-                "n_params": 0,
-                "psize": 0,
-                "rom_output": {
-                    "c_size": 21504,
-                    "fmt": {
-                        "format": "int8_t"
-                    },
-                    "shape": [
-                        14,
-                        12,
-                        128,
-                        1
-                    ]
-                },
-                "rom_size": 0
-            },
-            "id": 250,
-            "inputs": [
-                "_blocks_blocks_6_Add_output_0_DequantizeLinear_Output",
-                "_blocks_blocks_7_conv_conv_6_Conv_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_7_Add_output_0",
-            "original": "Add",
-            "type": "Eltwise"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 251,
-            "inputs": [
-                "_blocks_blocks_7_Add_output_0"
-            ],
-            "name": "_blocks_blocks_7_Add_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 252,
-            "inputs": [
-                "_blocks_blocks_7_Add_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_7_Add_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 5505280,
                 "n_params": 33024,
-                "psize": 132096,
+                "psize": 33792,
                 "rom_output": {
                     "c_size": 43008,
                     "fmt": {
@@ -2955,102 +1088,38 @@
                 },
                 "rom_size": 0
             },
-            "id": 253,
+            "id": 41,
             "inputs": [
-                "_blocks_blocks_7_Add_output_0_DequantizeLinear_Output"
+                "conv2d_40"
             ],
-            "name": "_blocks_blocks_8_conv_conv_0_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_41",
+            "original": "CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 254,
-            "inputs": [
-                "_blocks_blocks_8_conv_conv_0_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_8_conv_conv_0_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 255,
-            "inputs": [
-                "_blocks_blocks_8_conv_conv_0_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_8_conv_conv_0_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                33
+                32
             ],
             "extras": {
                 "n_macc": 86016,
                 "n_params": 256,
-                "psize": 1024,
+                "psize": 256,
                 "rom_size": 34048
             },
-            "id": 256,
+            "id": 42,
             "inputs": [
-                "_blocks_blocks_8_conv_conv_0_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_41"
             ],
-            "name": "_blocks_blocks_8_conv_conv_2_PRelu_output_0",
-            "original": "PRelu",
+            "name": "nl_42",
+            "original": "PRELU",
             "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 257,
-            "inputs": [
-                "_blocks_blocks_8_conv_conv_2_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_8_conv_conv_2_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 258,
-            "inputs": [
-                "_blocks_blocks_8_conv_conv_2_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_8_conv_conv_2_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 387328,
                 "n_params": 2560,
-                "psize": 10240,
+                "psize": 3328,
                 "rom_output": {
                     "c_size": 43008,
                     "fmt": {
@@ -3065,95 +1134,32 @@
                 },
                 "rom_size": 0
             },
-            "id": 259,
+            "id": 43,
             "inputs": [
-                "_blocks_blocks_8_conv_conv_2_PRelu_output_0_DequantizeLinear_Output"
+                "nl_42"
             ],
-            "name": "_blocks_blocks_8_conv_conv_3_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_43",
+            "original": "DEPTHWISE_CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 260,
-            "inputs": [
-                "_blocks_blocks_8_conv_conv_3_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_8_conv_conv_3_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 261,
-            "inputs": [
-                "_blocks_blocks_8_conv_conv_3_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_8_conv_conv_3_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
+                33,
                 34
             ],
             "extras": {
                 "n_macc": 86016,
                 "n_params": 256,
-                "psize": 1024,
+                "psize": 256,
                 "rom_size": 3584
             },
-            "id": 262,
+            "id": 44,
             "inputs": [
-                "_blocks_blocks_8_conv_conv_3_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_43"
             ],
-            "name": "_blocks_blocks_8_conv_conv_5_PRelu_output_0",
-            "original": "PRelu",
+            "name": "nl_44",
+            "original": "PRELU",
             "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 263,
-            "inputs": [
-                "_blocks_blocks_8_conv_conv_5_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_8_conv_conv_5_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 264,
-            "inputs": [
-                "_blocks_blocks_8_conv_conv_5_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_8_conv_conv_5_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [
@@ -3162,7 +1168,7 @@
             "extras": {
                 "n_macc": 5505152,
                 "n_params": 32896,
-                "psize": 131584,
+                "psize": 33280,
                 "rom_output": {
                     "c_size": 21504,
                     "fmt": {
@@ -3177,45 +1183,13 @@
                 },
                 "rom_size": 33280
             },
-            "id": 265,
+            "id": 45,
             "inputs": [
-                "_blocks_blocks_8_conv_conv_5_PRelu_output_0_DequantizeLinear_Output"
+                "nl_44"
             ],
-            "name": "_blocks_blocks_8_conv_conv_6_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_45",
+            "original": "CONV_2D",
             "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 266,
-            "inputs": [
-                "_blocks_blocks_8_conv_conv_6_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_8_conv_conv_6_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 267,
-            "inputs": [
-                "_blocks_blocks_8_conv_conv_6_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_8_conv_conv_6_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [
@@ -3239,53 +1213,21 @@
                 },
                 "rom_size": 0
             },
-            "id": 268,
+            "id": 46,
             "inputs": [
-                "_blocks_blocks_7_Add_output_0_DequantizeLinear_Output",
-                "_blocks_blocks_8_conv_conv_6_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_40",
+                "conv2d_45"
             ],
-            "name": "_blocks_blocks_8_Add_output_0",
-            "original": "Add",
+            "name": "eltwise_46",
+            "original": "ADD",
             "type": "Eltwise"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 269,
-            "inputs": [
-                "_blocks_blocks_8_Add_output_0"
-            ],
-            "name": "_blocks_blocks_8_Add_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 270,
-            "inputs": [
-                "_blocks_blocks_8_Add_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_8_Add_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 5505280,
                 "n_params": 33024,
-                "psize": 132096,
+                "psize": 33792,
                 "rom_output": {
                     "c_size": 43008,
                     "fmt": {
@@ -3300,45 +1242,13 @@
                 },
                 "rom_size": 0
             },
-            "id": 271,
+            "id": 47,
             "inputs": [
-                "_blocks_blocks_8_Add_output_0_DequantizeLinear_Output"
+                "eltwise_46"
             ],
-            "name": "_blocks_blocks_9_conv_conv_0_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_47",
+            "original": "CONV_2D",
             "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 272,
-            "inputs": [
-                "_blocks_blocks_9_conv_conv_0_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_9_conv_conv_0_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 273,
-            "inputs": [
-                "_blocks_blocks_9_conv_conv_0_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_9_conv_conv_0_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [
@@ -3347,55 +1257,23 @@
             "extras": {
                 "n_macc": 86016,
                 "n_params": 256,
-                "psize": 1024,
+                "psize": 256,
                 "rom_size": 34048
             },
-            "id": 274,
+            "id": 48,
             "inputs": [
-                "_blocks_blocks_9_conv_conv_0_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_47"
             ],
-            "name": "_blocks_blocks_9_conv_conv_2_PRelu_output_0",
-            "original": "PRelu",
+            "name": "nl_48",
+            "original": "PRELU",
             "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 275,
-            "inputs": [
-                "_blocks_blocks_9_conv_conv_2_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_9_conv_conv_2_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 276,
-            "inputs": [
-                "_blocks_blocks_9_conv_conv_2_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_9_conv_conv_2_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 387328,
                 "n_params": 2560,
-                "psize": 10240,
+                "psize": 3328,
                 "rom_output": {
                     "c_size": 43008,
                     "fmt": {
@@ -3410,104 +1288,41 @@
                 },
                 "rom_size": 0
             },
-            "id": 277,
+            "id": 49,
             "inputs": [
-                "_blocks_blocks_9_conv_conv_2_PRelu_output_0_DequantizeLinear_Output"
+                "nl_48"
             ],
-            "name": "_blocks_blocks_9_conv_conv_3_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_49",
+            "original": "DEPTHWISE_CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 278,
-            "inputs": [
-                "_blocks_blocks_9_conv_conv_3_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_9_conv_conv_3_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 279,
-            "inputs": [
-                "_blocks_blocks_9_conv_conv_3_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_9_conv_conv_3_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                38
+                38,
+                39
             ],
             "extras": {
                 "n_macc": 86016,
                 "n_params": 256,
-                "psize": 1024,
+                "psize": 256,
                 "rom_size": 3584
             },
-            "id": 280,
+            "id": 50,
             "inputs": [
-                "_blocks_blocks_9_conv_conv_3_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_49"
             ],
-            "name": "_blocks_blocks_9_conv_conv_5_PRelu_output_0",
-            "original": "PRelu",
+            "name": "nl_50",
+            "original": "PRELU",
             "type": "Nonlinearity"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 281,
-            "inputs": [
-                "_blocks_blocks_9_conv_conv_5_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_9_conv_conv_5_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 282,
-            "inputs": [
-                "_blocks_blocks_9_conv_conv_5_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_9_conv_conv_5_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                39
+                40
             ],
             "extras": {
                 "n_macc": 5505152,
                 "n_params": 32896,
-                "psize": 131584,
+                "psize": 33280,
                 "rom_output": {
                     "c_size": 21504,
                     "fmt": {
@@ -3522,49 +1337,17 @@
                 },
                 "rom_size": 33280
             },
-            "id": 283,
+            "id": 51,
             "inputs": [
-                "_blocks_blocks_9_conv_conv_5_PRelu_output_0_DequantizeLinear_Output"
+                "nl_50"
             ],
-            "name": "_blocks_blocks_9_conv_conv_6_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_51",
+            "original": "CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 284,
-            "inputs": [
-                "_blocks_blocks_9_conv_conv_6_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_9_conv_conv_6_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 285,
-            "inputs": [
-                "_blocks_blocks_9_conv_conv_6_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_9_conv_conv_6_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                40
+                41
             ],
             "extras": {
                 "n_macc": 21504,
@@ -3584,53 +1367,21 @@
                 },
                 "rom_size": 0
             },
-            "id": 286,
+            "id": 52,
             "inputs": [
-                "_blocks_blocks_8_Add_output_0_DequantizeLinear_Output",
-                "_blocks_blocks_9_conv_conv_6_Conv_output_0_DequantizeLinear_Output"
+                "eltwise_46",
+                "conv2d_51"
             ],
-            "name": "_blocks_blocks_9_Add_output_0",
-            "original": "Add",
+            "name": "eltwise_52",
+            "original": "ADD",
             "type": "Eltwise"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 287,
-            "inputs": [
-                "_blocks_blocks_9_Add_output_0"
-            ],
-            "name": "_blocks_blocks_9_Add_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 288,
-            "inputs": [
-                "_blocks_blocks_9_Add_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_9_Add_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 5505280,
                 "n_params": 33024,
-                "psize": 132096,
+                "psize": 33792,
                 "rom_output": {
                     "c_size": 43008,
                     "fmt": {
@@ -3645,155 +1396,13 @@
                 },
                 "rom_size": 0
             },
-            "id": 289,
+            "id": 53,
             "inputs": [
-                "_blocks_blocks_9_Add_output_0_DequantizeLinear_Output"
+                "eltwise_52"
             ],
-            "name": "_blocks_blocks_10_conv_conv_0_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_53",
+            "original": "CONV_2D",
             "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 290,
-            "inputs": [
-                "_blocks_blocks_10_conv_conv_0_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_10_conv_conv_0_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 291,
-            "inputs": [
-                "_blocks_blocks_10_conv_conv_0_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_10_conv_conv_0_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [
-                41
-            ],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 256,
-                "psize": 1024,
-                "rom_size": 34048
-            },
-            "id": 292,
-            "inputs": [
-                "_blocks_blocks_10_conv_conv_0_Conv_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_10_conv_conv_2_PRelu_output_0",
-            "original": "PRelu",
-            "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 293,
-            "inputs": [
-                "_blocks_blocks_10_conv_conv_2_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_10_conv_conv_2_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 294,
-            "inputs": [
-                "_blocks_blocks_10_conv_conv_2_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_10_conv_conv_2_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 387328,
-                "n_params": 2560,
-                "psize": 10240,
-                "rom_output": {
-                    "c_size": 43008,
-                    "fmt": {
-                        "format": "int8_t"
-                    },
-                    "shape": [
-                        14,
-                        12,
-                        256,
-                        1
-                    ]
-                },
-                "rom_size": 0
-            },
-            "id": 295,
-            "inputs": [
-                "_blocks_blocks_10_conv_conv_2_PRelu_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_10_conv_conv_3_Conv_output_0",
-            "original": "Conv",
-            "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 296,
-            "inputs": [
-                "_blocks_blocks_10_conv_conv_3_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_10_conv_conv_3_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 297,
-            "inputs": [
-                "_blocks_blocks_10_conv_conv_3_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_10_conv_conv_3_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [
@@ -3802,290 +1411,23 @@
             "extras": {
                 "n_macc": 86016,
                 "n_params": 256,
-                "psize": 1024,
-                "rom_size": 3584
-            },
-            "id": 298,
-            "inputs": [
-                "_blocks_blocks_10_conv_conv_3_Conv_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_10_conv_conv_5_PRelu_output_0",
-            "original": "PRelu",
-            "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 299,
-            "inputs": [
-                "_blocks_blocks_10_conv_conv_5_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_10_conv_conv_5_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 300,
-            "inputs": [
-                "_blocks_blocks_10_conv_conv_5_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_10_conv_conv_5_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [
-                43
-            ],
-            "extras": {
-                "n_macc": 5505152,
-                "n_params": 32896,
-                "psize": 131584,
-                "rom_output": {
-                    "c_size": 21504,
-                    "fmt": {
-                        "format": "int8_t"
-                    },
-                    "shape": [
-                        14,
-                        12,
-                        128,
-                        1
-                    ]
-                },
-                "rom_size": 33280
-            },
-            "id": 301,
-            "inputs": [
-                "_blocks_blocks_10_conv_conv_5_PRelu_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_10_conv_conv_6_Conv_output_0",
-            "original": "Conv",
-            "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 302,
-            "inputs": [
-                "_blocks_blocks_10_conv_conv_6_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_10_conv_conv_6_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 303,
-            "inputs": [
-                "_blocks_blocks_10_conv_conv_6_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_10_conv_conv_6_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [
-                44
-            ],
-            "extras": {
-                "n_macc": 21504,
-                "n_params": 0,
-                "psize": 0,
-                "rom_output": {
-                    "c_size": 21504,
-                    "fmt": {
-                        "format": "int8_t"
-                    },
-                    "shape": [
-                        14,
-                        12,
-                        128,
-                        1
-                    ]
-                },
-                "rom_size": 0
-            },
-            "id": 304,
-            "inputs": [
-                "_blocks_blocks_9_Add_output_0_DequantizeLinear_Output",
-                "_blocks_blocks_10_conv_conv_6_Conv_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_10_Add_output_0",
-            "original": "Add",
-            "type": "Eltwise"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 305,
-            "inputs": [
-                "_blocks_blocks_10_Add_output_0"
-            ],
-            "name": "_blocks_blocks_10_Add_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 306,
-            "inputs": [
-                "_blocks_blocks_10_Add_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_10_Add_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 5505280,
-                "n_params": 33024,
-                "psize": 132096,
-                "rom_output": {
-                    "c_size": 43008,
-                    "fmt": {
-                        "format": "int8_t"
-                    },
-                    "shape": [
-                        14,
-                        12,
-                        256,
-                        1
-                    ]
-                },
-                "rom_size": 0
-            },
-            "id": 307,
-            "inputs": [
-                "_blocks_blocks_10_Add_output_0_DequantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_11_conv_conv_0_Conv_output_0",
-            "original": "Conv",
-            "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 308,
-            "inputs": [
-                "_blocks_blocks_11_conv_conv_0_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_11_conv_conv_0_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 309,
-            "inputs": [
-                "_blocks_blocks_11_conv_conv_0_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_11_conv_conv_0_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [
-                45
-            ],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 256,
-                "psize": 1024,
+                "psize": 256,
                 "rom_size": 34048
             },
-            "id": 310,
+            "id": 54,
             "inputs": [
-                "_blocks_blocks_11_conv_conv_0_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_53"
             ],
-            "name": "_blocks_blocks_11_conv_conv_2_PRelu_output_0",
-            "original": "PRelu",
+            "name": "nl_54",
+            "original": "PRELU",
             "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 311,
-            "inputs": [
-                "_blocks_blocks_11_conv_conv_2_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_11_conv_conv_2_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 312,
-            "inputs": [
-                "_blocks_blocks_11_conv_conv_2_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_11_conv_conv_2_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 387328,
                 "n_params": 2560,
-                "psize": 10240,
+                "psize": 3328,
                 "rom_output": {
                     "c_size": 43008,
                     "fmt": {
@@ -4100,104 +1442,41 @@
                 },
                 "rom_size": 0
             },
-            "id": 313,
+            "id": 55,
             "inputs": [
-                "_blocks_blocks_11_conv_conv_2_PRelu_output_0_DequantizeLinear_Output"
+                "nl_54"
             ],
-            "name": "_blocks_blocks_11_conv_conv_3_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_55",
+            "original": "DEPTHWISE_CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 314,
-            "inputs": [
-                "_blocks_blocks_11_conv_conv_3_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_11_conv_conv_3_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 315,
-            "inputs": [
-                "_blocks_blocks_11_conv_conv_3_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_11_conv_conv_3_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                46
+                43,
+                44
             ],
             "extras": {
                 "n_macc": 86016,
                 "n_params": 256,
-                "psize": 1024,
+                "psize": 256,
                 "rom_size": 3584
             },
-            "id": 316,
+            "id": 56,
             "inputs": [
-                "_blocks_blocks_11_conv_conv_3_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_55"
             ],
-            "name": "_blocks_blocks_11_conv_conv_5_PRelu_output_0",
-            "original": "PRelu",
+            "name": "nl_56",
+            "original": "PRELU",
             "type": "Nonlinearity"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 317,
-            "inputs": [
-                "_blocks_blocks_11_conv_conv_5_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_11_conv_conv_5_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 86016,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 318,
-            "inputs": [
-                "_blocks_blocks_11_conv_conv_5_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_11_conv_conv_5_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                47
+                45
             ],
             "extras": {
                 "n_macc": 5505152,
                 "n_params": 32896,
-                "psize": 131584,
+                "psize": 33280,
                 "rom_output": {
                     "c_size": 21504,
                     "fmt": {
@@ -4212,49 +1491,17 @@
                 },
                 "rom_size": 33280
             },
-            "id": 319,
+            "id": 57,
             "inputs": [
-                "_blocks_blocks_11_conv_conv_5_PRelu_output_0_DequantizeLinear_Output"
+                "nl_56"
             ],
-            "name": "_blocks_blocks_11_conv_conv_6_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_57",
+            "original": "CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 320,
-            "inputs": [
-                "_blocks_blocks_11_conv_conv_6_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_11_conv_conv_6_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 321,
-            "inputs": [
-                "_blocks_blocks_11_conv_conv_6_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_11_conv_conv_6_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                48
+                46
             ],
             "extras": {
                 "n_macc": 21504,
@@ -4274,53 +1521,483 @@
                 },
                 "rom_size": 0
             },
-            "id": 322,
+            "id": 58,
             "inputs": [
-                "_blocks_blocks_10_Add_output_0_DequantizeLinear_Output",
-                "_blocks_blocks_11_conv_conv_6_Conv_output_0_DequantizeLinear_Output"
+                "eltwise_52",
+                "conv2d_57"
             ],
-            "name": "_blocks_blocks_11_Add_output_0",
-            "original": "Add",
+            "name": "eltwise_58",
+            "original": "ADD",
             "type": "Eltwise"
         },
         {
             "c_id": [],
             "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
+                "n_macc": 5505280,
+                "n_params": 33024,
+                "psize": 33792,
+                "rom_output": {
+                    "c_size": 43008,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        14,
+                        12,
+                        256,
+                        1
+                    ]
+                },
                 "rom_size": 0
             },
-            "id": 323,
+            "id": 59,
             "inputs": [
-                "_blocks_blocks_11_Add_output_0"
+                "eltwise_58"
             ],
-            "name": "_blocks_blocks_11_Add_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
+            "name": "conv2d_59",
+            "original": "CONV_2D",
+            "type": "Conv2D"
+        },
+        {
+            "c_id": [
+                47
+            ],
+            "extras": {
+                "n_macc": 86016,
+                "n_params": 256,
+                "psize": 256,
+                "rom_size": 34048
+            },
+            "id": 60,
+            "inputs": [
+                "conv2d_59"
+            ],
+            "name": "nl_60",
+            "original": "PRELU",
+            "type": "Nonlinearity"
         },
         {
             "c_id": [],
             "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
+                "n_macc": 387328,
+                "n_params": 2560,
+                "psize": 3328,
+                "rom_output": {
+                    "c_size": 43008,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        14,
+                        12,
+                        256,
+                        1
+                    ]
+                },
                 "rom_size": 0
             },
-            "id": 324,
+            "id": 61,
             "inputs": [
-                "_blocks_blocks_11_Add_output_0_QuantizeLinear_Output"
+                "nl_60"
             ],
-            "name": "_blocks_blocks_11_Add_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
+            "name": "conv2d_61",
+            "original": "DEPTHWISE_CONV_2D",
+            "type": "Conv2D"
+        },
+        {
+            "c_id": [
+                48,
+                49
+            ],
+            "extras": {
+                "n_macc": 86016,
+                "n_params": 256,
+                "psize": 256,
+                "rom_size": 3584
+            },
+            "id": 62,
+            "inputs": [
+                "conv2d_61"
+            ],
+            "name": "nl_62",
+            "original": "PRELU",
+            "type": "Nonlinearity"
+        },
+        {
+            "c_id": [
+                50
+            ],
+            "extras": {
+                "n_macc": 5505152,
+                "n_params": 32896,
+                "psize": 33280,
+                "rom_output": {
+                    "c_size": 21504,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        14,
+                        12,
+                        128,
+                        1
+                    ]
+                },
+                "rom_size": 33280
+            },
+            "id": 63,
+            "inputs": [
+                "nl_62"
+            ],
+            "name": "conv2d_63",
+            "original": "CONV_2D",
+            "type": "Conv2D"
+        },
+        {
+            "c_id": [
+                51
+            ],
+            "extras": {
+                "n_macc": 21504,
+                "n_params": 0,
+                "psize": 0,
+                "rom_output": {
+                    "c_size": 21504,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        14,
+                        12,
+                        128,
+                        1
+                    ]
+                },
+                "rom_size": 0
+            },
+            "id": 64,
+            "inputs": [
+                "eltwise_58",
+                "conv2d_63"
+            ],
+            "name": "eltwise_64",
+            "original": "ADD",
+            "type": "Eltwise"
+        },
+        {
+            "c_id": [],
+            "extras": {
+                "n_macc": 5505280,
+                "n_params": 33024,
+                "psize": 33792,
+                "rom_output": {
+                    "c_size": 43008,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        14,
+                        12,
+                        256,
+                        1
+                    ]
+                },
+                "rom_size": 0
+            },
+            "id": 65,
+            "inputs": [
+                "eltwise_64"
+            ],
+            "name": "conv2d_65",
+            "original": "CONV_2D",
+            "type": "Conv2D"
+        },
+        {
+            "c_id": [
+                52
+            ],
+            "extras": {
+                "n_macc": 86016,
+                "n_params": 256,
+                "psize": 256,
+                "rom_size": 34048
+            },
+            "id": 66,
+            "inputs": [
+                "conv2d_65"
+            ],
+            "name": "nl_66",
+            "original": "PRELU",
+            "type": "Nonlinearity"
+        },
+        {
+            "c_id": [],
+            "extras": {
+                "n_macc": 387328,
+                "n_params": 2560,
+                "psize": 3328,
+                "rom_output": {
+                    "c_size": 43008,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        14,
+                        12,
+                        256,
+                        1
+                    ]
+                },
+                "rom_size": 0
+            },
+            "id": 67,
+            "inputs": [
+                "nl_66"
+            ],
+            "name": "conv2d_67",
+            "original": "DEPTHWISE_CONV_2D",
+            "type": "Conv2D"
+        },
+        {
+            "c_id": [
+                53,
+                54
+            ],
+            "extras": {
+                "n_macc": 86016,
+                "n_params": 256,
+                "psize": 256,
+                "rom_size": 3584
+            },
+            "id": 68,
+            "inputs": [
+                "conv2d_67"
+            ],
+            "name": "nl_68",
+            "original": "PRELU",
+            "type": "Nonlinearity"
+        },
+        {
+            "c_id": [
+                55
+            ],
+            "extras": {
+                "n_macc": 5505152,
+                "n_params": 32896,
+                "psize": 33280,
+                "rom_output": {
+                    "c_size": 21504,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        14,
+                        12,
+                        128,
+                        1
+                    ]
+                },
+                "rom_size": 33280
+            },
+            "id": 69,
+            "inputs": [
+                "nl_68"
+            ],
+            "name": "conv2d_69",
+            "original": "CONV_2D",
+            "type": "Conv2D"
+        },
+        {
+            "c_id": [
+                56
+            ],
+            "extras": {
+                "n_macc": 21504,
+                "n_params": 0,
+                "psize": 0,
+                "rom_output": {
+                    "c_size": 21504,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        14,
+                        12,
+                        128,
+                        1
+                    ]
+                },
+                "rom_size": 0
+            },
+            "id": 70,
+            "inputs": [
+                "eltwise_64",
+                "conv2d_69"
+            ],
+            "name": "eltwise_70",
+            "original": "ADD",
+            "type": "Eltwise"
+        },
+        {
+            "c_id": [],
+            "extras": {
+                "n_macc": 5505280,
+                "n_params": 33024,
+                "psize": 33792,
+                "rom_output": {
+                    "c_size": 43008,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        14,
+                        12,
+                        256,
+                        1
+                    ]
+                },
+                "rom_size": 0
+            },
+            "id": 71,
+            "inputs": [
+                "eltwise_70"
+            ],
+            "name": "conv2d_71",
+            "original": "CONV_2D",
+            "type": "Conv2D"
+        },
+        {
+            "c_id": [
+                57
+            ],
+            "extras": {
+                "n_macc": 86016,
+                "n_params": 256,
+                "psize": 256,
+                "rom_size": 34048
+            },
+            "id": 72,
+            "inputs": [
+                "conv2d_71"
+            ],
+            "name": "nl_72",
+            "original": "PRELU",
+            "type": "Nonlinearity"
+        },
+        {
+            "c_id": [],
+            "extras": {
+                "n_macc": 387328,
+                "n_params": 2560,
+                "psize": 3328,
+                "rom_output": {
+                    "c_size": 43008,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        14,
+                        12,
+                        256,
+                        1
+                    ]
+                },
+                "rom_size": 0
+            },
+            "id": 73,
+            "inputs": [
+                "nl_72"
+            ],
+            "name": "conv2d_73",
+            "original": "DEPTHWISE_CONV_2D",
+            "type": "Conv2D"
+        },
+        {
+            "c_id": [
+                58,
+                59
+            ],
+            "extras": {
+                "n_macc": 86016,
+                "n_params": 256,
+                "psize": 256,
+                "rom_size": 3584
+            },
+            "id": 74,
+            "inputs": [
+                "conv2d_73"
+            ],
+            "name": "nl_74",
+            "original": "PRELU",
+            "type": "Nonlinearity"
+        },
+        {
+            "c_id": [
+                60
+            ],
+            "extras": {
+                "n_macc": 5505152,
+                "n_params": 32896,
+                "psize": 33280,
+                "rom_output": {
+                    "c_size": 21504,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        14,
+                        12,
+                        128,
+                        1
+                    ]
+                },
+                "rom_size": 33280
+            },
+            "id": 75,
+            "inputs": [
+                "nl_74"
+            ],
+            "name": "conv2d_75",
+            "original": "CONV_2D",
+            "type": "Conv2D"
+        },
+        {
+            "c_id": [
+                61
+            ],
+            "extras": {
+                "n_macc": 21504,
+                "n_params": 0,
+                "psize": 0,
+                "rom_output": {
+                    "c_size": 21504,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        14,
+                        12,
+                        128,
+                        1
+                    ]
+                },
+                "rom_size": 0
+            },
+            "id": 76,
+            "inputs": [
+                "eltwise_70",
+                "conv2d_75"
+            ],
+            "name": "eltwise_76",
+            "original": "ADD",
+            "type": "Eltwise"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 11010560,
                 "n_params": 66048,
-                "psize": 264192,
+                "psize": 67584,
                 "rom_output": {
                     "c_size": 86016,
                     "fmt": {
@@ -4335,102 +2012,56 @@
                 },
                 "rom_size": 0
             },
-            "id": 325,
+            "id": 77,
             "inputs": [
-                "_blocks_blocks_11_Add_output_0_DequantizeLinear_Output"
+                "eltwise_76"
             ],
-            "name": "_blocks_blocks_12_conv_conv_0_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_77",
+            "original": "CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 326,
-            "inputs": [
-                "_blocks_blocks_12_conv_conv_0_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_12_conv_conv_0_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 327,
-            "inputs": [
-                "_blocks_blocks_12_conv_conv_0_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_12_conv_conv_0_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                49
+                62
             ],
             "extras": {
                 "n_macc": 172032,
                 "n_params": 512,
-                "psize": 2048,
+                "psize": 512,
                 "rom_size": 68096
             },
-            "id": 328,
+            "id": 78,
             "inputs": [
-                "_blocks_blocks_12_conv_conv_0_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_77"
             ],
-            "name": "_blocks_blocks_12_conv_conv_2_PRelu_output_0",
-            "original": "PRelu",
+            "name": "nl_78",
+            "original": "PRELU",
             "type": "Nonlinearity"
         },
         {
-            "c_id": [],
+            "c_id": [
+                64
+            ],
             "extras": {
-                "n_macc": 172032,
+                "n_macc": 0,
                 "n_params": 0,
                 "psize": 0,
-                "rom_size": 0
+                "rom_size": 7168
             },
-            "id": 329,
+            "id": 79,
             "inputs": [
-                "_blocks_blocks_12_conv_conv_2_PRelu_output_0"
+                "nl_78"
             ],
-            "name": "_blocks_blocks_12_conv_conv_2_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 172032,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 330,
-            "inputs": [
-                "_blocks_blocks_12_conv_conv_2_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_12_conv_conv_2_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
+            "name": "pad_79",
+            "original": "PAD",
+            "type": "Pad"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 194048,
                 "n_params": 5120,
-                "psize": 20480,
+                "psize": 6656,
                 "rom_output": {
                     "c_size": 21504,
                     "fmt": {
@@ -4445,104 +2076,40 @@
                 },
                 "rom_size": 0
             },
-            "id": 331,
+            "id": 80,
             "inputs": [
-                "_blocks_blocks_12_conv_conv_2_PRelu_output_0_DequantizeLinear_Output"
+                "pad_79"
             ],
-            "name": "_blocks_blocks_12_conv_conv_3_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_80",
+            "original": "DEPTHWISE_CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 332,
-            "inputs": [
-                "_blocks_blocks_12_conv_conv_3_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_12_conv_conv_3_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 333,
-            "inputs": [
-                "_blocks_blocks_12_conv_conv_3_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_12_conv_conv_3_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                50
+                63
             ],
             "extras": {
                 "n_macc": 43008,
                 "n_params": 512,
-                "psize": 2048,
-                "rom_size": 7168
+                "psize": 512,
+                "rom_size": 0
             },
-            "id": 334,
+            "id": 81,
             "inputs": [
-                "_blocks_blocks_12_conv_conv_3_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_80"
             ],
-            "name": "_blocks_blocks_12_conv_conv_5_PRelu_output_0",
-            "original": "PRelu",
+            "name": "nl_81",
+            "original": "PRELU",
             "type": "Nonlinearity"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 335,
-            "inputs": [
-                "_blocks_blocks_12_conv_conv_5_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_12_conv_conv_5_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 336,
-            "inputs": [
-                "_blocks_blocks_12_conv_conv_5_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_12_conv_conv_5_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                51
+                65
             ],
             "extras": {
                 "n_macc": 2752640,
                 "n_params": 65664,
-                "psize": 262656,
+                "psize": 66048,
                 "rom_output": {
                     "c_size": 5376,
                     "fmt": {
@@ -4557,52 +2124,20 @@
                 },
                 "rom_size": 66048
             },
-            "id": 337,
+            "id": 82,
             "inputs": [
-                "_blocks_blocks_12_conv_conv_5_PRelu_output_0_DequantizeLinear_Output"
+                "nl_81"
             ],
-            "name": "_blocks_blocks_12_conv_conv_6_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_82",
+            "original": "CONV_2D",
             "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 10752,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 338,
-            "inputs": [
-                "_blocks_blocks_12_conv_conv_6_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_12_conv_conv_6_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 10752,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 339,
-            "inputs": [
-                "_blocks_blocks_12_conv_conv_6_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_12_conv_conv_6_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 1376512,
                 "n_params": 33024,
-                "psize": 132096,
+                "psize": 33792,
                 "rom_output": {
                     "c_size": 10752,
                     "fmt": {
@@ -4617,102 +2152,38 @@
                 },
                 "rom_size": 0
             },
-            "id": 340,
+            "id": 83,
             "inputs": [
-                "_blocks_blocks_12_conv_conv_6_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_82"
             ],
-            "name": "_blocks_blocks_13_conv_conv_0_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_83",
+            "original": "CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 21504,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 341,
-            "inputs": [
-                "_blocks_blocks_13_conv_conv_0_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_13_conv_conv_0_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 21504,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 342,
-            "inputs": [
-                "_blocks_blocks_13_conv_conv_0_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_13_conv_conv_0_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                52
+                66
             ],
             "extras": {
                 "n_macc": 21504,
                 "n_params": 256,
-                "psize": 1024,
+                "psize": 256,
                 "rom_size": 34048
             },
-            "id": 343,
+            "id": 84,
             "inputs": [
-                "_blocks_blocks_13_conv_conv_0_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_83"
             ],
-            "name": "_blocks_blocks_13_conv_conv_2_PRelu_output_0",
-            "original": "PRelu",
+            "name": "nl_84",
+            "original": "PRELU",
             "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 21504,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 344,
-            "inputs": [
-                "_blocks_blocks_13_conv_conv_2_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_13_conv_conv_2_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 21504,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 345,
-            "inputs": [
-                "_blocks_blocks_13_conv_conv_2_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_13_conv_conv_2_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 97024,
                 "n_params": 2560,
-                "psize": 10240,
+                "psize": 3328,
                 "rom_output": {
                     "c_size": 10752,
                     "fmt": {
@@ -4727,104 +2198,41 @@
                 },
                 "rom_size": 0
             },
-            "id": 346,
+            "id": 85,
             "inputs": [
-                "_blocks_blocks_13_conv_conv_2_PRelu_output_0_DequantizeLinear_Output"
+                "nl_84"
             ],
-            "name": "_blocks_blocks_13_conv_conv_3_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_85",
+            "original": "DEPTHWISE_CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 21504,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 347,
-            "inputs": [
-                "_blocks_blocks_13_conv_conv_3_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_13_conv_conv_3_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 21504,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 348,
-            "inputs": [
-                "_blocks_blocks_13_conv_conv_3_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_13_conv_conv_3_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                53
+                67,
+                68
             ],
             "extras": {
                 "n_macc": 21504,
                 "n_params": 256,
-                "psize": 1024,
+                "psize": 256,
                 "rom_size": 3584
             },
-            "id": 349,
+            "id": 86,
             "inputs": [
-                "_blocks_blocks_13_conv_conv_3_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_85"
             ],
-            "name": "_blocks_blocks_13_conv_conv_5_PRelu_output_0",
-            "original": "PRelu",
+            "name": "nl_86",
+            "original": "PRELU",
             "type": "Nonlinearity"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 21504,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 350,
-            "inputs": [
-                "_blocks_blocks_13_conv_conv_5_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_13_conv_conv_5_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 21504,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 351,
-            "inputs": [
-                "_blocks_blocks_13_conv_conv_5_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_13_conv_conv_5_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                54
+                69
             ],
             "extras": {
                 "n_macc": 1376384,
                 "n_params": 32896,
-                "psize": 131584,
+                "psize": 33280,
                 "rom_output": {
                     "c_size": 5376,
                     "fmt": {
@@ -4839,49 +2247,17 @@
                 },
                 "rom_size": 33280
             },
-            "id": 352,
+            "id": 87,
             "inputs": [
-                "_blocks_blocks_13_conv_conv_5_PRelu_output_0_DequantizeLinear_Output"
+                "nl_86"
             ],
-            "name": "_blocks_blocks_13_conv_conv_6_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_87",
+            "original": "CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 10752,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 353,
-            "inputs": [
-                "_blocks_blocks_13_conv_conv_6_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_13_conv_conv_6_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 10752,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 354,
-            "inputs": [
-                "_blocks_blocks_13_conv_conv_6_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_13_conv_conv_6_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                55
+                70
             ],
             "extras": {
                 "n_macc": 5376,
@@ -4901,53 +2277,21 @@
                 },
                 "rom_size": 0
             },
-            "id": 355,
+            "id": 88,
             "inputs": [
-                "_blocks_blocks_12_conv_conv_6_Conv_output_0_DequantizeLinear_Output",
-                "_blocks_blocks_13_conv_conv_6_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_82",
+                "conv2d_87"
             ],
-            "name": "_blocks_blocks_13_Add_output_0",
-            "original": "Add",
+            "name": "eltwise_88",
+            "original": "ADD",
             "type": "Eltwise"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 10752,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 356,
-            "inputs": [
-                "_blocks_blocks_13_Add_output_0"
-            ],
-            "name": "_blocks_blocks_13_Add_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 10752,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 357,
-            "inputs": [
-                "_blocks_blocks_13_Add_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_13_Add_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 1376512,
                 "n_params": 33024,
-                "psize": 132096,
+                "psize": 33792,
                 "rom_output": {
                     "c_size": 10752,
                     "fmt": {
@@ -4962,102 +2306,38 @@
                 },
                 "rom_size": 0
             },
-            "id": 358,
+            "id": 89,
             "inputs": [
-                "_blocks_blocks_13_Add_output_0_DequantizeLinear_Output"
+                "eltwise_88"
             ],
-            "name": "_blocks_blocks_14_conv_conv_0_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_89",
+            "original": "CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 21504,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 359,
-            "inputs": [
-                "_blocks_blocks_14_conv_conv_0_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_14_conv_conv_0_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 21504,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 360,
-            "inputs": [
-                "_blocks_blocks_14_conv_conv_0_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_14_conv_conv_0_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                56
+                71
             ],
             "extras": {
                 "n_macc": 21504,
                 "n_params": 256,
-                "psize": 1024,
+                "psize": 256,
                 "rom_size": 34048
             },
-            "id": 361,
+            "id": 90,
             "inputs": [
-                "_blocks_blocks_14_conv_conv_0_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_89"
             ],
-            "name": "_blocks_blocks_14_conv_conv_2_PRelu_output_0",
-            "original": "PRelu",
+            "name": "nl_90",
+            "original": "PRELU",
             "type": "Nonlinearity"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 21504,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 362,
-            "inputs": [
-                "_blocks_blocks_14_conv_conv_2_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_14_conv_conv_2_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 21504,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 363,
-            "inputs": [
-                "_blocks_blocks_14_conv_conv_2_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_14_conv_conv_2_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 97024,
                 "n_params": 2560,
-                "psize": 10240,
+                "psize": 3328,
                 "rom_output": {
                     "c_size": 10752,
                     "fmt": {
@@ -5072,104 +2352,41 @@
                 },
                 "rom_size": 0
             },
-            "id": 364,
+            "id": 91,
             "inputs": [
-                "_blocks_blocks_14_conv_conv_2_PRelu_output_0_DequantizeLinear_Output"
+                "nl_90"
             ],
-            "name": "_blocks_blocks_14_conv_conv_3_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_91",
+            "original": "DEPTHWISE_CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 21504,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 365,
-            "inputs": [
-                "_blocks_blocks_14_conv_conv_3_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_14_conv_conv_3_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 21504,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 366,
-            "inputs": [
-                "_blocks_blocks_14_conv_conv_3_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_14_conv_conv_3_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                57
+                72,
+                73
             ],
             "extras": {
                 "n_macc": 21504,
                 "n_params": 256,
-                "psize": 1024,
+                "psize": 256,
                 "rom_size": 3584
             },
-            "id": 367,
+            "id": 92,
             "inputs": [
-                "_blocks_blocks_14_conv_conv_3_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_91"
             ],
-            "name": "_blocks_blocks_14_conv_conv_5_PRelu_output_0",
-            "original": "PRelu",
+            "name": "nl_92",
+            "original": "PRELU",
             "type": "Nonlinearity"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 21504,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 368,
-            "inputs": [
-                "_blocks_blocks_14_conv_conv_5_PRelu_output_0"
-            ],
-            "name": "_blocks_blocks_14_conv_conv_5_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 21504,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 369,
-            "inputs": [
-                "_blocks_blocks_14_conv_conv_5_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_14_conv_conv_5_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                58
+                74
             ],
             "extras": {
                 "n_macc": 1376384,
                 "n_params": 32896,
-                "psize": 131584,
+                "psize": 33280,
                 "rom_output": {
                     "c_size": 5376,
                     "fmt": {
@@ -5184,49 +2401,17 @@
                 },
                 "rom_size": 33280
             },
-            "id": 370,
+            "id": 93,
             "inputs": [
-                "_blocks_blocks_14_conv_conv_5_PRelu_output_0_DequantizeLinear_Output"
+                "nl_92"
             ],
-            "name": "_blocks_blocks_14_conv_conv_6_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_93",
+            "original": "CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 10752,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 371,
-            "inputs": [
-                "_blocks_blocks_14_conv_conv_6_Conv_output_0"
-            ],
-            "name": "_blocks_blocks_14_conv_conv_6_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 10752,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 372,
-            "inputs": [
-                "_blocks_blocks_14_conv_conv_6_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_14_conv_conv_6_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                59
+                75
             ],
             "extras": {
                 "n_macc": 5376,
@@ -5246,53 +2431,21 @@
                 },
                 "rom_size": 0
             },
-            "id": 373,
+            "id": 94,
             "inputs": [
-                "_blocks_blocks_13_Add_output_0_DequantizeLinear_Output",
-                "_blocks_blocks_14_conv_conv_6_Conv_output_0_DequantizeLinear_Output"
+                "eltwise_88",
+                "conv2d_93"
             ],
-            "name": "_blocks_blocks_14_Add_output_0",
-            "original": "Add",
+            "name": "eltwise_94",
+            "original": "ADD",
             "type": "Eltwise"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 10752,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 374,
-            "inputs": [
-                "_blocks_blocks_14_Add_output_0"
-            ],
-            "name": "_blocks_blocks_14_Add_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 10752,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 375,
-            "inputs": [
-                "_blocks_blocks_14_Add_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_blocks_blocks_14_Add_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [],
             "extras": {
                 "n_macc": 2753024,
                 "n_params": 66048,
-                "psize": 264192,
+                "psize": 67584,
                 "rom_output": {
                     "c_size": 21504,
                     "fmt": {
@@ -5307,104 +2460,40 @@
                 },
                 "rom_size": 0
             },
-            "id": 376,
+            "id": 95,
             "inputs": [
-                "_blocks_blocks_14_Add_output_0_DequantizeLinear_Output"
+                "eltwise_94"
             ],
-            "name": "_conv2_conv_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_95",
+            "original": "CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 377,
-            "inputs": [
-                "_conv2_conv_Conv_output_0"
-            ],
-            "name": "_conv2_conv_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 378,
-            "inputs": [
-                "_conv2_conv_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_conv2_conv_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                60
+                76
             ],
             "extras": {
                 "n_macc": 43008,
                 "n_params": 512,
-                "psize": 2048,
+                "psize": 512,
                 "rom_size": 68096
             },
-            "id": 379,
+            "id": 96,
             "inputs": [
-                "_conv2_conv_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_95"
             ],
-            "name": "_conv2_prelu_PRelu_output_0",
-            "original": "PRelu",
+            "name": "nl_96",
+            "original": "PRELU",
             "type": "Nonlinearity"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 380,
-            "inputs": [
-                "_conv2_prelu_PRelu_output_0"
-            ],
-            "name": "_conv2_prelu_PRelu_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 43008,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 381,
-            "inputs": [
-                "_conv2_prelu_PRelu_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_conv2_prelu_PRelu_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                61
+                77
             ],
             "extras": {
                 "n_macc": 22016,
                 "n_params": 22016,
-                "psize": 88064,
+                "psize": 23552,
                 "rom_output": {
                     "c_size": 512,
                     "fmt": {
@@ -5419,54 +2508,22 @@
                 },
                 "rom_size": 23552
             },
-            "id": 382,
+            "id": 97,
             "inputs": [
-                "_conv2_prelu_PRelu_output_0_DequantizeLinear_Output"
+                "nl_96"
             ],
-            "name": "_linear7_conv_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_97",
+            "original": "DEPTHWISE_CONV_2D",
             "type": "Conv2D"
         },
         {
-            "c_id": [],
-            "extras": {
-                "n_macc": 1024,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 383,
-            "inputs": [
-                "_linear7_conv_Conv_output_0"
-            ],
-            "name": "_linear7_conv_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 1024,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 384,
-            "inputs": [
-                "_linear7_conv_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_linear7_conv_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
-        },
-        {
             "c_id": [
-                62
+                78
             ],
             "extras": {
                 "n_macc": 65664,
                 "n_params": 65664,
-                "psize": 262656,
+                "psize": 66048,
                 "rom_output": {
                     "c_size": 128,
                     "fmt": {
@@ -5481,45 +2538,13 @@
                 },
                 "rom_size": 66048
             },
-            "id": 385,
+            "id": 98,
             "inputs": [
-                "_linear7_conv_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_97"
             ],
-            "name": "_linear1_conv_Conv_output_0",
-            "original": "Conv",
+            "name": "conv2d_98",
+            "original": "CONV_2D",
             "type": "Conv2D"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 256,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 386,
-            "inputs": [
-                "_linear1_conv_Conv_output_0"
-            ],
-            "name": "_linear1_conv_Conv_output_0_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 256,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 387,
-            "inputs": [
-                "_linear1_conv_Conv_output_0_QuantizeLinear_Output"
-            ],
-            "name": "_linear1_conv_Conv_output_0_DequantizeLinear_Output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         },
         {
             "c_id": [],
@@ -5529,65 +2554,33 @@
                 "psize": 0,
                 "rom_size": 0
             },
-            "id": 388,
+            "id": 99,
             "inputs": [
-                "_linear1_conv_Conv_output_0_DequantizeLinear_Output"
+                "conv2d_98"
             ],
-            "name": "output_QuantizeLinear_Input",
-            "original": "Reshape",
+            "name": "reshape_99",
+            "original": "RESHAPE",
             "type": "Reshape"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 256,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 389,
-            "inputs": [
-                "output_QuantizeLinear_Input"
-            ],
-            "name": "output_QuantizeLinear_Output",
-            "original": "QuantizeLinear",
-            "type": "Conversion"
-        },
-        {
-            "c_id": [],
-            "extras": {
-                "n_macc": 256,
-                "n_params": 0,
-                "psize": 0,
-                "rom_size": 0
-            },
-            "id": 390,
-            "inputs": [
-                "output_QuantizeLinear_Output"
-            ],
-            "name": "output",
-            "original": "DequantizeLinear",
-            "type": "Conversion"
         }
     ],
     "model_files": [
-        "D:\\linux\\MobileFaceNet_Pytorch\\mobilefacenet_quantized1.onnx"
+        "D:\\linux\\MobileFaceNet_Pytorch\\model\\mobilefacenet_int8.tflite"
     ],
     "model_n_params": 989760,
-    "model_name": "mobilefacenet_quantized1",
-    "model_size": 3959040,
-    "model_type": "onnx",
+    "model_name": "mobilefacenet_int8",
+    "model_size": 1019136,
+    "model_type": "tflite",
     "name": "network_1",
     "outputs": [
-        "_linear1_conv_Conv_0"
+        "conv2d_98"
     ],
     "ram_io_size": [
         32256,
         128
     ],
     "ram_size": [
-        353408,
-        353408
+        380416,
+        380416
     ],
     "report_version": 1.1,
     "rom_cfact": 1.0,
@@ -5596,15 +2589,15 @@
         {
             "c_size": 32256,
             "c_type": "int8_t",
-            "name": "input"
+            "name": "serving_default_input_10"
         }
     ],
-    "rom_n_macc": 194476864,
+    "rom_n_macc": 194460736,
     "rom_outputs": [
         {
             "c_size": 128,
             "c_type": "int8_t",
-            "name": "_linear1_conv_Conv_0"
+            "name": "conv2d_98"
         }
     ],
     "rom_size": 1019136,

@@ -1,32 +1,32 @@
 Neural Network Tools for STM32 family v1.7.0 (stm.ai v8.1.0-19520)
-Created date          : 2024-07-02 20:41:58
-Parameters            : generate --name network -m D:/linux/yoloface-50k/tflite/yoloface.tflite --type tflite --compression none --verbosity 1 --workspace C:\Users\19178\AppData\Local\Temp\mxAI_workspace55103105910013300074149129268400 --output C:\Users\19178\.stm32cubemx\network_output --allocate-inputs --series stm32h7 --allocate-outputs
+Created date          : 2024-07-03 10:11:59
+Parameters            : generate --name network -m D:/linux/yoloface-50k/tflite/yoloface.tflite --type tflite --compression none --verbosity 1 --workspace C:\Users\19178\AppData\Local\Temp\mxAI_workspace491162926967002345176461692624135 --output C:\Users\19178\.stm32cubemx\network_output --allocate-inputs --series stm32h7 --allocate-outputs
 
 Exec/report summary (generate)
-----------------------------------------------------------------------------------------------------------
-model file         :   D:\linux\yoloface-50k\tflite\yoloface.tflite                                       
-type               :   tflite                                                                             
-c_name             :   network                                                                            
-compression        :   none                                                                               
-options            :   allocate-inputs, allocate-outputs                                                  
-optimization       :   balanced                                                                           
-target/series      :   stm32h7                                                                            
-workspace dir      :   C:\Users\19178\AppData\Local\Temp\mxAI_workspace55103105910013300074149129268400   
-output dir         :   C:\Users\19178\.stm32cubemx\network_output                                         
-model_fmt          :   float                                                                              
-model_name         :   yoloface                                                                           
-model_hash         :   68dd343f8c4694d2c81577d480b0e349                                                   
-params #           :   9,670 items (37.77 KiB)                                                            
-----------------------------------------------------------------------------------------------------------
-input 1/1          :   'Input' (domain:activations/**default**)                                           
-                   :   9408 items, 36.75 KiB, ai_float, float, (1,56,56,3)                                
-output 1/1         :   'conv2d_47' (domain:activations/**default**)                                       
-                   :   882 items, 3.45 KiB, ai_float, float, (1,7,7,18)                                   
-macc               :   1,480,736                                                                          
-weights (ro)       :   38,680 B (37.77 KiB) (1 segment)                                                   
-activations (rw)   :   103,248 B (100.83 KiB) (1 segment) *                                               
-ram (total)        :   103,248 B (100.83 KiB) = 103,248 + 0 + 0                                           
-----------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
+model file         :   D:\linux\yoloface-50k\tflite\yoloface.tflite                                        
+type               :   tflite                                                                              
+c_name             :   network                                                                             
+compression        :   none                                                                                
+options            :   allocate-inputs, allocate-outputs                                                   
+optimization       :   balanced                                                                            
+target/series      :   stm32h7                                                                             
+workspace dir      :   C:\Users\19178\AppData\Local\Temp\mxAI_workspace491162926967002345176461692624135   
+output dir         :   C:\Users\19178\.stm32cubemx\network_output                                          
+model_fmt          :   float                                                                               
+model_name         :   yoloface                                                                            
+model_hash         :   68dd343f8c4694d2c81577d480b0e349                                                    
+params #           :   9,670 items (37.77 KiB)                                                             
+-----------------------------------------------------------------------------------------------------------
+input 1/1          :   'Input' (domain:activations/**default**)                                            
+                   :   9408 items, 36.75 KiB, ai_float, float, (1,56,56,3)                                 
+output 1/1         :   'conv2d_47' (domain:activations/**default**)                                        
+                   :   882 items, 3.45 KiB, ai_float, float, (1,7,7,18)                                    
+macc               :   1,480,736                                                                           
+weights (ro)       :   38,680 B (37.77 KiB) (1 segment)                                                    
+activations (rw)   :   103,248 B (100.83 KiB) (1 segment) *                                                
+ram (total)        :   103,248 B (100.83 KiB) = 103,248 + 0 + 0                                            
+-----------------------------------------------------------------------------------------------------------
 (*) 'input'/'output' buffers can be used from the activations buffer
 
 Model name - yoloface ['Input'] ['conv2d_47']

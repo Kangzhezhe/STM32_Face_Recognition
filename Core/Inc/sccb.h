@@ -29,7 +29,7 @@
 #define SCCB_ID   			0X78  			//OV2640µÄID
 
 ///////////////////////////////////////////
-void delay_us(u16 time);
+//void delay_us(u16 time);
 void SCCB_SDA_OUT();
 void SCCB_SDA_IN(void);
 void SCCB_Init(void);

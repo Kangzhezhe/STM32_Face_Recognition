@@ -22,6 +22,7 @@
 #include "dcmi.h"
 #include "dma.h"
 #include "eth.h"
+#include "usart.h"
 #include "usb_otg.h"
 #include "gpio.h"
 #include "fmc.h"
@@ -36,6 +37,8 @@
 #include "network_1_data.h"
 #include "utils.h"
 #include "stdio.h"
+#include "delay.h"
+#include "touch.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -419,6 +422,17 @@ void post_process()
     LCD_ShowString(10,300,200,16,16,"noface"); 
 		      	// DCMI_Start();
 }
+
+struct __FILE
+{
+        int handle;
+};
+FILE __stdout;
+int fputc(int ch, FILE *f)
+{
+    HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);//更具实际情况更改驱动
+    return (ch);
+}
 /* USER CODE END 0 */
 
 /**
@@ -467,7 +481,9 @@ int main(void)
   MX_ETH_Init();
   MX_FMC_Init();
   MX_USB_OTG_FS_PCD_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+  delay_init(480);
 	 HAL_DMA_RegisterCallback(&hdma_memtomem_dma2_stream6,HAL_DMA_XFER_CPLT_CB_ID,TransferComplete);
 	AI_Init();
  LCD_Init();
@@ -488,7 +504,10 @@ int main(void)
 //   LCD_Set_Window(0,0,256,400);
 	OV5640_OutSize_Set(16,4,256,256);
 
-		DCMI_Start();
+		// DCMI_Start();
+
+    TP_Init();
+	LCD_Clear(WHITE);//清屏
 	
 
 	
@@ -498,15 +517,15 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    if(isok){
-        LCD_DrawRectangle(50,10,216,245);
-        AI_Run(in_data,out_data);
-        post_process();
-        DCMI_Start();
-        isok = 0;
-    }
-
-
+    // if(isok){
+    //     LCD_DrawRectangle(50,10,216,245);
+    //     AI_Run(in_data,out_data);
+    //     post_process();
+    //     DCMI_Start();
+    //     isok = 0;
+    // }
+    // printf("hello\r\n");
+    tp_dev.scan(0);
 
 	// 	if(isok)
 	// {
