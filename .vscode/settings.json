@@ -17,6 +17,7 @@
         "main.h": "c",
         "math.h": "c",
         "stdlib.h": "c",
-        "gt911.h": "c"
+        "gt911.h": "c",
+        "ui.h": "c"
     }
 }

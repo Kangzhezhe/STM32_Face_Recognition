@@ -272,7 +272,7 @@
 
   <Group>
     <GroupName>Application/MDK-ARM</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -292,7 +292,7 @@
 
   <Group>
     <GroupName>Application/User/Core</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -4475,21 +4475,13 @@
   </Group>
 
   <Group>
-    <GroupName>::CMSIS</GroupName>
-    <tvExp>0</tvExp>
-    <tvExpOptDlg>0</tvExpOptDlg>
-    <cbSel>0</cbSel>
-    <RteFlg>1</RteFlg>
-  </Group>
-
-  <Group>
     <GroupName>Middlewares/FreeRTOS</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>10</GroupNumber>
+      <GroupNumber>9</GroupNumber>
       <FileNumber>346</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -4501,7 +4493,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>10</GroupNumber>
+      <GroupNumber>9</GroupNumber>
       <FileNumber>347</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -4513,7 +4505,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>10</GroupNumber>
+      <GroupNumber>9</GroupNumber>
       <FileNumber>348</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -4525,7 +4517,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>10</GroupNumber>
+      <GroupNumber>9</GroupNumber>
       <FileNumber>349</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -4537,7 +4529,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>10</GroupNumber>
+      <GroupNumber>9</GroupNumber>
       <FileNumber>350</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -4549,7 +4541,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>10</GroupNumber>
+      <GroupNumber>9</GroupNumber>
       <FileNumber>351</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -4561,7 +4553,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>10</GroupNumber>
+      <GroupNumber>9</GroupNumber>
       <FileNumber>352</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -4573,7 +4565,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>10</GroupNumber>
+      <GroupNumber>9</GroupNumber>
       <FileNumber>353</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -4585,7 +4577,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>10</GroupNumber>
+      <GroupNumber>9</GroupNumber>
       <FileNumber>354</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -4597,7 +4589,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>10</GroupNumber>
+      <GroupNumber>9</GroupNumber>
       <FileNumber>355</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -4617,7 +4609,7 @@
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>11</GroupNumber>
+      <GroupNumber>10</GroupNumber>
       <FileNumber>356</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -4629,7 +4621,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>11</GroupNumber>
+      <GroupNumber>10</GroupNumber>
       <FileNumber>357</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -4641,7 +4633,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>11</GroupNumber>
+      <GroupNumber>10</GroupNumber>
       <FileNumber>358</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -4653,7 +4645,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>11</GroupNumber>
+      <GroupNumber>10</GroupNumber>
       <FileNumber>359</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -4665,7 +4657,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>11</GroupNumber>
+      <GroupNumber>10</GroupNumber>
       <FileNumber>360</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -4677,7 +4669,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>11</GroupNumber>
+      <GroupNumber>10</GroupNumber>
       <FileNumber>361</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -4688,6 +4680,166 @@
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
+  </Group>
+
+  <Group>
+    <GroupName>ui</GroupName>
+    <tvExp>1</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>362</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\ui\components\ui_comp_hook.c</PathWithFileName>
+      <FilenameWithoutPath>ui_comp_hook.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>363</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\ui\fonts\ui_font_Fontcn15.c</PathWithFileName>
+      <FilenameWithoutPath>ui_font_Fontcn15.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>364</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\ui\fonts\ui_font_Fontcn18.c</PathWithFileName>
+      <FilenameWithoutPath>ui_font_Fontcn18.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>365</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\ui\fonts\ui_font_Fontcn20.c</PathWithFileName>
+      <FilenameWithoutPath>ui_font_Fontcn20.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>366</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\ui\fonts\ui_font_Fontcn25.c</PathWithFileName>
+      <FilenameWithoutPath>ui_font_Fontcn25.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>367</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\ui\fonts\ui_font_Fontcn30.c</PathWithFileName>
+      <FilenameWithoutPath>ui_font_Fontcn30.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>368</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\ui\fonts\ui_font_Fontcnmsg.c</PathWithFileName>
+      <FilenameWithoutPath>ui_font_Fontcnmsg.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>369</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\ui\screens\ui_Screen1.c</PathWithFileName>
+      <FilenameWithoutPath>ui_Screen1.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>370</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\ui\my_ui.c</PathWithFileName>
+      <FilenameWithoutPath>my_ui.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>371</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\ui\ui.c</PathWithFileName>
+      <FilenameWithoutPath>ui.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>372</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\ui\ui_helpers.c</PathWithFileName>
+      <FilenameWithoutPath>ui_helpers.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>373</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\ui\images\ui_img_backgroud1_png.c</PathWithFileName>
+      <FilenameWithoutPath>ui_img_backgroud1_png.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>::CMSIS</GroupName>
+    <tvExp>0</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>1</RteFlg>
   </Group>
 
 </ProjectOpt>
