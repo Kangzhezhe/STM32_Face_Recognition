@@ -43,6 +43,7 @@
 #include "lv_port_disp.h"
 #include "lvgl.h"
 #include "lv_port_indev.h"
+#include "ui.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -349,7 +350,13 @@ float sigmod(float x)
 }
 
 
-
+void lvgl_set_txt(lv_obj_t * label, char * txt){
+    if(pdTRUE == xSemaphoreTake(Sem_lvglHandle,portMAX_DELAY))    
+    {
+        lv_label_set_text(label, txt);
+        xSemaphoreGive(Sem_lvglHandle);
+    } 
+}
 #define W_SCALE (255/55)
 #define H_SCALE (255/55)
 uint8_t cnt_detected = 0;
@@ -403,6 +410,7 @@ void post_process()
 				// {
 				// 	//LCD_DrawRectangle(x1,y1,x2,y2);
                 // LCD_ShowString(10,300,100,16,16,"isface"); 
+                lvgl_set_txt(ui_Label4, "识别到人脸");
                 // sprintf(logStr,"%3d",cnt_detected);
                 // LCD_ShowString(40,300,100,16,16,logStr); 
                 cnt_detected++;
@@ -412,6 +420,7 @@ void post_process()
                     AI_Run1(in_data1,out_data1);
                     int max_index = post_process_facenet();
                     snprintf(logStr,30,"score[%d] = %4.2f",max_index,score[max_index]);
+                    lvgl_set_txt(ui_Label4, "确认身份!");
                     // LCD_ShowString(10,400,200,16,16,logStr);
                     cnt_detected=0;
                 }
@@ -436,6 +445,7 @@ void post_process()
         // LCD_ShowString(10,400,200,16,16,"                  ");
         cnt_detected--;
     }
+    lvgl_set_txt(ui_Label4, "检测中...");
     // LCD_ShowString(10,300,200,16,16,"noface"); 
 		      	// DCMI_Start();
 }
