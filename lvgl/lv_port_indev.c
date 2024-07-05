@@ -191,7 +191,7 @@ static void touchpad_read(lv_indev_t * indev_drv, lv_indev_data_t * data)
 //		printf("tp_dev.sta %d \r\n",(int)tp_dev.sta);
     if (tp_dev.sta & TP_PRES_DOWN) //
     {
-        //printf("x×ø±ê:%d,Y×ø±ê:%d\r\n", tp_dev.x[0], tp_dev.y[0]);
+        //printf("xï¿½ï¿½ï¿½ï¿½:%d,Yï¿½ï¿½ï¿½ï¿½:%d\r\n", tp_dev.x[0], tp_dev.y[0]);
         last_x = tp_dev.x[0];
         last_y = tp_dev.y[0];
  

@@ -2,7 +2,6 @@
 #include "stdio.h"
 
 #define DATA_32                 ((uint32_t)0x87645321)
-
 /* Exported types -----------------------------------------------------*/
 /* Exported constants -------------------------------------------------*/
 /* 要擦除内部FLASH的起始地址 */
@@ -145,11 +144,15 @@ int InternalFlash_Test(void)
     uint32_t Address = FLASH_USER_START_ADDR;
     uint32_t DataToWrite[10];
     uint32_t DataRead[10];
+    uint32_t Address1 = FLASH_USER_START_ADDR+40;
+    uint32_t DataToWrite1[10];
+    uint32_t DataRead1[10];
     volatile uint32_t MemoryProgramStatus = 0;
 
     for (int i = 0; i < 10; i++)
     {
         DataToWrite[i] = DATA_32 + i*2;
+        DataToWrite1[i] = DATA_32 + i*3;
     }
      printf("wating\r\n");
 
@@ -166,7 +169,13 @@ int InternalFlash_Test(void)
     // Flash_Lock();
 
     // Flash_Erase_and_Write(Address, DataToWrite, 10);
+
+    Flash_Unlock();
+    Flash_Write(Address1, DataToWrite1, 10);
+    Flash_Lock();
+
     Flash_Read(Address, DataRead, 10);
+    Flash_Read(Address1, DataRead1, 10);
 
 
     MemoryProgramStatus = 0;
@@ -187,5 +196,26 @@ int InternalFlash_Test(void)
    {
       printf("\r\nfaid\r\n");
    } 
+
+   MemoryProgramStatus = 0;
+    for (int i = 0; i < 10; i++)
+    {
+        if (DataRead1[i] != DataToWrite1[i])
+        {
+            MemoryProgramStatus++;
+        }
+    }
+
+   
+   if(MemoryProgramStatus == 0)
+   {
+      printf("\r\nsuccess\r\n");
+   }
+   else
+   {
+      printf("\r\nfaid\r\n");
+   } 
+
+   while(1);
     return (MemoryProgramStatus == 0) ? 0 : -1;
 }

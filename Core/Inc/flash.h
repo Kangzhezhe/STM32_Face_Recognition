@@ -20,7 +20,6 @@
                                  of Sector 6, 128 Kbytes  */
 #define ADDR_FLASH_SECTOR_7     ((uint32_t)0x081E0000) /* Base address
                                  of Sector 7, 128 Kbytes  */
-
 int InternalFlash_Test(void);
 void Flash_Erase_and_Write(uint32_t address, uint32_t *data, uint32_t length);
 void Flash_Read(uint32_t address, uint32_t *data, uint32_t length);

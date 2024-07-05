@@ -23,6 +23,7 @@
 #include "dcmi.h"
 #include "dma.h"
 #include "eth.h"
+#include "spi.h"
 #include "usart.h"
 #include "usb_otg.h"
 #include "gpio.h"
@@ -176,7 +177,7 @@ void MX_FREERTOS_Init(void);
 void post_process();
 
 
-// �������������������������???
+// �������������������������????
 int x1, y1, x2, y2;
 // yoloface��anchor�ߴ�
 uint8_t anchors[3][2] = {{9, 14}, {12, 17}, {22, 21}};
@@ -425,7 +426,7 @@ struct __FILE
 FILE __stdout;
 int fputc(int ch, FILE *f)
 {
-    HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);//����ʵ�������������???
+    HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);//����ʵ�������������????
     return (ch);
 }
 
@@ -456,7 +457,6 @@ void lv_example_get_started_1(void)
     label = lv_label_create(lv_screen_active());
     lv_label_set_text(label, "0");
     lv_obj_align_to(label, slider, LV_ALIGN_OUT_TOP_MID, 0, -15);    /*Align top of the slider*/
-	
 }
 
 extern lv_obj_t * ui_Container1;
@@ -533,6 +533,7 @@ int main(void)
   MX_FMC_Init();
   MX_USB_OTG_FS_PCD_Init();
   MX_USART1_UART_Init();
+  MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
   delay_init();
 	 HAL_DMA_RegisterCallback(&hdma_memtomem_dma2_stream6,HAL_DMA_XFER_CPLT_CB_ID,TransferComplete);
@@ -551,7 +552,7 @@ int main(void)
 	OV5640_Color_Saturation(3);//ɫ�ʱ��Ͷ�0
 	OV5640_Brightness(4);	//����0
 	OV5640_Contrast(3);		//�Աȶ�0
-	OV5640_Sharpness(33);	//�Զ����???????
+	OV5640_Sharpness(33);	//�Զ����????????
 	OV5640_Focus_Constant();//���������Խ�
 //   LCD_Set_Window(0,0,256,400);
 	OV5640_OutSize_Set(16,4,256,256);
@@ -562,7 +563,6 @@ int main(void)
 	LCD_Clear(WHITE);//����
 	// InternalFlash_Test();
     
- 
   
 	
   /* USER CODE END 2 */

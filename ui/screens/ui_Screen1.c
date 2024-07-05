@@ -396,11 +396,11 @@ void ui_Screen1_screen_init(void)
     lv_obj_remove_flag(ui_Container7update1, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
     ui_Dropdown2 = lv_dropdown_create(ui_Container7update1);
-    lv_dropdown_set_options(ui_Dropdown2, "阿莫西林\n123");
+    lv_dropdown_set_options(ui_Dropdown2, "阿莫西林\n布洛芬");
     lv_obj_set_width(ui_Dropdown2, 150);
     lv_obj_set_height(ui_Dropdown2, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_x(ui_Dropdown2, -67);
-    lv_obj_set_y(ui_Dropdown2, -72);
+    lv_obj_set_y(ui_Dropdown2, -73);
     lv_obj_set_align(ui_Dropdown2, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_Dropdown2, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
     lv_obj_set_style_text_font(ui_Dropdown2, &ui_font_Fontcnmsg, LV_PART_MAIN | LV_STATE_DEFAULT);

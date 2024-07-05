@@ -28,9 +28,11 @@ void ui_event_Button1(lv_event_t * e){
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
         if (strcmp(lv_label_get_text(ui_Label19), "暂停") == 0) {
+            _ui_flag_modify(ui_Label18, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
             vTaskSuspend(myTask_aiHandle);
             lv_label_set_text(ui_Label19, "继续");
         }else {
+            _ui_flag_modify(ui_Label18, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
             vTaskResume(myTask_aiHandle);
             lv_label_set_text(ui_Label19, "暂停");
         }

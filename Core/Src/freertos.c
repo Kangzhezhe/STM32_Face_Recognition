@@ -146,7 +146,7 @@ void MX_FREERTOS_Init(void) {
   start_taskHandle = osThreadCreate(osThread(start_task), NULL);
 
   /* definition and creation of myTask_lvgl */
-  osThreadDef(myTask_lvgl, StartTask_lvgl, osPriorityIdle, 0, 768);
+  osThreadDef(myTask_lvgl, StartTask_lvgl, osPriorityIdle, 0, 1024);
   myTask_lvglHandle = osThreadCreate(osThread(myTask_lvgl), NULL);
 
   /* definition and creation of myTask_ai */
