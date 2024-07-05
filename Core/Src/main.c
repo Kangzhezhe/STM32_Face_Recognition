@@ -179,6 +179,7 @@ int x1, y1, x2, y2;
 uint8_t anchors[3][2] = {{9, 14}, {12, 17}, {22, 21}};
 
 
+// uint16_t img_data[256*256]__attribute__((section(".RW_IRAM2")));//__attribute__((at(0x30020000)));//__attribute__((section(".sram_data2")));
 uint16_t img_data[256*256]__attribute__((section(".RW_IRAM2")));//__attribute__((at(0x30020000)));//__attribute__((section(".sram_data2")));
 uint16_t isok=0;
 
@@ -355,15 +356,10 @@ void post_process()
 	{
 		for(int j = 0; j < 3; j++)
 		{
-			  // �������ά����1*7*7*18
-            // ����18ά�Ȱ�����ÿ������Ԥ�������ê��ÿ��ê���Ӧ6��ά�ȣ�����Ϊx y w h conf class
-            // ��Ȼ��Ϊ��������ǵ����⣬����class��һά��û����
-            // �����YOLO����Ϥ�Ļ�������ȥѧϰһ��yolov3
 			float conf = out_data[i*18+j*6+4];
-            // �����-9�Ǹ�����������������ƫ��������ģ���Ӧ����70%�����Ŷ�
             // sigmod((conf+15)*0.14218327403068542) < 0.7 ==> conf > -9
             snprintf(logStr,13,"conf = %3.2f",conf);
-            LCD_ShowString(10,350,200,16,16,(u8*)logStr);
+            // LCD_ShowString(10,350,200,16,16,(u8*)logStr);
 			if(conf > 2)
 			{
                 // grid_x = i % 7;
@@ -400,17 +396,17 @@ void post_process()
 				// if(x1>=0&&y1>=0&&x2<256&&y2<256)
 				// {
 				// 	//LCD_DrawRectangle(x1,y1,x2,y2);
-                LCD_ShowString(10,300,100,16,16,"isface"); 
+                // LCD_ShowString(10,300,100,16,16,"isface"); 
                 // sprintf(logStr,"%3d",cnt_detected);
                 // LCD_ShowString(40,300,100,16,16,logStr); 
                 cnt_detected++;
                 if(cnt_detected == 5){
-                    LCD_ShowString(100,300,100,16,16,"detected"); 
+                    // LCD_ShowString(100,300,100,16,16,"detected"); 
                     prepare_facenet_data(50,10,216,245);
                     AI_Run1(in_data1,out_data1);
                     int max_index = post_process_facenet();
                     snprintf(logStr,30,"score[%d] = %4.2f",max_index,score[max_index]);
-                    LCD_ShowString(10,400,200,16,16,logStr);
+                    // LCD_ShowString(10,400,200,16,16,logStr);
                     cnt_detected=0;
                 }
                 return;
@@ -430,11 +426,11 @@ void post_process()
 		}
 	}
     if(cnt_detected > 0){
-        LCD_ShowString(100,300,100,16,16,"        "); 
-        LCD_ShowString(10,400,200,16,16,"                  ");
+        // LCD_ShowString(100,300,100,16,16,"        "); 
+        // LCD_ShowString(10,400,200,16,16,"                  ");
         cnt_detected--;
     }
-    LCD_ShowString(10,300,200,16,16,"noface"); 
+    // LCD_ShowString(10,300,200,16,16,"noface"); 
 		      	// DCMI_Start();
 }
 
@@ -479,15 +475,28 @@ void lv_example_get_started_1(void)
 	
 }
 
+extern lv_obj_t * ui_Container1;
 void lv_cam_canvas(void){
     // ��������
-    canvas_cam = lv_canvas_create(lv_screen_active());
+    canvas_cam = lv_canvas_create(ui_Container1);
     lv_canvas_set_buffer(canvas_cam, img_data, 256, 256, LV_COLOR_FORMAT_RGB565);
     lv_canvas_fill_bg(canvas_cam, lv_color_hex(0x000000), 255);
+    lv_obj_set_align(canvas_cam, LV_ALIGN_CENTER);
+    // lv_obj_set_pos(canvas_cam, 0, 0);
 
-    lv_obj_set_pos(canvas_cam, 0, 0);
     lv_obj_set_size(canvas_cam, 256, 256);
     lv_obj_set_scrollbar_mode(canvas_cam, LV_SCROLLBAR_MODE_OFF);
+
+    lv_obj_set_style_shadow_color(canvas_cam, lv_color_hex(0x2EC1D3), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_opa(canvas_cam, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(canvas_cam, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_spread(canvas_cam, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+}
+
+void process_ai(void){
+    prepare_yolo_data();
+    AI_Run(in_data,out_data);
+	post_process();
 }
 /* USER CODE END 0 */
 

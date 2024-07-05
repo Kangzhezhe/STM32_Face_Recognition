@@ -155,6 +155,7 @@ void MX_FREERTOS_Init(void) {
   * @param  argument: Not used
   * @retval None
   */
+ void process_ai(void);
 /* USER CODE END Header_StartDefaultTask */
 void StartDefaultTask(void const * argument)
 {
@@ -163,6 +164,8 @@ void StartDefaultTask(void const * argument)
   for(;;)
   {
     osDelay(1);
+   // process_ai();
+    
   }
   /* USER CODE END StartDefaultTask */
 }
@@ -186,16 +189,17 @@ void StartTask(void const * argument)
         lv_init();
         lv_port_disp_init();
         lv_port_indev_init();
-        // lv_example_get_started_1();
-        // lv_cam_canvas();
+        lv_example_get_started_1();
         ui_init();
+        lv_cam_canvas();
         my_ui_init();
-        HAL_Delay(1000);
         xSemaphoreGive(Sem_lvglHandle);
     }
-    // DCMI_Start();
+		osThreadResume(myTask_lvglHandle);
+		
+    HAL_Delay(1000);
+    DCMI_Start();
   
-  osThreadResume(myTask_lvglHandle);
   vTaskDelete(start_taskHandle);
  
   /* USER CODE END StartTask */

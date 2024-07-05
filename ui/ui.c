@@ -68,8 +68,12 @@ lv_obj_t * ui_Button6;
 lv_obj_t * ui_Label15;
 lv_obj_t * ui_Button7;
 lv_obj_t * ui_Label17;
+lv_obj_t * ui_Image4;
+lv_obj_t * ui_Container8;
+lv_obj_t * ui_Container9;
+lv_obj_t * ui_Container10;
 lv_obj_t * ui____initial_actions0;
-const lv_image_dsc_t * ui_imgset_backgroud[1] = {&ui_img_backgroud1_png};
+const lv_image_dsc_t * ui_imgset_backgroud[4] = {&ui_img_backgroud1_png, &ui_img_backgroud2_png, &ui_img_backgroud3_png, &ui_img_backgroud4_png};
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
 #if LV_COLOR_DEPTH != 16

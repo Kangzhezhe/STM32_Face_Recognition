@@ -3702,6 +3702,21 @@
               <FileType>1</FileType>
               <FilePath>..\ui\images\ui_img_backgroud1_png.c</FilePath>
             </File>
+            <File>
+              <FileName>ui_img_backgroud2_png.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ui\images\ui_img_backgroud2_png.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_img_backgroud3_png.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ui\images\ui_img_backgroud3_png.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_img_backgroud4_png.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ui\images\ui_img_backgroud4_png.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -74,10 +74,17 @@ extern lv_obj_t * ui_Button6;
 extern lv_obj_t * ui_Label15;
 extern lv_obj_t * ui_Button7;
 extern lv_obj_t * ui_Label17;
+extern lv_obj_t * ui_Image4;
+extern lv_obj_t * ui_Container8;
+extern lv_obj_t * ui_Container9;
+extern lv_obj_t * ui_Container10;
 extern lv_obj_t * ui____initial_actions0;
 
 
+LV_IMG_DECLARE(ui_img_backgroud4_png);    // assets/backgroud4.png
+LV_IMG_DECLARE(ui_img_backgroud3_png);    // assets/backgroud3.png
 LV_IMG_DECLARE(ui_img_backgroud1_png);    // assets/backgroud1.png
+LV_IMG_DECLARE(ui_img_backgroud2_png);    // assets/backgroud2.png
 
 
 
