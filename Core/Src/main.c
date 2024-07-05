@@ -44,6 +44,7 @@
 #include "lvgl.h"
 #include "lv_port_indev.h"
 #include "ui.h"
+#include "L610.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -174,7 +175,7 @@ void MX_FREERTOS_Init(void);
 void post_process();
 
 
-// �������������������������??
+// �������������������������???
 int x1, y1, x2, y2;
 // yoloface��anchor�ߴ�
 uint8_t anchors[3][2] = {{9, 14}, {12, 17}, {22, 21}};
@@ -377,7 +378,7 @@ void post_process()
 			{
                 // grid_x = i % 7;
 				// grid_y = (i - grid_x)/7;
-				// // �����??15��0.14218327403068542�����������������������ƫ����??
+				// // �����???15��0.14218327403068542�����������������������ƫ����???
 				// // x = ((float)out_data[i*18+j*6]+15)*0.14218327403068542f;
 				// // y = ((float)out_data[i*18+j*6+1]+15)*0.14218327403068542f;
 				// // w = ((float)out_data[i*18+j*6+2]+15)*0.14218327403068542f;
@@ -386,7 +387,7 @@ void post_process()
 				// y = ((float)out_data[i*18+j*6+1]);
 				// w = ((float)out_data[i*18+j*6+2]);
 				// h = ((float)out_data[i*18+j*6+3]);
-                // // �����²������Σ���С��8�����������ԭ��??56*56�ĳ߶�
+                // // �����²������Σ���С��8�����������ԭ��???56*56�ĳ߶�
 				// x = (sigmod(x)+grid_x) * 8;
 				// y = (sigmod(y)+grid_y) * 8;
 				// w = expf(w) * anchors[j][0];
@@ -404,7 +405,7 @@ void post_process()
                 
                 //LCD_DrawRectangle(x1*H_SCALE,y1*W_SCALE,x2*H_SCALE,y2*W_SCALE);
                 // ���Ʒ������Ͻ�����Ϊ(x1, y1)�����½�����Ϊ(x2, y2)
-                // ע�⣬�������ͼ�������ŵ�??56*56����������Ļ�����������껹Ҫ����ͼ�������ϵ��??
+                // ע�⣬�������ͼ�������ŵ�???56*56����������Ļ�����������껹Ҫ����ͼ�������ϵ��???
 
 				// if(x1>=0&&y1>=0&&x2<256&&y2<256)
 				// {
@@ -457,7 +458,7 @@ struct __FILE
 FILE __stdout;
 int fputc(int ch, FILE *f)
 {
-    HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);//����ʵ�������������??
+    HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);//����ʵ�������������???
     return (ch);
 }
 
@@ -567,6 +568,7 @@ int main(void)
   delay_init();
 	 HAL_DMA_RegisterCallback(&hdma_memtomem_dma2_stream6,HAL_DMA_XFER_CPLT_CB_ID,TransferComplete);
 	AI_Init();
+    // HAL_UART_Receive_IT(&huart1,&Res,1);
  LCD_Init();
  HAL_Delay(50);
 	while(OV5640_Init())//��ʼ��OV2640
@@ -580,13 +582,13 @@ int main(void)
 	OV5640_Color_Saturation(3);//ɫ�ʱ��Ͷ�0
 	OV5640_Brightness(4);	//����0
 	OV5640_Contrast(3);		//�Աȶ�0
-	OV5640_Sharpness(33);	//�Զ����??????
+	OV5640_Sharpness(33);	//�Զ����???????
 	OV5640_Focus_Constant();//���������Խ�
 //   LCD_Set_Window(0,0,256,400);
 	OV5640_OutSize_Set(16,4,256,256);
 
 		// DCMI_Start();
-
+    // L610_test();
     TP_Init();
 	LCD_Clear(WHITE);//����
 	
