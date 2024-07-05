@@ -78,6 +78,9 @@ extern lv_obj_t * ui_Image4;
 extern lv_obj_t * ui_Container8;
 extern lv_obj_t * ui_Container9;
 extern lv_obj_t * ui_Container10;
+extern lv_obj_t * ui_Label18;
+extern lv_obj_t * ui_Button1;
+extern lv_obj_t * ui_Label19;
 extern lv_obj_t * ui____initial_actions0;
 
 

@@ -361,6 +361,8 @@ void lvgl_set_txt(lv_obj_t * label, char * txt){
 #define W_SCALE (255/55)
 #define H_SCALE (255/55)
 uint8_t cnt_detected = 0;
+extern u8 state;
+extern osThreadId myTask_aiHandle;
 char logStr[1024]__attribute__((section(".RW_IRAM1")));
 void post_process()
 {
@@ -376,42 +378,8 @@ void post_process()
             // LCD_ShowString(10,350,200,16,16,(u8*)logStr);
 			if(conf > 2)
 			{
-                // grid_x = i % 7;
-				// grid_y = (i - grid_x)/7;
-				// // �����???15��0.14218327403068542�����������������������ƫ����???
-				// // x = ((float)out_data[i*18+j*6]+15)*0.14218327403068542f;
-				// // y = ((float)out_data[i*18+j*6+1]+15)*0.14218327403068542f;
-				// // w = ((float)out_data[i*18+j*6+2]+15)*0.14218327403068542f;
-				// // h = ((float)out_data[i*18+j*6+3]+15)*0.14218327403068542f;
-                // x = ((float)out_data[i*18+j*6]);
-				// y = ((float)out_data[i*18+j*6+1]);
-				// w = ((float)out_data[i*18+j*6+2]);
-				// h = ((float)out_data[i*18+j*6+3]);
-                // // �����²������Σ���С��8�����������ԭ��???56*56�ĳ߶�
-				// x = (sigmod(x)+grid_x) * 8;
-				// y = (sigmod(y)+grid_y) * 8;
-				// w = expf(w) * anchors[j][0];
-				// h = expf(h) * anchors[j][1];
-				// y1 = (x - w/2);
-				// y2 = (x + w/2);
-				// x1 = y - h/2;
-				// x2 = y + h/2;
-                // snprintf(logStr,1024,"%5d,%5d,%5d,%5d",x1,x2,y1,y2);
-                // LCD_ShowString(10,400,200,16,16,(u8*)logStr);
-				// if(x1 < 0) x1 = 0;
-				// if(y1 < 0) y1 = 0;
-				// if(x2 > 55) x2 = 55;
-				// if(y2 > 55) y2 = 55;
-                
-                //LCD_DrawRectangle(x1*H_SCALE,y1*W_SCALE,x2*H_SCALE,y2*W_SCALE);
-                // ���Ʒ������Ͻ�����Ϊ(x1, y1)�����½�����Ϊ(x2, y2)
-                // ע�⣬�������ͼ�������ŵ�???56*56����������Ļ�����������껹Ҫ����ͼ�������ϵ��???
-
-				// if(x1>=0&&y1>=0&&x2<256&&y2<256)
-				// {
-				// 	//LCD_DrawRectangle(x1,y1,x2,y2);
-                // LCD_ShowString(10,300,100,16,16,"isface"); 
                 lvgl_set_txt(ui_Label4, "识别到人脸");
+                state = 1;
                 // sprintf(logStr,"%3d",cnt_detected);
                 // LCD_ShowString(40,300,100,16,16,logStr); 
                 cnt_detected++;
@@ -420,30 +388,29 @@ void post_process()
                     prepare_facenet_data(50,10,216,245);
                     AI_Run1(in_data1,out_data1);
                     int max_index = post_process_facenet();
-                    snprintf(logStr,30,"score[%d] = %4.2f",max_index,score[max_index]);
-                    lvgl_set_txt(ui_Label4, "确认身份!");
-                    // LCD_ShowString(10,400,200,16,16,logStr);
-                    cnt_detected=0;
+                    // snprintf(logStr,30,"score[%d] = %4.2f",max_index,score[max_index]);
+                    if(pdTRUE == xSemaphoreTake(Sem_lvglHandle,portMAX_DELAY))    
+                    {
+                        snprintf(logStr,30,"确认身份!");
+                        lv_label_set_text(ui_Label4, logStr);
+                        snprintf(logStr,30,"置信度:%4.2f",score[max_index]);
+                        lv_label_set_text(ui_Label18, logStr);
+                        _ui_flag_modify(ui_Label18, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+                        snprintf(logStr,30,"%d",max_index);
+                        lv_label_set_text(ui_Labelid, logStr);
+                        state = 2;
+                        cnt_detected=0;
+                        lv_label_set_text(ui_Label19, "继续");
+                        xSemaphoreGive(Sem_lvglHandle);
+                    } 
+                    vTaskSuspend(myTask_aiHandle);
                 }
                 return;
 
-				// 	//LCD_Fill(0,0,256,256,WHITE);
-                //    DCMI_Start();
-					
-				// 	return;
-				// }
-				
-				// else{
-				// LCD_ShowString(10,300,200,16,16,"noface"); 
-                //     DCMI_Start();
-				// 	return;
-				// }
 			}
 		}
 	}
     if(cnt_detected > 0){
-        // LCD_ShowString(100,300,100,16,16,"        "); 
-        // LCD_ShowString(10,400,200,16,16,"                  ");
         cnt_detected--;
     }
     lvgl_set_txt(ui_Label4, "检测中...");

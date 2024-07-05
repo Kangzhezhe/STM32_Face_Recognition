@@ -72,6 +72,9 @@ lv_obj_t * ui_Image4;
 lv_obj_t * ui_Container8;
 lv_obj_t * ui_Container9;
 lv_obj_t * ui_Container10;
+lv_obj_t * ui_Label18;
+lv_obj_t * ui_Button1;
+lv_obj_t * ui_Label19;
 lv_obj_t * ui____initial_actions0;
 const lv_image_dsc_t * ui_imgset_backgroud[4] = {&ui_img_backgroud1_png, &ui_img_backgroud2_png, &ui_img_backgroud3_png, &ui_img_backgroud4_png};
 

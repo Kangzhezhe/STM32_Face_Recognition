@@ -247,6 +247,7 @@ void StartTask_lvgl(void const * argument)
 */
  void process_ai(void);
 #include "dcmi.h"
+u8 state = 0;
 /* USER CODE END Header_StartTask_ai */
 void StartTask_ai(void const * argument)
 {
