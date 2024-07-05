@@ -81,7 +81,7 @@
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>0</RunUserProg1>
-            <RunUserProg2>0</RunUserProg2>
+            <RunUserProg2>1</RunUserProg2>
             <UserProg1Name></UserProg1Name>
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
@@ -337,9 +337,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls>--locale=english</MiscControls>
-              <Define>USE_HAL_DRIVER,STM32H753xx,__TARGET_FPU_VFP,LV_LVGL_H_INCLUDE_SIMPLE</Define>
+              <Define>USE_HAL_DRIVER,STM32H753xx,__TARGET_FPU_VFP,LV_LVGL_H_INCLUDE_SIMPLE,DATA_IN_D2_SRAM,configAPPLICATION_ALLOCATED_HEAP</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../Middlewares/ST/AI/Inc;../X-CUBE-AI/App;../Core/TOUCH;../lvgl;../lvgl/inc;../lvgl/src/core;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;..\ui</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../Middlewares/ST/AI/Inc;../X-CUBE-AI/App;../Core/TOUCH;../lvgl;../lvgl/inc;../lvgl/src/core;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;../ui</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -370,7 +370,7 @@
             <TextAddressRange></TextAddressRange>
             <DataAddressRange></DataAddressRange>
             <pXoBase></pXoBase>
-            <ScatterFile>TESTAI4.sct</ScatterFile>
+            <ScatterFile>.\myTESTAI4.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
             <Misc></Misc>
@@ -3230,6 +3230,86 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>ui</GroupName>
+          <Files>
+            <File>
+              <FileName>ui_comp_hook.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ui\components\ui_comp_hook.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_font_Fontcn15.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ui\fonts\ui_font_Fontcn15.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_font_Fontcn18.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ui\fonts\ui_font_Fontcn18.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_font_Fontcn20.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ui\fonts\ui_font_Fontcn20.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_font_Fontcn25.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ui\fonts\ui_font_Fontcn25.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_font_Fontcn30.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ui\fonts\ui_font_Fontcn30.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_font_Fontcnmsg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ui\fonts\ui_font_Fontcnmsg.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_Screen1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ui\screens\ui_Screen1.c</FilePath>
+            </File>
+            <File>
+              <FileName>my_ui.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ui\my_ui.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ui\ui.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_helpers.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ui\ui_helpers.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_img_backgroud1_png.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ui\images\ui_img_backgroud1_png.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_img_backgroud2_png.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ui\images\ui_img_backgroud2_png.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_img_backgroud3_png.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ui\images\ui_img_backgroud3_png.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_img_backgroud4_png.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ui\images\ui_img_backgroud4_png.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>Application/User/X-CUBE-AI/App</GroupName>
           <GroupOption>
             <CommonProperty>
@@ -3636,86 +3716,6 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>ui</GroupName>
-          <Files>
-            <File>
-              <FileName>ui_comp_hook.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ui\components\ui_comp_hook.c</FilePath>
-            </File>
-            <File>
-              <FileName>ui_font_Fontcn15.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ui\fonts\ui_font_Fontcn15.c</FilePath>
-            </File>
-            <File>
-              <FileName>ui_font_Fontcn18.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ui\fonts\ui_font_Fontcn18.c</FilePath>
-            </File>
-            <File>
-              <FileName>ui_font_Fontcn20.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ui\fonts\ui_font_Fontcn20.c</FilePath>
-            </File>
-            <File>
-              <FileName>ui_font_Fontcn25.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ui\fonts\ui_font_Fontcn25.c</FilePath>
-            </File>
-            <File>
-              <FileName>ui_font_Fontcn30.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ui\fonts\ui_font_Fontcn30.c</FilePath>
-            </File>
-            <File>
-              <FileName>ui_font_Fontcnmsg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ui\fonts\ui_font_Fontcnmsg.c</FilePath>
-            </File>
-            <File>
-              <FileName>ui_Screen1.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ui\screens\ui_Screen1.c</FilePath>
-            </File>
-            <File>
-              <FileName>my_ui.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ui\my_ui.c</FilePath>
-            </File>
-            <File>
-              <FileName>ui.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ui\ui.c</FilePath>
-            </File>
-            <File>
-              <FileName>ui_helpers.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ui\ui_helpers.c</FilePath>
-            </File>
-            <File>
-              <FileName>ui_img_backgroud1_png.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ui\images\ui_img_backgroud1_png.c</FilePath>
-            </File>
-            <File>
-              <FileName>ui_img_backgroud2_png.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ui\images\ui_img_backgroud2_png.c</FilePath>
-            </File>
-            <File>
-              <FileName>ui_img_backgroud3_png.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ui\images\ui_img_backgroud3_png.c</FilePath>
-            </File>
-            <File>
-              <FileName>ui_img_backgroud4_png.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ui\images\ui_img_backgroud4_png.c</FilePath>
             </File>
           </Files>
         </Group>

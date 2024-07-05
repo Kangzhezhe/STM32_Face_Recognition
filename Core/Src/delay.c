@@ -108,20 +108,4 @@ void delay_ms(uint32_t nms)
 	}
 }
 
-/*重写HAL_Delay*/
-void HAL_Delay(uint32_t Delay)
-{
-  uint32_t tickstart = HAL_GetTick();
-  uint32_t wait = Delay;
 
-  /*不太明白官方源码为啥这么写，会多延时1ms，注释掉后更准*/
-//  /* Add a freq to guarantee minimum wait */
-//  if (wait < HAL_MAX_DELAY)
-//  {
-//    wait += (uint32_t)(uwTickFreq);
-//  }
-
-  while ((HAL_GetTick() - tickstart) < wait)
-  {
-  }
-}

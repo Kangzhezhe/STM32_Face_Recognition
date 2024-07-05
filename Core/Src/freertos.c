@@ -34,7 +34,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+uint8_t ucHeap[ configTOTAL_HEAP_SIZE ]__attribute__((section(".RAM_D2")));
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -54,7 +54,9 @@
 osThreadId defaultTaskHandle;
 osThreadId start_taskHandle;
 osThreadId myTask_lvglHandle;
+osThreadId myTask_aiHandle;
 osSemaphoreId Sem_lvglHandle;
+osSemaphoreId Sem_imgbufHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -64,6 +66,7 @@ osSemaphoreId Sem_lvglHandle;
 void StartDefaultTask(void const * argument);
 void StartTask(void const * argument);
 void StartTask_lvgl(void const * argument);
+void StartTask_ai(void const * argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -117,6 +120,10 @@ void MX_FREERTOS_Init(void) {
   osSemaphoreDef(Sem_lvgl);
   Sem_lvglHandle = osSemaphoreCreate(osSemaphore(Sem_lvgl), 1);
 
+  /* definition and creation of Sem_imgbuf */
+  osSemaphoreDef(Sem_imgbuf);
+  Sem_imgbufHandle = osSemaphoreCreate(osSemaphore(Sem_imgbuf), 1);
+
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
   /* USER CODE END RTOS_SEMAPHORES */
@@ -139,12 +146,17 @@ void MX_FREERTOS_Init(void) {
   start_taskHandle = osThreadCreate(osThread(start_task), NULL);
 
   /* definition and creation of myTask_lvgl */
-  osThreadDef(myTask_lvgl, StartTask_lvgl, osPriorityIdle, 0, 2048);
+  osThreadDef(myTask_lvgl, StartTask_lvgl, osPriorityIdle, 0, 768);
   myTask_lvglHandle = osThreadCreate(osThread(myTask_lvgl), NULL);
+
+  /* definition and creation of myTask_ai */
+  osThreadDef(myTask_ai, StartTask_ai, osPriorityIdle, 0, 1024);
+  myTask_aiHandle = osThreadCreate(osThread(myTask_ai), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   osThreadSuspend(myTask_lvglHandle);
+  osThreadSuspend(myTask_aiHandle);
   /* USER CODE END RTOS_THREADS */
 
 }
@@ -155,7 +167,6 @@ void MX_FREERTOS_Init(void) {
   * @param  argument: Not used
   * @retval None
   */
- void process_ai(void);
 /* USER CODE END Header_StartDefaultTask */
 void StartDefaultTask(void const * argument)
 {
@@ -189,7 +200,7 @@ void StartTask(void const * argument)
         lv_init();
         lv_port_disp_init();
         lv_port_indev_init();
-        lv_example_get_started_1();
+        // lv_example_get_started_1();
         ui_init();
         lv_cam_canvas();
         my_ui_init();
@@ -197,11 +208,11 @@ void StartTask(void const * argument)
     }
 		osThreadResume(myTask_lvglHandle);
 		
-    HAL_Delay(1000);
+    //vTaskDelay(1000);
     DCMI_Start();
   
+    osThreadResume(myTask_aiHandle);
   vTaskDelete(start_taskHandle);
- 
   /* USER CODE END StartTask */
 }
 
@@ -226,6 +237,31 @@ void StartTask_lvgl(void const * argument)
     }
   } 
   /* USER CODE END StartTask_lvgl */
+}
+
+/* USER CODE BEGIN Header_StartTask_ai */
+/**
+* @brief Function implementing the myTask_ai thread.
+* @param argument: Not used
+* @retval None
+*/
+ void process_ai(void);
+#include "dcmi.h"
+/* USER CODE END Header_StartTask_ai */
+void StartTask_ai(void const * argument)
+{
+  /* USER CODE BEGIN StartTask_ai */
+
+  /* Infinite loop */
+  for(;;)
+  {
+    HAL_DCMI_Suspend(&hdcmi);
+ 	HAL_DCMI_Stop(&hdcmi);
+    process_ai();
+    DCMI_Start();
+    osDelay(1);
+  }
+  /* USER CODE END StartTask_ai */
 }
 
 /* Private application code --------------------------------------------------*/

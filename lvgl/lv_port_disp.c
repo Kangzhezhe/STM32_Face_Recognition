@@ -69,7 +69,7 @@ void lv_port_disp_init(void)
 
     /* Example 1
      * One buffer for partial rendering*/
-    static lv_color_t buf_1_1[MY_DISP_HOR_RES*5]__attribute__((section(".RW_IRAM1")));    /*A buffer for 10 rows*/
+    static lv_color_t buf_1_1[MY_DISP_HOR_RES*5]__attribute__((section(".RAM_D2")));    /*A buffer for 10 rows*/
     lv_display_set_buffers(disp, buf_1_1, NULL, sizeof(buf_1_1), LV_DISPLAY_RENDER_MODE_PARTIAL);
 
     /* Example 2
@@ -121,27 +121,29 @@ void disp_disable_update(void)
  *'lv_display_flush_ready()' has to be called when it's finished.*/
 static void disp_flush(lv_display_t * disp_drv, const lv_area_t * area, uint8_t * px_map)
 {
-    if(disp_flush_enabled) {
-        /*The most simple case (but also the slowest) to put all pixels to the screen one-by-one*/
+        if(disp_flush_enabled) {
+            /*The most simple case (but also the slowest) to put all pixels to the screen one-by-one*/
 
-      LCD_Color_Fill(area->x1,area->y1,area->x2,area->y2,(uint16_t*)px_map);  
-			//u16* px_16 = (u16*)px_map;
+        
+            LCD_Color_Fill(area->x1,area->y1,area->x2,area->y2,(uint16_t*)px_map);  
+                //u16* px_16 = (u16*)px_map;
 
-        // int32_t x;
-        // int32_t y;
-        // for(y = area->y1; y <= area->y2; y++) {
-        //     for(x = area->x1; x <= area->x2; x++) {
-        //         /*Put a pixel to the display. For example:*/
-        //         /*put_px(x, y, *px_map)*/
-        //         sendShort(*(u16*)px_map);
-        //         px_map++;
-        //     }
-        // }
-    }
+            // int32_t x;
+            // int32_t y;
+            // for(y = area->y1; y <= area->y2; y++) {
+            //     for(x = area->x1; x <= area->x2; x++) {
+            //         /*Put a pixel to the display. For example:*/
+            //         /*put_px(x, y, *px_map)*/
+            //         sendShort(*(u16*)px_map);
+            //         px_map++;
+            //     }
+            // }
+        }
 
-    /*IMPORTANT!!!
-     *Inform the graphics library that you are ready with the flushing*/
-    lv_display_flush_ready(disp_drv);
+        /*IMPORTANT!!!
+        *Inform the graphics library that you are ready with the flushing*/
+        lv_display_flush_ready(disp_drv);
+        
 }
 
 #else /*Enable this file at the top*/
