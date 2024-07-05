@@ -22,4 +22,7 @@
                                  of Sector 7, 128 Kbytes  */
 
 int InternalFlash_Test(void);
+void Flash_Erase_and_Write(uint32_t address, uint32_t *data, uint32_t length);
+void Flash_Read(uint32_t address, uint32_t *data, uint32_t length);
+
 #endif

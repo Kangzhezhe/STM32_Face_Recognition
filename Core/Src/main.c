@@ -593,18 +593,8 @@ int main(void)
     // L610_test();
     TP_Init();
 	LCD_Clear(WHITE);//����
-	
-    printf("wating\r\n");
-   if(InternalFlash_Test() == 0)
-   {
-      printf("\r\nsuccess\r\n");
-   }
-   else
-   {
-      printf("\r\nfaid\r\n");
-   } 
-  while (1){
-  }
+	// InternalFlash_Test();
+    
  
   
 	

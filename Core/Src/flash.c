@@ -1,4 +1,5 @@
 #include "flash.h"
+#include "stdio.h"
 
 #define DATA_32                 ((uint32_t)0x87645321)
 
@@ -150,6 +151,7 @@ int InternalFlash_Test(void)
     {
         DataToWrite[i] = DATA_32 + i*2;
     }
+     printf("wating\r\n");
 
     // Flash_Unlock();
 
@@ -176,5 +178,14 @@ int InternalFlash_Test(void)
         }
     }
 
+   
+   if(MemoryProgramStatus == 0)
+   {
+      printf("\r\nsuccess\r\n");
+   }
+   else
+   {
+      printf("\r\nfaid\r\n");
+   } 
     return (MemoryProgramStatus == 0) ? 0 : -1;
 }
