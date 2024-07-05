@@ -45,6 +45,7 @@
 #include "lv_port_indev.h"
 #include "ui.h"
 #include "L610.h"
+#include "flash.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -343,7 +344,6 @@ void TransferComplete(DMA_HandleTypeDef *_hdma)
     isok=1;
     
 }
-
 float sigmod(float x)
 {
 	float y = 1/(1+expf(x));
@@ -515,6 +515,8 @@ void process_ai(void){
     AI_Run(in_data,out_data);
 	post_process();
 }
+
+
 /* USER CODE END 0 */
 
 /**
@@ -592,7 +594,19 @@ int main(void)
     TP_Init();
 	LCD_Clear(WHITE);//����
 	
-	
+    printf("wating\r\n");
+   if(InternalFlash_Test() == 0)
+   {
+      printf("\r\nsuccess\r\n");
+   }
+   else
+   {
+      printf("\r\nfaid\r\n");
+   } 
+  while (1){
+  }
+ 
+  
 	
   /* USER CODE END 2 */
 

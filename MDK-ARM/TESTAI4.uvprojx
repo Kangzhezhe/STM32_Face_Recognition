@@ -646,6 +646,11 @@
               <FileType>1</FileType>
               <FilePath>..\Core\Src\L610.c</FilePath>
             </File>
+            <File>
+              <FileName>flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\flash.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
