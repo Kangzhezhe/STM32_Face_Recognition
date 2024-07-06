@@ -5,9 +5,6 @@
 /* Exported types -----------------------------------------------------*/
 /* Exported constants -------------------------------------------------*/
 /* 要擦除内部FLASH的起始地址 */
-#define FLASH_USER_START_ADDR   ADDR_FLASH_SECTOR_7
-/* 要擦除内部FLASH的结束地址 */
-#define FLASH_USER_END_ADDR     ADDR_FLASH_SECTOR_7
 
 /**
  * @brief  根据输入的地址给出它所在的sector

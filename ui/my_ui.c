@@ -38,14 +38,24 @@ void ui_event_Button1(lv_event_t * e){
         }
     }
 }
-
+typedef struct 
+{
+    int32_t id;
+    uint8_t* feature;
+    char name[16];
+    char sex[4];
+    int32_t age;
+    char judge[64];
+    uint8_t* record;
+}Persion;
+extern Persion cur_persion;
 void set_state(uint8_t temp);
 void ui_event_Button7(lv_event_t * e){
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
-        int32_t ID = lv_spinbox_get_value(ui_Spinbox5);
-        // TODO 由ID号获取个人信息
+        // TODO 由ID号从云端获取个人信息
+        cur_persion.id = lv_spinbox_get_value(ui_Spinbox5);
         lv_label_set_text(ui_Label17, "OK");
         
         vTaskResume(myTask_aiHandle);

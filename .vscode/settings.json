@@ -22,6 +22,7 @@
         "freertos.h": "c",
         "l610.h": "c",
         "usart.h": "c",
-        "flash.h": "c"
+        "flash.h": "c",
+        "stm32h7xx_hal_flash.h": "c"
     }
 }

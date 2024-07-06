@@ -23,5 +23,8 @@
 int InternalFlash_Test(void);
 void Flash_Erase_and_Write(uint32_t address, uint32_t *data, uint32_t length);
 void Flash_Read(uint32_t address, uint32_t *data, uint32_t length);
+#define FLASH_USER_START_ADDR   ADDR_FLASH_SECTOR_7
+/* 要擦除内部FLASH的结束地址 */
+#define FLASH_USER_END_ADDR     ADDR_FLASH_SECTOR_7
 
 #endif

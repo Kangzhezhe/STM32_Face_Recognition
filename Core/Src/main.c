@@ -364,6 +364,20 @@ void lvgl_set_txt(lv_obj_t * label, char * txt){
 u8 get_state();
 void set_state(u8 temp);
 
+#define FEATURE_PER_PERSION 4
+#define MAX_ID 128
+typedef struct 
+{
+    int32_t id;
+    u8* feature;
+    char name[16];
+    char sex[4];
+    int32_t age;
+    char judge[64];
+    u8* record;
+}Persion;
+Persion cur_persion;
+
 #define W_SCALE (255/55)
 #define H_SCALE (255/55)
 uint8_t cnt_detected = 0;
@@ -407,8 +421,6 @@ void post_process()
                             temp_state = ai_state;
                             xSemaphoreGive(Sem_stateHandle);
                         } 
-                        snprintf(logStr,30,"%d",temp_state);
-                        lv_label_set_text(ui_Labelid, logStr);
                         if (temp_state == 0)
                         {
                             snprintf(logStr,30,"确认身份!");
@@ -433,6 +445,33 @@ void post_process()
                             lv_label_set_text(ui_Label17, "确认");
                             xSemaphoreGive(Sem_lvglHandle);
                             //TODO 录入人脸
+                           if (cur_persion.id > MAX_ID-1) 
+                               lv_label_set_text(ui_Label4,"ID太大");
+                           else{
+                               Flash_Read(FLASH_USER_START_ADDR,(uint32_t*)buf_common,128*512/4);
+                               cur_persion.feature = (u8*)buf_common + cur_persion.id*FEATURE_PER_PERSION*128;
+                               for (int i = 0; i < FEATURE_PER_PERSION; i++)
+                               {
+                                   memcpy(cur_persion.feature+i*128,out_data1,128);
+                               }
+                               Flash_Erase_and_Write(FLASH_USER_START_ADDR,(uint32_t*)buf_common,128*512/4);
+                               uint32_t MemoryProgramStatus = 0;
+                               MemoryProgramStatus = 0;
+                               u8*address=buf_common+128*512;
+                               Flash_Read(FLASH_USER_START_ADDR,(uint32_t*)address,128*512/4);
+                               for (int i = 0; i < 128*512; i++)
+                               {
+                                   if (buf_common[i] != address[i])
+                                   {
+                                       MemoryProgramStatus++;
+                                   }
+                               }
+                               if(MemoryProgramStatus==0)
+                                   lv_label_set_text(ui_Labelid, "succs");
+                               else 
+                                   lv_label_set_text(ui_Labelid, "faild");
+
+                            }
                         }
                     } 
                     vTaskSuspend(myTask_aiHandle);
