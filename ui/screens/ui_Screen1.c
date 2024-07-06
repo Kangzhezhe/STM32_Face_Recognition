@@ -572,7 +572,7 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_align(ui_Label18, LV_ALIGN_CENTER);
     lv_label_set_text(ui_Label18, "置信度:");
     lv_obj_add_flag(ui_Label18, LV_OBJ_FLAG_HIDDEN);     /// Flags
-    lv_obj_set_style_text_font(ui_Label18, &ui_font_Fontcn15, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_Label18, &ui_font_Fontcnmsg, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Button1 = lv_button_create(ui_Screen1);
     lv_obj_set_width(ui_Button1, 71);

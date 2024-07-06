@@ -14,5 +14,8 @@ LR_IROM1 0x08000000 0x00200000  {    ; load region size_region
   RW_IRAM3 0x30000000 0x00048000  {
    *(.RAM_D2)
   }
+  RW_IRAM4 0x38000000 0x00010000  {
+   *(.RAM_D3)
+  }
 }
 

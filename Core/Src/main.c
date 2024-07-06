@@ -378,12 +378,23 @@ typedef struct
 }Persion;
 Persion cur_persion;
 
+
 #define W_SCALE (255/55)
 #define H_SCALE (255/55)
 uint8_t cnt_detected = 0;
 extern u8 ai_state;
 extern osThreadId myTask_aiHandle;
 char logStr[1024]__attribute__((section(".RW_IRAM1")));
+static int i_feature = 0;
+u8 features_buf[128*512]__attribute__((section(".RAM_D3")));
+u8* get_feature_ptr(int id){
+    return  (u8*)features_buf + id*FEATURE_PER_PERSION*128;
+}
+
+int32_t* get_cnt_ptr(){
+    return (int32_t*)((u8*)features_buf + 128*512-4);
+}
+
 void post_process()
 {
 	int grid_x, grid_y;
@@ -428,53 +439,66 @@ void post_process()
                             snprintf(logStr,30,"置信度:%4.2f",score[max_index]);
                             lv_label_set_text(ui_Label18, logStr);
                             _ui_flag_modify(ui_Label18, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
-                            // snprintf(logStr,30,"%d",max_index);
-                            // lv_label_set_text(ui_Labelid, logStr);
+                            snprintf(logStr,30,"%d",max_index);
+                            lv_label_set_text(ui_Labelid, logStr);
 
                             // TODO 从云端获取数�?
                             // void get data 
                             cnt_detected=0;
                             lv_label_set_text(ui_Label19, "继续");
                             xSemaphoreGive(Sem_lvglHandle);
+                            vTaskSuspend(myTask_aiHandle);
                         }
                         else if(temp_state==2){
-                            snprintf(logStr,30,"录入人脸!");
+                            _ui_flag_modify(ui_Label18, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+                            snprintf(logStr,30,"录入人脸");
                             lv_label_set_text(ui_Label4, logStr);
                             cnt_detected=0;
                             lv_label_set_text(ui_Label19, "继续");
                             lv_label_set_text(ui_Label17, "确认");
                             xSemaphoreGive(Sem_lvglHandle);
-                            //TODO 录入人脸
+                            // 录入人脸
                            if (cur_persion.id > MAX_ID-1) 
                                lv_label_set_text(ui_Label4,"ID太大");
                            else{
-                               Flash_Read(FLASH_USER_START_ADDR,(uint32_t*)buf_common,128*512/4);
-                               cur_persion.feature = (u8*)buf_common + cur_persion.id*FEATURE_PER_PERSION*128;
-                               for (int i = 0; i < FEATURE_PER_PERSION; i++)
-                               {
-                                   memcpy(cur_persion.feature+i*128,out_data1,128);
-                               }
-                               Flash_Erase_and_Write(FLASH_USER_START_ADDR,(uint32_t*)buf_common,128*512/4);
-                               uint32_t MemoryProgramStatus = 0;
-                               MemoryProgramStatus = 0;
-                               u8*address=buf_common+128*512;
-                               Flash_Read(FLASH_USER_START_ADDR,(uint32_t*)address,128*512/4);
-                               for (int i = 0; i < 128*512; i++)
-                               {
-                                   if (buf_common[i] != address[i])
-                                   {
-                                       MemoryProgramStatus++;
-                                   }
-                               }
-                               if(MemoryProgramStatus==0)
-                                   lv_label_set_text(ui_Labelid, "succs");
-                               else 
-                                   lv_label_set_text(ui_Labelid, "faild");
-
+                                Flash_Read(FLASH_USER_START_ADDR,(uint32_t*)features_buf,128*512/4);
+                                cur_persion.feature =get_feature_ptr(cur_persion.id);
+                                int32_t* cnt = get_cnt_ptr();
+                                if(cur_persion.id>*cnt-1){
+                                    *cnt = cur_persion.id+1;
+                                }
+                               
+                                if(i_feature<FEATURE_PER_PERSION){
+                                    memcpy(cur_persion.feature+i_feature*128,out_data1,128);
+                                    i_feature++;
+                                    snprintf(logStr,30,"调整角度再来一次:%d/4",i_feature);
+                                    lv_label_set_text(ui_Label18, logStr);
+                                }else {
+                                    i_feature=0;
+                                    memcpy(buf_common,features_buf,128*512);
+                                    Flash_Erase_and_Write(FLASH_USER_START_ADDR,(uint32_t*)buf_common,128*512/4);
+                                    //test flash
+                                    uint32_t MemoryProgramStatus = 0;
+                                    MemoryProgramStatus = 0;
+                                    u8*address=buf_common+128*512;
+                                    Flash_Read(FLASH_USER_START_ADDR,(uint32_t*)address,128*512/4);
+                                    for (int i = 0; i < 128*512; i++)
+                                    {
+                                        if (features_buf[i] != address[i])
+                                        {
+                                            MemoryProgramStatus++;
+                                        }
+                                    }
+                                    if(MemoryProgramStatus==0)
+                                        lv_label_set_text(ui_Label18, "录入成功!");
+                                    else 
+                                        lv_label_set_text(ui_Label18, "录入失败!");
+                                    vTaskSuspend(myTask_aiHandle);
+                                }
                             }
                         }
                     } 
-                    vTaskSuspend(myTask_aiHandle);
+                    
                 }
                 return;
 

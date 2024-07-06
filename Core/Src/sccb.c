@@ -1,19 +1,19 @@
 #include "main.h"
 #include "sccb.h"
 //////////////////////////////////////////////////////////////////////////////////	 
-//±¾³ÌÐòÖ»¹©Ñ§Ï°Ê¹ÓÃ£¬Î´¾­×÷ÕßÐí¿É£¬²»µÃÓÃÓÚÆäËüÈÎºÎÓÃÍ¾
-//ALIENTEK STM32F407¿ª·¢°å
-//OVÏµÁÐÉãÏñÍ· SCCB Çý¶¯´úÂë	   
-//ÕýµãÔ­×Ó@ALIENTEK
-//¼¼ÊõÂÛÌ³:www.openedv.com
-//´´½¨ÈÕÆÚ:2014/5/14
-//°æ±¾£ºV1.0
-//°æÈ¨ËùÓÐ£¬µÁ°æ±Ø¾¿¡£
-//Copyright(C) ¹ãÖÝÊÐÐÇÒíµç×Ó¿Æ¼¼ÓÐÏÞ¹«Ë¾ 2014-2024
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½Ñ§Ï°Ê¹ï¿½Ã£ï¿½Î´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îºï¿½ï¿½ï¿½Í¾
+//ALIENTEK STM32F407ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//OVÏµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í· SCCB ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½	   
+//ï¿½ï¿½ï¿½ï¿½Ô­ï¿½ï¿½@ALIENTEK
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì³:www.openedv.com
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:2014/5/14
+//ï¿½æ±¾ï¿½ï¿½V1.0
+//ï¿½ï¿½È¨ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ï¿½ï¿½
+//Copyright(C) ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¿Æ¼ï¿½ï¿½ï¿½ï¿½Þ¹ï¿½Ë¾ 2014-2024
 //All rights reserved									  
 ////////////////////////////////////////////////////////////////////////////////// 
-//#define SCCB_SDA_IN()    {GPIOB->MODER&=~(3<<(9*2));GPIOB->MODER|=0<<9*2;}	//Pb9 ÊäÈë
-//#define SCCB_SDA_OUT()   {GPIOB->MODER&=~(3<<(9*2));GPIOB->MODER|=1<<9*2;} 	//Pb9 Êä³ö
+//#define SCCB_SDA_IN()    {GPIOB->MODER&=~(3<<(9*2));GPIOB->MODER|=0<<9*2;}	//Pb9 ï¿½ï¿½ï¿½ï¿½
+//#define SCCB_SDA_OUT()   {GPIOB->MODER&=~(3<<(9*2));GPIOB->MODER|=1<<9*2;} 	//Pb9 ï¿½ï¿½ï¿½
 void SCCB_SDA_IN(void)
 {
 	GPIO_InitTypeDef  GPIO_InitStructure;
@@ -44,36 +44,36 @@ static void delay_us(u16 time)
    }
 
 }
-//³õÊ¼»¯SCCB½Ó¿Ú 
+//ï¿½ï¿½Ê¼ï¿½ï¿½SCCBï¿½Ó¿ï¿½ 
 void SCCB_Init(void)
 {				
 	SCCB_SDA_OUT();
  // GPIOB->MODER&=~(3<<(9*2));GPIOB->MODER|=1<<9*2;	
 }			 
 
-//SCCBÆðÊ¼ÐÅºÅ
-//µ±Ê±ÖÓÎª¸ßµÄÊ±ºò,Êý¾ÝÏßµÄ¸ßµ½µÍ,ÎªSCCBÆðÊ¼ÐÅºÅ
-//ÔÚ¼¤»î×´Ì¬ÏÂ,SDAºÍSCL¾ùÎªµÍµçÆ½
+//SCCBï¿½ï¿½Ê¼ï¿½Åºï¿½
+//ï¿½ï¿½Ê±ï¿½ï¿½Îªï¿½ßµï¿½Ê±ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ßµÄ¸ßµï¿½ï¿½ï¿½,ÎªSCCBï¿½ï¿½Ê¼ï¿½Åºï¿½
+//ï¿½Ú¼ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½,SDAï¿½ï¿½SCLï¿½ï¿½Îªï¿½Íµï¿½Æ½
 void SCCB_Start(void)
 {
 	SCCB_SDA_OUT();
 		HAL_GPIO_WritePin(GPIOB, SDA_Pin, GPIO_PIN_SET);
 		delay_us(5);
-    //SCCB_SDA=1;     //Êý¾ÝÏß¸ßµçÆ½	
+    //SCCB_SDA=1;     //ï¿½ï¿½ï¿½ï¿½ï¿½ß¸ßµï¿½Æ½	
     HAL_GPIO_WritePin(GPIOB, SCL_Pin, GPIO_PIN_SET);	
-    //SCCB_SCL=1;	    //ÔÚÊ±ÖÓÏß¸ßµÄÊ±ºòÊý¾ÝÏßÓÉ¸ßÖÁµÍ
+    //SCCB_SCL=1;	    //ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ß¸ßµï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¸ï¿½ï¿½ï¿½ï¿½ï¿½
     delay_us(5);  
 	  HAL_GPIO_WritePin(GPIOB, SDA_Pin, GPIO_PIN_RESET);
     //SCCB_SDA=0;
     delay_us(5); 
 	  HAL_GPIO_WritePin(GPIOB, SCL_Pin, GPIO_PIN_RESET);
 	delay_us(5);
-    //SCCB_SCL=0;	    //Êý¾ÝÏß»Ö¸´µÍµçÆ½£¬µ¥²Ù×÷º¯Êý±ØÒª	  
+    //SCCB_SCL=0;	    //ï¿½ï¿½ï¿½ï¿½ï¿½ß»Ö¸ï¿½ï¿½Íµï¿½Æ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òª	  
 }
 
-//SCCBÍ£Ö¹ÐÅºÅ
-//µ±Ê±ÖÓÎª¸ßµÄÊ±ºò,Êý¾ÝÏßµÄµÍµ½¸ß,ÎªSCCBÍ£Ö¹ÐÅºÅ
-//¿ÕÏÐ×´¿öÏÂ,SDA,SCL¾ùÎª¸ßµçÆ½
+//SCCBÍ£Ö¹ï¿½Åºï¿½
+//ï¿½ï¿½Ê±ï¿½ï¿½Îªï¿½ßµï¿½Ê±ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ßµÄµÍµï¿½ï¿½ï¿½,ÎªSCCBÍ£Ö¹ï¿½Åºï¿½
+//ï¿½ï¿½ï¿½ï¿½×´ï¿½ï¿½ï¿½ï¿½,SDA,SCLï¿½ï¿½Îªï¿½ßµï¿½Æ½
 void SCCB_Stop(void)
 {
 	SCCB_SDA_OUT();
@@ -87,7 +87,7 @@ void SCCB_Stop(void)
 	  HAL_GPIO_WritePin(GPIOB, SDA_Pin, GPIO_PIN_SET);
     delay_us(5); 
 }  
-//²úÉúNAÐÅºÅ
+//ï¿½ï¿½ï¿½ï¿½NAï¿½Åºï¿½
 void SCCB_No_Ack(void)
 {
 	SCCB_SDA_OUT(); 
@@ -105,12 +105,12 @@ void SCCB_No_Ack(void)
 	HAL_GPIO_WritePin(GPIOB, SDA_Pin, GPIO_PIN_RESET);
 	delay_us(5); 
 }
-//SCCB,Ð´ÈëÒ»¸ö×Ö½Ú
-//·µ»ØÖµ:0,³É¹¦;1,Ê§°Ü. 
+//SCCB,Ð´ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ö½ï¿½
+//ï¿½ï¿½ï¿½ï¿½Öµ:0,ï¿½É¹ï¿½;1,Ê§ï¿½ï¿½. 
 u8 SCCB_WR_Byte(u8 dat)
 {
 	u8 j,res;	 
-	for(j=0;j<8;j++) //Ñ­»·8´Î·¢ËÍÊý¾Ý
+	for(j=0;j<8;j++) //Ñ­ï¿½ï¿½8ï¿½Î·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	{
 		if(dat&0x80)HAL_GPIO_WritePin(GPIOB, SDA_Pin, GPIO_PIN_SET);//SCCB_SDA=1;	
 		else HAL_GPIO_WritePin(GPIOB, SDA_Pin, GPIO_PIN_RESET);//SCCB_SDA=0;
@@ -120,28 +120,28 @@ u8 SCCB_WR_Byte(u8 dat)
 		delay_us(5); 
 		HAL_GPIO_WritePin(GPIOB, SCL_Pin, GPIO_PIN_RESET);//SCCB_SCL=0;		   
 	}			 
-	SCCB_SDA_IN();		//ÉèÖÃSDAÎªÊäÈë  
+	SCCB_SDA_IN();		//ï¿½ï¿½ï¿½ï¿½SDAÎªï¿½ï¿½ï¿½ï¿½  
 	//GPIOB->MODER&=~(3<<(9*2));GPIOB->MODER|=0<<9*2;
 	delay_us(5); 
-	HAL_GPIO_WritePin(GPIOB, SCL_Pin, GPIO_PIN_SET);//SCCB_SCL=1;			//½ÓÊÕµÚ¾ÅÎ»,ÒÔÅÐ¶ÏÊÇ·ñ·¢ËÍ³É¹¦
+	HAL_GPIO_WritePin(GPIOB, SCL_Pin, GPIO_PIN_SET);//SCCB_SCL=1;			//ï¿½ï¿½ï¿½ÕµÚ¾ï¿½Î»,ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½Í³É¹ï¿½
 	delay_us(5); 
-	if(HAL_GPIO_ReadPin(GPIOB,SDA_Pin))res=1;  //SDA=1·¢ËÍÊ§°Ü£¬·µ»Ø1
-	else res=0;         //SDA=0·¢ËÍ³É¹¦£¬·µ»Ø0
+	if(HAL_GPIO_ReadPin(GPIOB,SDA_Pin))res=1;  //SDA=1ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½1
+	else res=0;         //SDA=0ï¿½ï¿½ï¿½Í³É¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0
 	HAL_GPIO_WritePin(GPIOB, SCL_Pin, GPIO_PIN_RESET);//SCCB_SCL=0;		 
-	SCCB_SDA_OUT();		//ÉèÖÃSDAÎªÊä³ö 
+	SCCB_SDA_OUT();		//ï¿½ï¿½ï¿½ï¿½SDAÎªï¿½ï¿½ï¿½ 
   //GPIOB->MODER&=~(3<<(9*2));GPIOB->MODER|=1<<9*2;	
 	return res;  
 }	 
-//SCCB ¶ÁÈ¡Ò»¸ö×Ö½Ú
-//ÔÚSCLµÄÉÏÉýÑØ,Êý¾ÝËø´æ
-//·µ»ØÖµ:¶Áµ½µÄÊý¾Ý
+//SCCB ï¿½ï¿½È¡Ò»ï¿½ï¿½ï¿½Ö½ï¿½
+//ï¿½ï¿½SCLï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//ï¿½ï¿½ï¿½ï¿½Öµ:ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 u8 SCCB_RD_Byte(void)
 {
 	u8 temp=0,j;    
-	SCCB_SDA_IN();		//ÉèÖÃSDAÎªÊäÈë  
+	SCCB_SDA_IN();		//ï¿½ï¿½ï¿½ï¿½SDAÎªï¿½ï¿½ï¿½ï¿½  
 	delay_us(5);
 	//GPIOB->MODER&=~(3<<(9*2));GPIOB->MODER|=0<<9*2;
-	for(j=8;j>0;j--) 	//Ñ­»·8´Î½ÓÊÕÊý¾Ý
+	for(j=8;j>0;j--) 	//Ñ­ï¿½ï¿½8ï¿½Î½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	{		     	  
 		delay_us(5);
 		HAL_GPIO_WritePin(GPIOB, SCL_Pin, GPIO_PIN_SET);//SCCB_SCL=1;
@@ -150,41 +150,41 @@ u8 SCCB_RD_Byte(void)
 		delay_us(5); 
 		HAL_GPIO_WritePin(GPIOB, SCL_Pin, GPIO_PIN_RESET);//SCCB_SCL=0;
 	}	
-	SCCB_SDA_OUT();		//ÉèÖÃSDAÎªÊä³ö    
+	SCCB_SDA_OUT();		//ï¿½ï¿½ï¿½ï¿½SDAÎªï¿½ï¿½ï¿½    
 	//GPIOB->MODER&=~(3<<(9*2));GPIOB->MODER|=1<<9*2;
 	return temp;
 } 							    
-//Ð´¼Ä´æÆ÷
-//·µ»ØÖµ:0,³É¹¦;1,Ê§°Ü.
+//Ð´ï¿½Ä´ï¿½ï¿½ï¿½
+//ï¿½ï¿½ï¿½ï¿½Öµ:0,ï¿½É¹ï¿½;1,Ê§ï¿½ï¿½.
 u8 SCCB_WR_Reg(u8 reg,u8 data)
 {
 	u8 res=0;
-	SCCB_Start(); 					//Æô¶¯SCCB´«Êä
-	if(SCCB_WR_Byte(SCCB_ID))res=1;	//Ð´Æ÷¼þID	  
+	SCCB_Start(); 					//ï¿½ï¿½ï¿½ï¿½SCCBï¿½ï¿½ï¿½ï¿½
+	if(SCCB_WR_Byte(SCCB_ID))res=1;	//Ð´ï¿½ï¿½ï¿½ï¿½ID	  
 	delay_us(100);  
-  	if(SCCB_WR_Byte(reg))res=1;		//Ð´¼Ä´æÆ÷µØÖ·	  
+  	if(SCCB_WR_Byte(reg))res=1;		//Ð´ï¿½Ä´ï¿½ï¿½ï¿½ï¿½ï¿½Ö·	  
 	delay_us(100);  
-  	if(SCCB_WR_Byte(data))res=1; 	//Ð´Êý¾Ý	 
+  	if(SCCB_WR_Byte(data))res=1; 	//Ð´ï¿½ï¿½ï¿½ï¿½	 
   	SCCB_Stop();	  
   	return	res;
 }		  					    
-//¶Á¼Ä´æÆ÷
-//·µ»ØÖµ:¶Áµ½µÄ¼Ä´æÆ÷Öµ
+//ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½
+//ï¿½ï¿½ï¿½ï¿½Öµ:ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼Ä´ï¿½ï¿½ï¿½Öµ
 u8 SCCB_RD_Reg(u8 reg)
 {
 	u8 val=0;
-	SCCB_Start(); 				//Æô¶¯SCCB´«Êä
-	SCCB_WR_Byte(SCCB_ID);		//Ð´Æ÷¼þID	  
+	SCCB_Start(); 				//ï¿½ï¿½ï¿½ï¿½SCCBï¿½ï¿½ï¿½ï¿½
+	SCCB_WR_Byte(SCCB_ID);		//Ð´ï¿½ï¿½ï¿½ï¿½ID	  
 	delay_us(100);  	 
-  SCCB_WR_Byte(reg);			//Ð´¼Ä´æÆ÷µØÖ·	  
+  SCCB_WR_Byte(reg);			//Ð´ï¿½Ä´ï¿½ï¿½ï¿½ï¿½ï¿½Ö·	  
 	delay_us(100);  	  
 	SCCB_Stop();   
 	delay_us(100);  		   
-	//ÉèÖÃ¼Ä´æÆ÷µØÖ·ºó£¬²ÅÊÇ¶Á
+	//ï¿½ï¿½ï¿½Ã¼Ä´ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ó£¬²ï¿½ï¿½Ç¶ï¿½
 	SCCB_Start();
-	SCCB_WR_Byte(SCCB_ID|0X01);	//·¢ËÍ¶ÁÃüÁî	  
+	SCCB_WR_Byte(SCCB_ID|0X01);	//ï¿½ï¿½ï¿½Í¶ï¿½ï¿½ï¿½ï¿½ï¿½	  
 	delay_us(100);  	
-  	val=SCCB_RD_Byte();		 	//¶ÁÈ¡Êý¾Ý
+  	val=SCCB_RD_Byte();		 	//ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½
   	SCCB_No_Ack();
   	SCCB_Stop();
   	return val;
