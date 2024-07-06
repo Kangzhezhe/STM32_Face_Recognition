@@ -1,0 +1,6 @@
+AT+HMPUB=1,"/test/M2M/aa",8,"faceid:1"
++HMPUB OK
+
+
++HMREC: "/test/M2M/hh",81,""xingming:������,xingbie:��,nianling:21,zhengduan:��˯��""
+

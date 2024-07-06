@@ -200,9 +200,9 @@ typedef struct
     int32_t id;
     u8* feature;
     char name[16];
-    char sex[4];
-    int32_t age;
-    char judge[64];
+    char sex[16];
+    char age[16];
+    char judge[16];
     u8* record;
 }Persion;
 Persion cur_persion;
@@ -404,8 +404,8 @@ void lvgl_set_txt(lv_obj_t * label, char * txt){
     } 
 }
 
-
-
+extern char RxBuffer[200],Rxcouter;
+void Clear_Buffer(void);
 void post_process()
 {
 	int grid_x, grid_y;
@@ -450,6 +450,32 @@ void post_process()
                             lv_label_set_text(ui_Labelid, logStr);
 
                             // TODO 从云端获取数�?
+														
+                            printf("AT+HMPUB=1,\"/test/M2M/aa\",8,\"faceid:%d\"\r\n",cur_persion.id+1);
+														Clear_Buffer();
+                            HAL_Delay(1000);
+                            //处理信息
+                            if (strstr((char*)&RxBuffer[0], "test/M2M"))
+                            {
+                                char* q = NULL;
+                                q = strstr((char*)&RxBuffer[0], "xingming");
+                                strncpy(cur_persion.name, q + 9, 9);
+                                cur_persion.name[9] = '\0';
+                                q = strstr((char*)&RxBuffer[0], "xingbie");
+                                strncpy(cur_persion.sex, q + 8, 3);
+                                cur_persion.sex[3] = '\0';
+                                q = strstr((char*)&RxBuffer[0], "nianling");
+                                strncpy(cur_persion.age, q + 9, 2);
+                                cur_persion.age[2] = '\0';
+                                q = strstr((char*)&RxBuffer[0], "zhengduan");
+                                strncpy(cur_persion.judge, q + 10, 9);
+                                cur_persion.judge[9] = '\0';
+
+                                lv_label_set_text(ui_Labelname, cur_persion.name);
+                                lv_label_set_text(ui_Labelsex, cur_persion.sex);
+                                lv_label_set_text(ui_Labelage, cur_persion.age);
+                                lv_label_set_text(ui_Labeljudge, cur_persion.judge);
+                            }
                             // void get data 
                             cnt_detected=0;
                             lv_label_set_text(ui_Label19, "继续");
@@ -639,7 +665,7 @@ int main(void)
   delay_init();
 	 HAL_DMA_RegisterCallback(&hdma_memtomem_dma2_stream6,HAL_DMA_XFER_CPLT_CB_ID,TransferComplete);
 	AI_Init();
-    // HAL_UART_Receive_IT(&huart1,&Res,1);
+   HAL_UART_Receive_IT(&huart1,&Res,1);
  LCD_Init();
  HAL_Delay(50);
 	while(OV5640_Init())//��ʼ��OV2640

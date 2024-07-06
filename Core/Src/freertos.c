@@ -192,6 +192,7 @@ void StartDefaultTask(void const * argument)
 * @param argument: Not used
 * @retval None
 */
+void L610_test(void);
 extern void lv_example_get_started_1(void);
 extern void lv_cam_canvas(void);
 void my_ui_init(void);
@@ -211,7 +212,8 @@ void StartTask(void const * argument)
         my_ui_init();
         xSemaphoreGive(Sem_lvglHandle);
     }
-		osThreadResume(myTask_lvglHandle);
+    L610_test();
+    osThreadResume(myTask_lvglHandle);
 		
     //vTaskDelay(1000);
     DCMI_Start();
