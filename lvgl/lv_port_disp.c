@@ -69,7 +69,7 @@ void lv_port_disp_init(void)
 
     /* Example 1
      * One buffer for partial rendering*/
-    static lv_color_t buf_1_1[MY_DISP_HOR_RES*5]__attribute__((section(".RAM_D2")));    /*A buffer for 10 rows*/
+    static lv_color_t buf_1_1[MY_DISP_HOR_RES*48]__attribute__((section(".RAM_D2")));    /*A buffer for 10 rows*/
     lv_display_set_buffers(disp, buf_1_1, NULL, sizeof(buf_1_1), LV_DISPLAY_RENDER_MODE_PARTIAL);
 
     /* Example 2

@@ -177,7 +177,7 @@ void MX_FREERTOS_Init(void);
 void post_process();
 
 
-// �������������������������????
+// �������������������������?????
 int x1, y1, x2, y2;
 // yoloface��anchor�ߴ�
 uint8_t anchors[3][2] = {{9, 14}, {12, 17}, {22, 21}};
@@ -284,6 +284,7 @@ u8 ram_ready = 0;
 static lv_obj_t * canvas_cam;
 extern osSemaphoreId Sem_lvglHandle;
 extern osSemaphoreId Sem_imgbufHandle;
+extern osSemaphoreId Sem_stateHandle;
 void HAL_DCMI_VsyncEventCallback(DCMI_HandleTypeDef *hdcmi)
 {
     
@@ -359,16 +360,24 @@ void lvgl_set_txt(lv_obj_t * label, char * txt){
         xSemaphoreGive(Sem_lvglHandle);
     } 
 }
+
+u8 get_state();
+void set_state(u8 temp);
+
 #define W_SCALE (255/55)
 #define H_SCALE (255/55)
 uint8_t cnt_detected = 0;
-extern u8 state;
+extern u8 ai_state;
 extern osThreadId myTask_aiHandle;
 char logStr[1024]__attribute__((section(".RW_IRAM1")));
 void post_process()
 {
 	int grid_x, grid_y;
 	float x, y, w ,h;
+    if(get_state() == 1){
+        cnt_detected = 0;
+        set_state(2);
+    }
 	for(int i = 0; i < 49; i++)
 	{
 		for(int j = 0; j < 3; j++)
@@ -380,7 +389,7 @@ void post_process()
 			if(conf > 2)
 			{
                 lvgl_set_txt(ui_Label4, "识别到人脸");
-                state = 1;
+                
                 // sprintf(logStr,"%3d",cnt_detected);
                 // LCD_ShowString(40,300,100,16,16,logStr); 
                 cnt_detected++;
@@ -392,17 +401,39 @@ void post_process()
                     // snprintf(logStr,30,"score[%d] = %4.2f",max_index,score[max_index]);
                     if(pdTRUE == xSemaphoreTake(Sem_lvglHandle,portMAX_DELAY))    
                     {
-                        snprintf(logStr,30,"确认身份!");
-                        lv_label_set_text(ui_Label4, logStr);
-                        snprintf(logStr,30,"置信度:%4.2f",score[max_index]);
-                        lv_label_set_text(ui_Label18, logStr);
-                        _ui_flag_modify(ui_Label18, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
-                        snprintf(logStr,30,"%d",max_index);
+                        u8 temp_state;
+                        if(pdTRUE == xSemaphoreTake(Sem_stateHandle,portMAX_DELAY))    
+                        {
+                            temp_state = ai_state;
+                            xSemaphoreGive(Sem_stateHandle);
+                        } 
+                        snprintf(logStr,30,"%d",temp_state);
                         lv_label_set_text(ui_Labelid, logStr);
-                        state = 2;
-                        cnt_detected=0;
-                        lv_label_set_text(ui_Label19, "继续");
-                        xSemaphoreGive(Sem_lvglHandle);
+                        if (temp_state == 0)
+                        {
+                            snprintf(logStr,30,"确认身份!");
+                            lv_label_set_text(ui_Label4, logStr);
+                            snprintf(logStr,30,"置信度:%4.2f",score[max_index]);
+                            lv_label_set_text(ui_Label18, logStr);
+                            _ui_flag_modify(ui_Label18, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+                            // snprintf(logStr,30,"%d",max_index);
+                            // lv_label_set_text(ui_Labelid, logStr);
+
+                            // TODO 从云端获取数�?
+                            // void get data 
+                            cnt_detected=0;
+                            lv_label_set_text(ui_Label19, "继续");
+                            xSemaphoreGive(Sem_lvglHandle);
+                        }
+                        else if(temp_state==2){
+                            snprintf(logStr,30,"录入人脸!");
+                            lv_label_set_text(ui_Label4, logStr);
+                            cnt_detected=0;
+                            lv_label_set_text(ui_Label19, "继续");
+                            lv_label_set_text(ui_Label17, "确认");
+                            xSemaphoreGive(Sem_lvglHandle);
+                            //TODO 录入人脸
+                        }
                     } 
                     vTaskSuspend(myTask_aiHandle);
                 }
@@ -426,7 +457,7 @@ struct __FILE
 FILE __stdout;
 int fputc(int ch, FILE *f)
 {
-    HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);//����ʵ�������������????
+    HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);//����ʵ�������������?????
     return (ch);
 }
 
@@ -552,7 +583,7 @@ int main(void)
 	OV5640_Color_Saturation(3);//ɫ�ʱ��Ͷ�0
 	OV5640_Brightness(4);	//����0
 	OV5640_Contrast(3);		//�Աȶ�0
-	OV5640_Sharpness(33);	//�Զ����????????
+	OV5640_Sharpness(33);	//�Զ����?????????
 	OV5640_Focus_Constant();//���������Խ�
 //   LCD_Set_Window(0,0,256,400);
 	OV5640_OutSize_Set(16,4,256,256);

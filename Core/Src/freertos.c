@@ -57,6 +57,7 @@ osThreadId myTask_lvglHandle;
 osThreadId myTask_aiHandle;
 osSemaphoreId Sem_lvglHandle;
 osSemaphoreId Sem_imgbufHandle;
+osSemaphoreId Sem_stateHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -123,6 +124,10 @@ void MX_FREERTOS_Init(void) {
   /* definition and creation of Sem_imgbuf */
   osSemaphoreDef(Sem_imgbuf);
   Sem_imgbufHandle = osSemaphoreCreate(osSemaphore(Sem_imgbuf), 1);
+
+  /* definition and creation of Sem_state */
+  osSemaphoreDef(Sem_state);
+  Sem_stateHandle = osSemaphoreCreate(osSemaphore(Sem_state), 1);
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
@@ -200,7 +205,7 @@ void StartTask(void const * argument)
         lv_init();
         lv_port_disp_init();
         lv_port_indev_init();
-        // lv_example_get_started_1();
+        lv_example_get_started_1();
         ui_init();
         lv_cam_canvas();
         my_ui_init();
@@ -247,7 +252,25 @@ void StartTask_lvgl(void const * argument)
 */
  void process_ai(void);
 #include "dcmi.h"
-u8 state = 0;
+u8 ai_state = 0;
+u8 get_state()
+{
+    u8 temp;
+    if(pdTRUE == xSemaphoreTake(Sem_stateHandle,portMAX_DELAY))    
+    {
+        temp = ai_state;
+        xSemaphoreGive(Sem_stateHandle);
+    } 
+    return temp;
+}
+void set_state(u8 temp)
+{
+    if(pdTRUE == xSemaphoreTake(Sem_stateHandle,portMAX_DELAY))    
+    {
+        ai_state = temp;
+        xSemaphoreGive(Sem_stateHandle);
+    } 
+}
 /* USER CODE END Header_StartTask_ai */
 void StartTask_ai(void const * argument)
 {

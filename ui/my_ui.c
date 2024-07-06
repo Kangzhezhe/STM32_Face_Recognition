@@ -39,6 +39,38 @@ void ui_event_Button1(lv_event_t * e){
     }
 }
 
+void set_state(uint8_t temp);
+void ui_event_Button7(lv_event_t * e){
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        int32_t ID = lv_spinbox_get_value(ui_Spinbox5);
+        // TODO 由ID号获取个人信息
+        lv_label_set_text(ui_Label17, "OK");
+        
+        vTaskResume(myTask_aiHandle);
+        lv_label_set_text(ui_Label19, "暂停");
+    }
+}
+
+void ui_event_Switch3_update(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        if(lv_obj_has_flag(ui_TabView4, LV_OBJ_FLAG_HIDDEN)){
+            lv_label_set_text(ui_Label17, "确认");
+            vTaskSuspend(myTask_aiHandle);
+            lv_label_set_text(ui_Label19, "继续");
+            set_state(1);
+        }else{
+            vTaskResume(myTask_aiHandle);
+            lv_label_set_text(ui_Label19, "暂停");
+            set_state(0);
+        }
+    }
+}
+
 void my_ui_init(void){
     lv_label_set_text(ui_Label16, LV_SYMBOL_PLUS);
     lv_label_set_text(ui_Label15, LV_SYMBOL_MINUS);
@@ -51,6 +83,7 @@ void my_ui_init(void){
     lv_obj_set_x(table, -1);
     lv_obj_set_y(table, 13);
     lv_obj_set_align(table, LV_ALIGN_TOP_MID);
+    
     lv_obj_set_style_text_font(table, &ui_font_Fontcnmsg, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     /*Fill the first column*/
@@ -83,4 +116,6 @@ void my_ui_init(void){
     lv_obj_add_event_cb(ui_Switch1, ui_event_Switch1_update, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Switch2, ui_event_Switch2_update, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Button1, ui_event_Button1, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_Button7, ui_event_Button7, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_Switch3, ui_event_Switch3_update, LV_EVENT_ALL, NULL);
 }

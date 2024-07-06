@@ -54,7 +54,7 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_y(ui_Label4, -32);
     lv_obj_set_align(ui_Label4, LV_ALIGN_CENTER);
     lv_label_set_text(ui_Label4, "检测中");
-    lv_obj_set_style_text_font(ui_Label4, &ui_font_Fontcn15, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_Label4, &ui_font_Fontcnmsg, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_outline_color(ui_Label4, lv_color_hex(0xDD2A4A), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_outline_opa(ui_Label4, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_outline_width(ui_Label4, 1, LV_PART_MAIN | LV_STATE_DEFAULT);

@@ -49464,7 +49464,7 @@
         }
     ],
     "c_activations_count": 1,
-    "date_time": "Sat Jul  6 01:23:13 2024",
+    "date_time": "Sat Jul  6 09:10:54 2024",
     "model_name": "mobilefacenet_int8",
     "tool_version": {
         "major": 1,
