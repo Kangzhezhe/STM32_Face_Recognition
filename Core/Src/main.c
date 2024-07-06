@@ -190,6 +190,40 @@ uint16_t isok=0;
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+u8 get_state();
+void set_state(u8 temp);
+
+#define FEATURE_PER_PERSION 4
+#define MAX_ID 128
+typedef struct 
+{
+    int32_t id;
+    u8* feature;
+    char name[16];
+    char sex[4];
+    int32_t age;
+    char judge[64];
+    u8* record;
+}Persion;
+Persion cur_persion;
+
+
+#define W_SCALE (255/55)
+#define H_SCALE (255/55)
+uint8_t cnt_detected = 0;
+extern u8 ai_state;
+extern osThreadId myTask_aiHandle;
+char logStr[1024]__attribute__((section(".RW_IRAM1")));
+static int i_feature = 0;
+u8 features_buf[128*512]__attribute__((section(".RAM_D3")));
+u8* get_feature_ptr(int id){
+    return  (u8*)features_buf + id*FEATURE_PER_PERSION*128;
+}
+
+int32_t* get_cnt_ptr(){
+    return (int32_t*)((u8*)features_buf + 128*512-4);
+}
+
 void prepare_yolo_data()
 {
     int8_t* temp = (int8_t*)buf_common + AI_NETWORK_IN_1_SIZE*4;
@@ -260,17 +294,26 @@ double cosine_similarity(int8_t* vec1, int8_t* vec2, int size) {
 
     return dot_product / (magnitude1 * magnitude2);
 }
-double score[N];
+
+double score[2];
 int post_process_facenet(){
 	for(int i = 0;i<128;i++){
 		out_data1[i] += 10;
 	}
-    for (int i = 0; i < N; i++)
+    for (int i = 0; i < 2; i++)
     {
-        score[i] = cosine_similarity(out_data1, database + i * 128, 128);
+        // score[i] = cosine_similarity(out_data1, database + i * 128, 128);
+        score[i]=0;
+        u8* featrues = get_feature_ptr(i);
+        for (int j = 0; j < FEATURE_PER_PERSION; j++)
+        {
+            score[i] += cosine_similarity(out_data1, featrues + j * 128, 128);
+        }
+        score[i]/=FEATURE_PER_PERSION;
     }
+
     int max_index = 0;
-    for (int i = 1; i < N; i++)
+    for (int i = 1; i < 2; i++)
     {
         if (score[i] > score[max_index])
         {
@@ -361,39 +404,7 @@ void lvgl_set_txt(lv_obj_t * label, char * txt){
     } 
 }
 
-u8 get_state();
-void set_state(u8 temp);
 
-#define FEATURE_PER_PERSION 4
-#define MAX_ID 128
-typedef struct 
-{
-    int32_t id;
-    u8* feature;
-    char name[16];
-    char sex[4];
-    int32_t age;
-    char judge[64];
-    u8* record;
-}Persion;
-Persion cur_persion;
-
-
-#define W_SCALE (255/55)
-#define H_SCALE (255/55)
-uint8_t cnt_detected = 0;
-extern u8 ai_state;
-extern osThreadId myTask_aiHandle;
-char logStr[1024]__attribute__((section(".RW_IRAM1")));
-static int i_feature = 0;
-u8 features_buf[128*512]__attribute__((section(".RAM_D3")));
-u8* get_feature_ptr(int id){
-    return  (u8*)features_buf + id*FEATURE_PER_PERSION*128;
-}
-
-int32_t* get_cnt_ptr(){
-    return (int32_t*)((u8*)features_buf + 128*512-4);
-}
 
 void post_process()
 {
@@ -414,16 +425,10 @@ void post_process()
 			if(conf > 2)
 			{
                 lvgl_set_txt(ui_Label4, "识别到人脸");
-                
-                // sprintf(logStr,"%3d",cnt_detected);
-                // LCD_ShowString(40,300,100,16,16,logStr); 
                 cnt_detected++;
                 if(cnt_detected == 5){
-                    // LCD_ShowString(100,300,100,16,16,"detected"); 
                     prepare_facenet_data(50,10,216,245);
                     AI_Run1(in_data1,out_data1);
-                    int max_index = post_process_facenet();
-                    // snprintf(logStr,30,"score[%d] = %4.2f",max_index,score[max_index]);
                     if(pdTRUE == xSemaphoreTake(Sem_lvglHandle,portMAX_DELAY))    
                     {
                         u8 temp_state;
@@ -434,6 +439,8 @@ void post_process()
                         } 
                         if (temp_state == 0)
                         {
+                            Flash_Read(FLASH_USER_START_ADDR,(uint32_t*)features_buf,128*512/4);
+                            int max_index = post_process_facenet();
                             snprintf(logStr,30,"确认身份!");
                             lv_label_set_text(ui_Label4, logStr);
                             snprintf(logStr,30,"置信度:%4.2f",score[max_index]);

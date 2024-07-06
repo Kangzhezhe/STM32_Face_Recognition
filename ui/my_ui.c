@@ -50,6 +50,7 @@ typedef struct
 }Persion;
 extern Persion cur_persion;
 void set_state(uint8_t temp);
+static char logStr1[30];
 void ui_event_Button7(lv_event_t * e){
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
@@ -57,7 +58,8 @@ void ui_event_Button7(lv_event_t * e){
         // TODO 由ID号从云端获取个人信息
         cur_persion.id = lv_spinbox_get_value(ui_Spinbox5);
         lv_label_set_text(ui_Label17, "OK");
-        
+        snprintf(logStr1,30,"%d",cur_persion.id);
+        lv_label_set_text(ui_Labelid, logStr1);
         vTaskResume(myTask_aiHandle);
         lv_label_set_text(ui_Label19, "暂停");
     }
