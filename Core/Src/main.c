@@ -451,9 +451,12 @@ void post_process()
                             lv_label_set_text(ui_Labelid, logStr);
 
                             // TODO 从云端获取数�???
-														Clear_Buffer();
+                            Clear_Buffer();
+                            printf("AT+HMPUB=1,\"$oc/devices/6685084786799a26c45e16f9_L610/sys/properties/report\",59,\"{\\\"services\\\":[{\\\"service_id\\\":\\\"%d\\\",\\\"properties\\\":{\\\"faceid\\\":%d}}]}\"\r\n",cur_persion.id+1,cur_persion.id+1);
+                            HAL_Delay(100);
+                            Clear_Buffer();
                             printf("AT+HMPUB=1,\"/test/M2M/aa\",8,\"faceid:%d\"\r\n",cur_persion.id+1);
-														Clear_Buffer();
+                            Clear_Buffer();
                             HAL_Delay(1000);
                             //处理信息
                             if (strstr((char*)&RxBuffer[0], "test/M2M"))
