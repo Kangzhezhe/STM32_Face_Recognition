@@ -1,6 +1,6 @@
 Neural Network Tools for STM32 family v1.7.0 (stm.ai v8.1.0-19520)
-Created date          : 2024-07-07 12:55:25
-Parameters            : generate --name network_1 -m D:/linux/MobileFaceNet_Pytorch/model/mobilefacenet_int8.tflite --type tflite --compression none --verbosity 1 --workspace C:\Users\19178\AppData\Local\Temp\mxAI_workspace106621983487001068322447432585723 --output C:\Users\19178\.stm32cubemx\network_output --allocate-inputs --series stm32h7 --allocate-outputs
+Created date          : 2024-07-07 14:08:56
+Parameters            : generate --name network_1 -m D:/linux/MobileFaceNet_Pytorch/model/mobilefacenet_int8.tflite --type tflite --compression none --verbosity 1 --workspace C:\Users\19178\AppData\Local\Temp\mxAI_workspace150758814142006219551046457487908 --output C:\Users\19178\.stm32cubemx\network_output --allocate-inputs --series stm32h7 --allocate-outputs
 
 Exec/report summary (generate)
 -----------------------------------------------------------------------------------------------------------
@@ -11,7 +11,7 @@ compression        :   none
 options            :   allocate-inputs, allocate-outputs                                                   
 optimization       :   balanced                                                                            
 target/series      :   stm32h7                                                                             
-workspace dir      :   C:\Users\19178\AppData\Local\Temp\mxAI_workspace106621983487001068322447432585723   
+workspace dir      :   C:\Users\19178\AppData\Local\Temp\mxAI_workspace150758814142006219551046457487908   
 output dir         :   C:\Users\19178\.stm32cubemx\network_output                                          
 model_fmt          :   sa/sa per tensor                                                                    
 model_name         :   mobilefacenet_int8                                                                  

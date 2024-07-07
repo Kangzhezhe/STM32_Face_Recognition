@@ -69,6 +69,10 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define B1_Pin GPIO_PIN_13
 #define B1_GPIO_Port GPIOC
+#define GY906_SDA_Pin GPIO_PIN_0
+#define GY906_SDA_GPIO_Port GPIOF
+#define GY906_SCL_Pin GPIO_PIN_1
+#define GY906_SCL_GPIO_Port GPIOF
 #define T_MISO_Pin GPIO_PIN_7
 #define T_MISO_GPIO_Port GPIOF
 #define T_PEN_Pin GPIO_PIN_8

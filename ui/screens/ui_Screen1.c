@@ -305,7 +305,7 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_style_text_font(ui_Label8, &ui_font_Fontcnmsg, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_TextArea3 = lv_textarea_create(ui_Container5);
-    lv_obj_set_width(ui_TextArea3, 43);
+    lv_obj_set_width(ui_TextArea3, 52);
     lv_obj_set_height(ui_TextArea3, 41);
     lv_obj_set_x(ui_TextArea3, -1);
     lv_obj_set_y(ui_TextArea3, -1);

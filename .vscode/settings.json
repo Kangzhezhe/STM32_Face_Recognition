@@ -26,6 +26,8 @@
         "stm32h7xx_hal_flash.h": "c",
         "typeinfo": "c",
         "delay.h": "c",
-        "algorithm.h": "c"
+        "algorithm.h": "c",
+        "gy906.h": "c",
+        "gpio.h": "c"
     }
 }
