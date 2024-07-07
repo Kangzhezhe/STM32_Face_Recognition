@@ -75,6 +75,12 @@ void Error_Handler(void);
 #define T_PEN_GPIO_Port GPIOF
 #define T_MOSI_Pin GPIO_PIN_9
 #define T_MOSI_GPIO_Port GPIOF
+#define MAX30102_SCL_Pin GPIO_PIN_0
+#define MAX30102_SCL_GPIO_Port GPIOC
+#define MAX30102_INT_Pin GPIO_PIN_3
+#define MAX30102_INT_GPIO_Port GPIOC
+#define MAX30102_SDA_Pin GPIO_PIN_3
+#define MAX30102_SDA_GPIO_Port GPIOA
 #define LD1_Pin GPIO_PIN_0
 #define LD1_GPIO_Port GPIOB
 #define T_CS_Pin GPIO_PIN_0

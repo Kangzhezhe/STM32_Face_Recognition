@@ -434,6 +434,21 @@
               <FilePath>..\Core\Src\flash.c</FilePath>
             </File>
             <File>
+              <FileName>algorithm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\algorithm.c</FilePath>
+            </File>
+            <File>
+              <FileName>max30102.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\max30102.c</FilePath>
+            </File>
+            <File>
+              <FileName>myiic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\myiic.c</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/main.c</FilePath>
@@ -706,21 +721,6 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
-            </File>
-            <File>
-              <FileName>algorithm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\algorithm.c</FilePath>
-            </File>
-            <File>
-              <FileName>max30102.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\max30102.c</FilePath>
-            </File>
-            <File>
-              <FileName>myiic.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\myiic.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3503,9 +3503,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>::CMSIS</GroupName>
-        </Group>
-        <Group>
           <GroupName>Application/User/X-CUBE-AI/App</GroupName>
           <GroupOption>
             <CommonProperty>
@@ -3914,6 +3911,9 @@
               </FileOption>
             </File>
           </Files>
+        </Group>
+        <Group>
+          <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>
     </Target>

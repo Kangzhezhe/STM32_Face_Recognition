@@ -30,6 +30,7 @@
 #include "lv_port_indev.h"
 #include "dcmi.h"
 #include "ui.h"
+#include "max30102.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -55,6 +56,7 @@ osThreadId defaultTaskHandle;
 osThreadId start_taskHandle;
 osThreadId myTask_lvglHandle;
 osThreadId myTask_aiHandle;
+osThreadId myTask_measureHandle;
 osSemaphoreId Sem_lvglHandle;
 osSemaphoreId Sem_imgbufHandle;
 osSemaphoreId Sem_stateHandle;
@@ -68,6 +70,7 @@ void StartDefaultTask(void const * argument);
 void StartTask(void const * argument);
 void StartTask_lvgl(void const * argument);
 void StartTask_ai(void const * argument);
+void StartTask_measure(void const * argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -158,6 +161,10 @@ void MX_FREERTOS_Init(void) {
   osThreadDef(myTask_ai, StartTask_ai, osPriorityIdle, 0, 1024);
   myTask_aiHandle = osThreadCreate(osThread(myTask_ai), NULL);
 
+  /* definition and creation of myTask_measure */
+  osThreadDef(myTask_measure, StartTask_measure, osPriorityIdle, 0, 256);
+  myTask_measureHandle = osThreadCreate(osThread(myTask_measure), NULL);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   osThreadSuspend(myTask_lvglHandle);
@@ -206,7 +213,7 @@ void StartTask(void const * argument)
         lv_init();
         lv_port_disp_init();
         lv_port_indev_init();
-        lv_example_get_started_1();
+        //lv_example_get_started_1();
         ui_init();
         lv_cam_canvas();
         my_ui_init();
@@ -288,6 +295,25 @@ void StartTask_ai(void const * argument)
     osDelay(1);
   }
   /* USER CODE END StartTask_ai */
+}
+
+/* USER CODE BEGIN Header_StartTask_measure */
+/**
+* @brief Function implementing the myTask_measure thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTask_measure */
+void StartTask_measure(void const * argument)
+{
+  /* USER CODE BEGIN StartTask_measure */
+  /* Infinite loop */
+  for(;;)
+  {
+    max30102_read();
+    osDelay(1);
+  }
+  /* USER CODE END StartTask_measure */
 }
 
 /* Private application code --------------------------------------------------*/

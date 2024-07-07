@@ -177,7 +177,7 @@ void MX_FREERTOS_Init(void);
 void post_process();
 
 
-// �������������������������?????
+// �������������������������??????
 int x1, y1, x2, y2;
 // yoloface��anchor�ߴ�
 uint8_t anchors[3][2] = {{9, 14}, {12, 17}, {22, 21}};
@@ -424,7 +424,7 @@ void post_process()
             // LCD_ShowString(10,350,200,16,16,(u8*)logStr);
 			if(conf > 2)
 			{
-                lvgl_set_txt(ui_Label4, "识别到人脸");
+                lvgl_set_txt(ui_Label4, "识别到人�?");
                 cnt_detected++;
                 if(cnt_detected == 5){
                     prepare_facenet_data(50,10,216,245);
@@ -443,13 +443,13 @@ void post_process()
                             int max_index = post_process_facenet();
                             snprintf(logStr,30,"确认身份!");
                             lv_label_set_text(ui_Label4, logStr);
-                            snprintf(logStr,30,"置信度:%4.2f",score[max_index]);
+                            snprintf(logStr,30,"置信�?:%4.2f",score[max_index]);
                             lv_label_set_text(ui_Label18, logStr);
                             _ui_flag_modify(ui_Label18, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
                             snprintf(logStr,30,"%d",max_index);
                             lv_label_set_text(ui_Labelid, logStr);
 
-                            // TODO 从云端获取数�?
+                            // TODO 从云端获取数�??
 														
                             printf("AT+HMPUB=1,\"/test/M2M/aa\",8,\"faceid:%d\"\r\n",cur_persion.id+1);
 														Clear_Buffer();
@@ -504,7 +504,7 @@ void post_process()
                                 if(i_feature<FEATURE_PER_PERSION){
                                     memcpy(cur_persion.feature+i_feature*128,out_data1,128);
                                     i_feature++;
-                                    snprintf(logStr,30,"调整角度再来一次:%d/4",i_feature);
+                                    snprintf(logStr,30,"调整角度再来�?�?:%d/4",i_feature);
                                     lv_label_set_text(ui_Label18, logStr);
                                 }else {
                                     i_feature=0;
@@ -541,7 +541,7 @@ void post_process()
     if(cnt_detected > 0){
         cnt_detected--;
     }
-    lvgl_set_txt(ui_Label4, "检测中...");
+    lvgl_set_txt(ui_Label4, "�?测中...");
     // LCD_ShowString(10,300,200,16,16,"noface"); 
 		      	// DCMI_Start();
 }
@@ -553,7 +553,7 @@ struct __FILE
 FILE __stdout;
 int fputc(int ch, FILE *f)
 {
-    HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);//����ʵ�������������?????
+    HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);//����ʵ�������������??????
     return (ch);
 }
 
@@ -610,7 +610,7 @@ void process_ai(void){
 	post_process();
 }
 
-
+#include "max30102.h"
 /* USER CODE END 0 */
 
 /**
@@ -679,7 +679,7 @@ int main(void)
 	OV5640_Color_Saturation(3);//ɫ�ʱ��Ͷ�0
 	OV5640_Brightness(4);	//����0
 	OV5640_Contrast(3);		//�Աȶ�0
-	OV5640_Sharpness(33);	//�Զ����?????????
+	OV5640_Sharpness(33);	//�Զ����??????????
 	OV5640_Focus_Constant();//���������Խ�
 //   LCD_Set_Window(0,0,256,400);
 	OV5640_OutSize_Set(16,4,256,256);
@@ -690,7 +690,8 @@ int main(void)
 	LCD_Clear(WHITE);//����
 	// InternalFlash_Test();
     
-  
+  max30102_init();
+	//max30102_test();
 	
   /* USER CODE END 2 */
 
