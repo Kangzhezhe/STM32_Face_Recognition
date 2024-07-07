@@ -5,12 +5,19 @@
 extern osThreadId myTask_aiHandle;
 lv_obj_t* table;
 lv_obj_t* table1;
+extern osThreadId myTask_measureHandle;
 void ui_event_Switch1_update(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
         _ui_flag_modify(table, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_TOGGLE);
+        if (lv_obj_has_flag(table, LV_OBJ_FLAG_HIDDEN))
+        {
+            osThreadResume(myTask_measureHandle);
+        }else{
+            osThreadSuspend(myTask_measureHandle);
+        }
     }
 }
 
@@ -62,6 +69,20 @@ void ui_event_Button7(lv_event_t * e){
         lv_label_set_text(ui_Labelid, logStr1);
         vTaskResume(myTask_aiHandle);
         lv_label_set_text(ui_Label19, "暂停");
+    }
+}
+
+extern uint8_t cur_dis_hr;
+extern uint8_t cur_dis_spo2;
+extern float cur_temp;
+void ui_event_Button3(lv_event_t * e){
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        lv_label_set_text(ui_Label11, "OK");
+        osThreadSuspend(myTask_measureHandle);
+        printf("AT+HMPUB=1,\"/test/M2M/aa\",40,\"faceid:%d,tiwen:%2.1f,xueyang:%02d,xinlv:%03d\"\r\n",cur_persion.id+1,cur_temp,cur_dis_spo2,cur_dis_hr);
+        // printf("AT+HMPUB=1,\"/test/M2M/aa\",40,\"faceid:1,tiwen:37.1,xueyang:12,xinlv:123\"\r\n");
     }
 }
 
@@ -130,4 +151,5 @@ void my_ui_init(void){
     lv_obj_add_event_cb(ui_Button1, ui_event_Button1, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Button7, ui_event_Button7, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Switch3, ui_event_Switch3_update, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_Button3, ui_event_Button3, LV_EVENT_ALL, NULL);
 }

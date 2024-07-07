@@ -354,6 +354,8 @@ float SMBus_ReadTemp(void)
 	temp = SMBus_ReadMemory(SA, RAM_ACCESS|RAM_TOBJ1)*0.02-273.15;
 	return temp;
 }
+
+#include "delay.h"
  
  
 /**
@@ -363,10 +365,11 @@ float SMBus_ReadTemp(void)
   */
 void Coarse_delay_us(uint32_t us)
 {
-    uint32_t delay = (HAL_RCC_GetHCLKFreq() / 1000000 * us);
-    while (delay--)
-	{
-		;
-	}
+    // uint32_t delay = (HAL_RCC_GetHCLKFreq() / 1000000 * us);
+    // while (delay--)
+	// {
+	// 	;
+	// }
+    delay_us(us);
 }
  

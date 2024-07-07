@@ -169,8 +169,7 @@ void MX_FREERTOS_Init(void) {
   /* add threads, ... */
   osThreadSuspend(myTask_lvglHandle);
   osThreadSuspend(myTask_aiHandle);
-//   osThreadSuspend(myTask_measureHandle);
-//   osThreadSuspend(myTask_measureHandle);
+  osThreadSuspend(myTask_measureHandle);
   /* USER CODE END RTOS_THREADS */
 
 }
@@ -215,7 +214,7 @@ void StartTask(void const * argument)
         lv_init();
         lv_port_disp_init();
         lv_port_indev_init();
-        lv_example_get_started_1();
+        // lv_example_get_started_1();
         ui_init();
         lv_cam_canvas();
         my_ui_init();
@@ -308,40 +307,44 @@ void StartTask_ai(void const * argument)
 #include "GY906.h"
 #include "stdio.h"
 extern u8 dis_hr,dis_spo2;
+u8 cur_dis_hr=0,cur_dis_spo2=0;
+float cur_temp=0;
+char logstr_cur_temp[100];
+char logstr_cur_hr[100];
+char logstr_cur_spo2[100];
 /* USER CODE END Header_StartTask_measure */
 void StartTask_measure(void const * argument)
 {
   /* USER CODE BEGIN StartTask_measure */
   
-  char logstr[200];
-  u8 cur_dis_hr=0,cur_dis_spo2=0;
-	float cur_temp=0;
   /* Infinite loop */
   for(;;)
   {
-    max30102_read();
-    float temp = SMBus_ReadTemp()+3;
-    if(dis_hr != 0){
-        cur_dis_hr = dis_hr;
-    }
-    if(dis_spo2 != 0){
-        cur_dis_spo2 = dis_spo2;
-    }
-		if(temp>30&&temp<100){
-				cur_temp=temp;
-		}
-    // float temp = SMBus_ReadTemp();
-    // printf("temp = %f\r\n",temp);
-    if(pdTRUE == xSemaphoreTake(Sem_lvglHandle,portMAX_DELAY))    
-    {
-        snprintf(logstr,200,"%2.1f",cur_temp);
-        lv_textarea_set_text(ui_TextArea1,logstr);
-        lv_snprintf(logstr,200,"%d",cur_dis_hr);
-        lv_textarea_set_text(ui_TextArea3,logstr);
-        lv_snprintf(logstr,200,"%d",cur_dis_spo2);
-        lv_textarea_set_text(ui_TextArea4,logstr);
-        xSemaphoreGive(Sem_lvglHandle);
-    }
+        max30102_read();
+     
+        float temp = SMBus_ReadTemp()+3;
+        if(dis_hr != 0){
+            cur_dis_hr = dis_hr;
+        }
+        if(dis_spo2 != 0){
+            cur_dis_spo2 = dis_spo2;
+        }
+        if(temp>30&&temp<100){
+                cur_temp=temp;
+        }
+        // float temp = SMBus_ReadTemp();
+        // printf("temp = %f\r\n",temp);
+        snprintf(logstr_cur_temp,200,"%2.1f",cur_temp);
+        snprintf(logstr_cur_hr,200,"%03d",cur_dis_hr);
+        snprintf(logstr_cur_spo2,200,"%02d",cur_dis_spo2);
+    
+           if(pdTRUE == xSemaphoreTake(Sem_lvglHandle,portMAX_DELAY))    
+        {
+            lv_textarea_set_text(ui_TextArea1,logstr_cur_temp);
+            lv_textarea_set_text(ui_TextArea3,logstr_cur_hr);
+            lv_textarea_set_text(ui_TextArea4,logstr_cur_spo2);
+            xSemaphoreGive(Sem_lvglHandle);
+        }
     osDelay(10);
   }
   /* USER CODE END StartTask_measure */

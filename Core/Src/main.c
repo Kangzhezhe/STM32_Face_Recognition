@@ -328,6 +328,7 @@ static lv_obj_t * canvas_cam;
 extern osSemaphoreId Sem_lvglHandle;
 extern osSemaphoreId Sem_imgbufHandle;
 extern osSemaphoreId Sem_stateHandle;
+extern osThreadId myTask_measureHandle;
 void HAL_DCMI_VsyncEventCallback(DCMI_HandleTypeDef *hdcmi)
 {
     
@@ -424,7 +425,7 @@ void post_process()
             // LCD_ShowString(10,350,200,16,16,(u8*)logStr);
 			if(conf > 2)
 			{
-                lvgl_set_txt(ui_Label4, "识别到人�??");
+                lvgl_set_txt(ui_Label4, "识别到人脸");
                 cnt_detected++;
                 if(cnt_detected == 5){
                     prepare_facenet_data(50,10,216,245);
@@ -443,14 +444,14 @@ void post_process()
                             int max_index = post_process_facenet();
                             snprintf(logStr,30,"确认身份!");
                             lv_label_set_text(ui_Label4, logStr);
-                            snprintf(logStr,30,"置信�??:%4.2f",score[max_index]);
+                            snprintf(logStr,30,"置信度:%4.2f",score[max_index]);
                             lv_label_set_text(ui_Label18, logStr);
                             _ui_flag_modify(ui_Label18, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
                             snprintf(logStr,30,"%d",max_index);
                             lv_label_set_text(ui_Labelid, logStr);
 
                             // TODO 从云端获取数�???
-														
+														Clear_Buffer();
                             printf("AT+HMPUB=1,\"/test/M2M/aa\",8,\"faceid:%d\"\r\n",cur_persion.id+1);
 														Clear_Buffer();
                             HAL_Delay(1000);
@@ -504,7 +505,7 @@ void post_process()
                                 if(i_feature<FEATURE_PER_PERSION){
                                     memcpy(cur_persion.feature+i_feature*128,out_data1,128);
                                     i_feature++;
-                                    snprintf(logStr,30,"调整角度再来�??�??:%d/4",i_feature);
+                                    snprintf(logStr,30,"调整角度再来一次:%d/4",i_feature);
                                     lv_label_set_text(ui_Label18, logStr);
                                 }else {
                                     i_feature=0;
@@ -541,7 +542,7 @@ void post_process()
     if(cnt_detected > 0){
         cnt_detected--;
     }
-    lvgl_set_txt(ui_Label4, "�??测中...");
+    lvgl_set_txt(ui_Label4, "检测中...");
     // LCD_ShowString(10,300,200,16,16,"noface"); 
 		      	// DCMI_Start();
 }
