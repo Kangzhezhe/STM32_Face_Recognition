@@ -51,18 +51,20 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+// 公共缓冲区
 AI_ALIGNED(32) ai_u8 buf_common[AI_NETWORK_1_DATA_ACTIVATIONS_SIZE]__attribute__((section(".RW_IRAM2")));
 
+// 激活层
 const ai_handle activations[] = { buf_common };
 const ai_handle activations1[] = { buf_common };
-/* Data payload*/
 
+// 输入缓冲区
 static float*in_data=(float*)buf_common;
 static int8_t*in_data1=(int8_t*)buf_common;
-/* Data payload for the output tensor */
+
+// 输出缓冲区
 AI_ALIGNED(32)
 static float out_data[AI_NETWORK_OUT_1_SIZE]__attribute__((section(".RW_IRAM2")));
-
 AI_ALIGNED(32) 
 static int8_t out_data1[AI_NETWORK_1_OUT_1_SIZE]__attribute__((section(".RW_IRAM2")));
 
@@ -493,24 +495,32 @@ void post_process()
                             cnt_detected=0;
                             lv_label_set_text(ui_Label19, "继续");
                             lv_label_set_text(ui_Label17, "确认");
-                            xSemaphoreGive(Sem_lvglHandle);
+                            // xSemaphoreGive(Sem_lvglHandle);
                             // 录入人脸
-                           if (cur_persion.id > MAX_ID-1) 
+                           if (cur_persion.id > MAX_ID-1) {
                                lv_label_set_text(ui_Label4,"ID太大");
+                               xSemaphoreGive(Sem_lvglHandle);
+                           }
                            else{
-                                Flash_Read(FLASH_USER_START_ADDR,(uint32_t*)features_buf,128*512/4);
-                                cur_persion.feature =get_feature_ptr(cur_persion.id);
-                                int32_t* cnt = get_cnt_ptr();
-                                if(cur_persion.id>*cnt-1){
-                                    *cnt = cur_persion.id+1;
-                                }
-                               
-                                if(i_feature<FEATURE_PER_PERSION){
+                                if(i_feature==0){
+                                    Flash_Read(FLASH_USER_START_ADDR,(uint32_t*)features_buf,128*512/4);
+                                    cur_persion.feature =get_feature_ptr(cur_persion.id);
+                                    int32_t* cnt = get_cnt_ptr();
+                                    if(cur_persion.id>*cnt-1){
+                                        *cnt = cur_persion.id+1;
+                                    }     
+																		memcpy(cur_persion.feature+i_feature*128,out_data1,128);
+																		i_feature++;
+																		snprintf(logStr,30,"调整角度再来一次:%d/4",i_feature);
+                                    xSemaphoreGive(Sem_lvglHandle);
+                                }else if(i_feature<FEATURE_PER_PERSION-1){
                                     memcpy(cur_persion.feature+i_feature*128,out_data1,128);
                                     i_feature++;
                                     snprintf(logStr,30,"调整角度再来一次:%d/4",i_feature);
                                     lv_label_set_text(ui_Label18, logStr);
+                                    xSemaphoreGive(Sem_lvglHandle);
                                 }else {
+																		memcpy(cur_persion.feature+i_feature*128,out_data1,128);
                                     i_feature=0;
                                     memcpy(buf_common,features_buf,128*512);
                                     Flash_Erase_and_Write(FLASH_USER_START_ADDR,(uint32_t*)buf_common,128*512/4);
@@ -530,6 +540,7 @@ void post_process()
                                         lv_label_set_text(ui_Label18, "录入成功!");
                                     else 
                                         lv_label_set_text(ui_Label18, "录入失败!");
+                                    xSemaphoreGive(Sem_lvglHandle);
                                     vTaskSuspend(myTask_aiHandle);
                                 }
                             }

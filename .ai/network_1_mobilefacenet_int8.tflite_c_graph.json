@@ -3,36 +3,39 @@
     "c_layers": [
         {
             "next": "conv2d_1",
-            "rom": 0,
             "op_by_type": {"smul_s8_s8": 0},
             "c_forward": "forward_pad",
-            "c_code_emit": true,
             "macc": 0,
-            "name": "pad_0",
-            "c_id": 0,
             "tensors": {
                 "outputs": ["pad_0_output"],
                 "inputs": ["serving_default_input_10_output"],
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "pad",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.009875000454485416,
+                "counters": [],
+                "percentage": 0.006532910136638475,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "pad_0",
+            "c_id": 0,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "pad",
             "m_id": 0
         },
         {
             "next": "conv2d_3_pad_before",
-            "rom": 2048,
             "op_by_type": {"smul_s8_s8": 4988992},
             "c_forward": "forward_conv2d_sssa8_ch",
-            "c_code_emit": true,
             "macc": 4988992,
-            "name": "conv2d_1",
-            "c_id": 1,
             "tensors": {
                 "outputs": ["conv2d_1_output"],
                 "inputs": ["pad_0_output"],
@@ -46,46 +49,60 @@
                     "conv2d_1_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 2048,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 4.105625182390213,
+                "counters": [],
+                "percentage": 2.716119406262132,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_1",
+            "c_id": 1,
             "weight_sparsity": [
                 0.007543103448275912,
                 1856,
                 14
             ],
-            "layer_type": "conv2d",
             "m_id": 2
         },
         {
             "next": "conv2d_3",
-            "rom": 0,
             "op_by_type": {"smul_s8_s8": 0},
             "c_forward": "forward_pad",
-            "c_code_emit": true,
             "macc": 0,
-            "name": "conv2d_3_pad_before",
-            "c_id": 2,
             "tensors": {
                 "outputs": ["conv2d_3_pad_before_output"],
                 "inputs": ["conv2d_1_output"],
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "pad",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.021875001257285476,
+                "counters": [],
+                "percentage": 0.014471636544359687,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_3_pad_before",
+            "c_id": 2,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "pad",
             "m_id": 4
         },
         {
             "next": "conv2d_5",
-            "rom": 896,
             "op_by_type": {"smul_s8_s8": 1892416},
             "c_forward": "forward_dw_3x3_sssa8_ch",
-            "c_code_emit": true,
             "macc": 1892416,
-            "name": "conv2d_3",
-            "c_id": 3,
             "tensors": {
                 "outputs": ["conv2d_3_output"],
                 "inputs": ["conv2d_3_pad_before_output"],
@@ -99,23 +116,30 @@
                     "conv2d_3_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 896,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 4.4818752110004425,
+                "counters": [],
+                "percentage": 2.9650315594460652,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_3",
+            "c_id": 3,
             "weight_sparsity": [
                 0.011363636363636354,
                 704,
                 8
             ],
-            "layer_type": "conv2d",
             "m_id": 4
         },
         {
             "next": "conv2d_8_pad_before",
-            "rom": 8832,
             "op_by_type": {"smul_s8_s8": 22708352},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 22708352,
-            "name": "conv2d_5",
-            "c_id": 4,
             "tensors": {
                 "outputs": ["conv2d_5_output"],
                 "inputs": ["conv2d_3_output"],
@@ -129,46 +153,60 @@
                     "conv2d_5_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 8832,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 17.752250909805298,
+                "counters": [],
+                "percentage": 11.74418780549413,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_5",
+            "c_id": 4,
             "weight_sparsity": [
                 0.022964015151515138,
                 8448,
                 194
             ],
-            "layer_type": "conv2d",
             "m_id": 6
         },
         {
             "next": "conv2d_8",
-            "rom": 0,
             "op_by_type": {"smul_s8_s8": 0},
             "c_forward": "forward_pad",
-            "c_code_emit": true,
             "macc": 0,
-            "name": "conv2d_8_pad_before",
-            "c_id": 5,
             "tensors": {
                 "outputs": ["conv2d_8_pad_before_output"],
                 "inputs": ["conv2d_5_output"],
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "pad",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.053750003688037395,
+                "counters": [],
+                "percentage": 0.035558878762222086,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_8_pad_before",
+            "c_id": 5,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "pad",
             "m_id": 9
         },
         {
             "next": "conv2d_10",
-            "rom": 1792,
             "op_by_type": {"smul_s8_s8": 946304},
             "c_forward": "forward_dw_3x3_sssa8_ch",
-            "c_code_emit": true,
             "macc": 946304,
-            "name": "conv2d_8",
-            "c_id": 6,
             "tensors": {
                 "outputs": ["conv2d_8_output"],
                 "inputs": ["conv2d_8_pad_before_output"],
@@ -182,23 +220,30 @@
                     "conv2d_8_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 1792,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 2.1782500743865967,
+                "counters": [],
+                "percentage": 1.4410441859402676,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_8",
+            "c_id": 6,
             "weight_sparsity": [
                 0.0021306818181817677,
                 1408,
                 3
             ],
-            "layer_type": "conv2d",
             "m_id": 7
         },
         {
             "next": "conv2d_11",
-            "rom": 8448,
             "op_by_type": {"smul_s8_s8": 5505088},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 5505088,
-            "name": "conv2d_10",
-            "c_id": 7,
             "tensors": {
                 "outputs": ["conv2d_10_output"],
                 "inputs": ["conv2d_8_output"],
@@ -208,23 +253,30 @@
                     "conv2d_10_bias"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 8448,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 3.802250176668167,
+                "counters": [],
+                "percentage": 2.5154184889083426,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_10",
+            "c_id": 7,
             "weight_sparsity": [
                 0.01017441860465118,
                 8256,
                 84
             ],
-            "layer_type": "conv2d",
             "m_id": 10
         },
         {
             "next": "conv2d_13_pad_before",
-            "rom": 8832,
             "op_by_type": {"smul_s8_s8": 5677184},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 5677184,
-            "name": "conv2d_11",
-            "c_id": 8,
             "tensors": {
                 "outputs": ["conv2d_11_output"],
                 "inputs": ["conv2d_10_output"],
@@ -238,46 +290,60 @@
                     "conv2d_11_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 8832,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 4.43712517619133,
+                "counters": [],
+                "percentage": 2.9354267045028344,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_11",
+            "c_id": 8,
             "weight_sparsity": [
                 0.005800189393939448,
                 8448,
                 49
             ],
-            "layer_type": "conv2d",
             "m_id": 12
         },
         {
             "next": "conv2d_13",
-            "rom": 0,
             "op_by_type": {"smul_s8_s8": 0},
             "c_forward": "forward_pad",
-            "c_code_emit": true,
             "macc": 0,
-            "name": "conv2d_13_pad_before",
-            "c_id": 9,
             "tensors": {
                 "outputs": ["conv2d_13_pad_before_output"],
                 "inputs": ["conv2d_11_output"],
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "pad",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.01362500071991235,
+                "counters": [],
+                "percentage": 0.009013762148678326,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_13_pad_before",
+            "c_id": 9,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "pad",
             "m_id": 14
         },
         {
             "next": "conv2d_15",
-            "rom": 1792,
             "op_by_type": {"smul_s8_s8": 946304},
             "c_forward": "forward_dw_3x3_sssa8_ch",
-            "c_code_emit": true,
             "macc": 946304,
-            "name": "conv2d_13",
-            "c_id": 10,
             "tensors": {
                 "outputs": ["conv2d_13_output"],
                 "inputs": ["conv2d_13_pad_before_output"],
@@ -291,23 +357,30 @@
                     "conv2d_13_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 1792,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 2.1028750985860825,
+                "counters": [],
+                "percentage": 1.3911790800371693,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_13",
+            "c_id": 10,
             "weight_sparsity": [
                 0.0042613636363636465,
                 1408,
                 6
             ],
-            "layer_type": "conv2d",
             "m_id": 14
         },
         {
             "next": "eltwise_16",
-            "rom": 8448,
             "op_by_type": {"smul_s8_s8": 5505088},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 5505088,
-            "name": "conv2d_15",
-            "c_id": 11,
             "tensors": {
                 "outputs": ["conv2d_15_output"],
                 "inputs": ["conv2d_13_output"],
@@ -317,23 +390,30 @@
                     "conv2d_15_bias"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 8448,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 3.396625190973282,
+                "counters": [],
+                "percentage": 2.2470730247300286,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_15",
+            "c_id": 11,
             "weight_sparsity": [
                 0.009689922480620172,
                 8256,
                 80
             ],
-            "layer_type": "conv2d",
             "m_id": 15
         },
         {
             "next": "conv2d_17",
-            "rom": 0,
             "op_by_type": {"op_s8_s8": 43008},
             "c_forward": "forward_eltwise_integer_INT8",
-            "c_code_emit": true,
             "macc": 43008,
-            "name": "eltwise_16",
-            "c_id": 12,
             "tensors": {
                 "outputs": ["eltwise_16_output"],
                 "inputs": [
@@ -343,23 +423,30 @@
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "eltwise_integer/sum",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.08737500384449959,
+                "counters": [],
+                "percentage": 0.057803850332511404,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "eltwise_16",
+            "c_id": 12,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "eltwise_integer/sum",
             "m_id": 16
         },
         {
             "next": "conv2d_19_pad_before",
-            "rom": 8832,
             "op_by_type": {"smul_s8_s8": 5677184},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 5677184,
-            "name": "conv2d_17",
-            "c_id": 13,
             "tensors": {
                 "outputs": ["conv2d_17_output"],
                 "inputs": ["eltwise_16_output"],
@@ -373,46 +460,60 @@
                     "conv2d_17_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 8832,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 4.323000222444534,
+                "counters": [],
+                "percentage": 2.8599261442130186,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_17",
+            "c_id": 13,
             "weight_sparsity": [
                 0.009469696969697017,
                 8448,
                 80
             ],
-            "layer_type": "conv2d",
             "m_id": 18
         },
         {
             "next": "conv2d_19",
-            "rom": 0,
             "op_by_type": {"smul_s8_s8": 0},
             "c_forward": "forward_pad",
-            "c_code_emit": true,
             "macc": 0,
-            "name": "conv2d_19_pad_before",
-            "c_id": 14,
             "tensors": {
                 "outputs": ["conv2d_19_pad_before_output"],
                 "inputs": ["conv2d_17_output"],
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "pad",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.021375000942498446,
+                "counters": [],
+                "percentage": 0.014140856091249841,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_19_pad_before",
+            "c_id": 14,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "pad",
             "m_id": 20
         },
         {
             "next": "conv2d_21",
-            "rom": 1792,
             "op_by_type": {"smul_s8_s8": 946304},
             "c_forward": "forward_dw_3x3_sssa8_ch",
-            "c_code_emit": true,
             "macc": 946304,
-            "name": "conv2d_19",
-            "c_id": 15,
             "tensors": {
                 "outputs": ["conv2d_19_output"],
                 "inputs": ["conv2d_19_pad_before_output"],
@@ -426,23 +527,30 @@
                     "conv2d_19_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 1792,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 2.2553750872612,
+                "counters": [],
+                "percentage": 1.4920670472271256,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_19",
+            "c_id": 15,
             "weight_sparsity": [
                 0.0042613636363636465,
                 1408,
                 6
             ],
-            "layer_type": "conv2d",
             "m_id": 20
         },
         {
             "next": "eltwise_22",
-            "rom": 8448,
             "op_by_type": {"smul_s8_s8": 5505088},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 5505088,
-            "name": "conv2d_21",
-            "c_id": 16,
             "tensors": {
                 "outputs": ["conv2d_21_output"],
                 "inputs": ["conv2d_19_output"],
@@ -452,23 +560,30 @@
                     "conv2d_21_bias"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 8448,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 3.168250173330307,
+                "counters": [],
+                "percentage": 2.095989136218701,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_21",
+            "c_id": 16,
             "weight_sparsity": [
                 0.009205426356589164,
                 8256,
                 76
             ],
-            "layer_type": "conv2d",
             "m_id": 21
         },
         {
             "next": "conv2d_23",
-            "rom": 0,
             "op_by_type": {"op_s8_s8": 43008},
             "c_forward": "forward_eltwise_integer_INT8",
-            "c_code_emit": true,
             "macc": 43008,
-            "name": "eltwise_22",
-            "c_id": 17,
             "tensors": {
                 "outputs": ["eltwise_22_output"],
                 "inputs": [
@@ -478,23 +593,30 @@
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "eltwise_integer/sum",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.0783750033006072,
+                "counters": [],
+                "percentage": 0.051849805565228384,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "eltwise_22",
+            "c_id": 17,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "eltwise_integer/sum",
             "m_id": 22
         },
         {
             "next": "conv2d_25_pad_before",
-            "rom": 8832,
             "op_by_type": {"smul_s8_s8": 5677184},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 5677184,
-            "name": "conv2d_23",
-            "c_id": 18,
             "tensors": {
                 "outputs": ["conv2d_23_output"],
                 "inputs": ["eltwise_22_output"],
@@ -508,46 +630,60 @@
                     "conv2d_23_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 8832,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 4.25287526845932,
+                "counters": [],
+                "percentage": 2.813534245313082,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_23",
+            "c_id": 18,
             "weight_sparsity": [
                 0.010771780303030276,
                 8448,
                 91
             ],
-            "layer_type": "conv2d",
             "m_id": 24
         },
         {
             "next": "conv2d_25",
-            "rom": 0,
             "op_by_type": {"smul_s8_s8": 0},
             "c_forward": "forward_pad",
-            "c_code_emit": true,
             "macc": 0,
-            "name": "conv2d_25_pad_before",
-            "c_id": 19,
             "tensors": {
                 "outputs": ["conv2d_25_pad_before_output"],
                 "inputs": ["conv2d_23_output"],
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "pad",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.01287500059697777,
+                "counters": [],
+                "percentage": 0.00851759170006089,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_25_pad_before",
+            "c_id": 19,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "pad",
             "m_id": 26
         },
         {
             "next": "conv2d_27",
-            "rom": 1792,
             "op_by_type": {"smul_s8_s8": 946304},
             "c_forward": "forward_dw_3x3_sssa8_ch",
-            "c_code_emit": true,
             "macc": 946304,
-            "name": "conv2d_25",
-            "c_id": 20,
             "tensors": {
                 "outputs": ["conv2d_25_output"],
                 "inputs": ["conv2d_25_pad_before_output"],
@@ -561,23 +697,30 @@
                     "conv2d_25_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 1792,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 1.909625083208084,
+                "counters": [],
+                "percentage": 1.2633325052256188,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_25",
+            "c_id": 20,
             "weight_sparsity": [
                 0.007102272727272707,
                 1408,
                 10
             ],
-            "layer_type": "conv2d",
             "m_id": 26
         },
         {
             "next": "eltwise_28",
-            "rom": 8448,
             "op_by_type": {"smul_s8_s8": 5505088},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 5505088,
-            "name": "conv2d_27",
-            "c_id": 21,
             "tensors": {
                 "outputs": ["conv2d_27_output"],
                 "inputs": ["conv2d_25_output"],
@@ -587,23 +730,30 @@
                     "conv2d_27_bias"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 8448,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 3.4450001418590546,
+                "counters": [],
+                "percentage": 2.279075980928122,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_27",
+            "c_id": 21,
             "weight_sparsity": [
                 0.00908430232558144,
                 8256,
                 75
             ],
-            "layer_type": "conv2d",
             "m_id": 27
         },
         {
             "next": "conv2d_29",
-            "rom": 0,
             "op_by_type": {"op_s8_s8": 43008},
             "c_forward": "forward_eltwise_integer_INT8",
-            "c_code_emit": true,
             "macc": 43008,
-            "name": "eltwise_28",
-            "c_id": 22,
             "tensors": {
                 "outputs": ["eltwise_28_output"],
                 "inputs": [
@@ -613,23 +763,30 @@
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "eltwise_integer/sum",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.07750000339001417,
+                "counters": [],
+                "percentage": 0.05127094019587293,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "eltwise_28",
+            "c_id": 22,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "eltwise_integer/sum",
             "m_id": 28
         },
         {
             "next": "conv2d_31_pad_before",
-            "rom": 8832,
             "op_by_type": {"smul_s8_s8": 5677184},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 5677184,
-            "name": "conv2d_29",
-            "c_id": 23,
             "tensors": {
                 "outputs": ["conv2d_29_output"],
                 "inputs": ["eltwise_28_output"],
@@ -643,46 +800,60 @@
                     "conv2d_29_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 8832,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 4.066625148057938,
+                "counters": [],
+                "percentage": 2.6903185244502383,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_29",
+            "c_id": 23,
             "weight_sparsity": [
                 0.01171875,
                 8448,
                 99
             ],
-            "layer_type": "conv2d",
             "m_id": 30
         },
         {
             "next": "conv2d_31",
-            "rom": 0,
             "op_by_type": {"smul_s8_s8": 0},
             "c_forward": "forward_pad",
-            "c_code_emit": true,
             "macc": 0,
-            "name": "conv2d_31_pad_before",
-            "c_id": 24,
             "tensors": {
                 "outputs": ["conv2d_31_pad_before_output"],
                 "inputs": ["conv2d_29_output"],
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "pad",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.014375000610016286,
+                "counters": [],
+                "percentage": 0.009509932443264209,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_31_pad_before",
+            "c_id": 24,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "pad",
             "m_id": 32
         },
         {
             "next": "conv2d_33",
-            "rom": 1792,
             "op_by_type": {"smul_s8_s8": 946304},
             "c_forward": "forward_dw_3x3_sssa8_ch",
-            "c_code_emit": true,
             "macc": 946304,
-            "name": "conv2d_31",
-            "c_id": 25,
             "tensors": {
                 "outputs": ["conv2d_31_output"],
                 "inputs": ["conv2d_31_pad_before_output"],
@@ -696,23 +867,30 @@
                     "conv2d_31_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 1792,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 1.9602500796318054,
+                "counters": [],
+                "percentage": 1.2968240026516864,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_31",
+            "c_id": 25,
             "weight_sparsity": [
                 0.009943181818181768,
                 1408,
                 14
             ],
-            "layer_type": "conv2d",
             "m_id": 32
         },
         {
             "next": "eltwise_34",
-            "rom": 8448,
             "op_by_type": {"smul_s8_s8": 5505088},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 5505088,
-            "name": "conv2d_33",
-            "c_id": 26,
             "tensors": {
                 "outputs": ["conv2d_33_output"],
                 "inputs": ["conv2d_31_output"],
@@ -722,23 +900,30 @@
                     "conv2d_33_bias"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 8448,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 3.283625155687332,
+                "counters": [],
+                "percentage": 2.172316666048063,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_33",
+            "c_id": 26,
             "weight_sparsity": [
                 0.009326550387596888,
                 8256,
                 77
             ],
-            "layer_type": "conv2d",
             "m_id": 33
         },
         {
             "next": "conv2d_35",
-            "rom": 0,
             "op_by_type": {"op_s8_s8": 43008},
             "c_forward": "forward_eltwise_integer_INT8",
-            "c_code_emit": true,
             "macc": 43008,
-            "name": "eltwise_34",
-            "c_id": 27,
             "tensors": {
                 "outputs": ["eltwise_34_output"],
                 "inputs": [
@@ -748,23 +933,30 @@
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "eltwise_integer/sum",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.07675000466406345,
+                "counters": [],
+                "percentage": 0.05077477067144482,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "eltwise_34",
+            "c_id": 27,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "eltwise_integer/sum",
             "m_id": 34
         },
         {
             "next": "conv2d_38_pad_before",
-            "rom": 17664,
             "op_by_type": {"smul_s8_s8": 11354368},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 11354368,
-            "name": "conv2d_35",
-            "c_id": 28,
             "tensors": {
                 "outputs": ["conv2d_35_output"],
                 "inputs": ["eltwise_34_output"],
@@ -778,46 +970,60 @@
                     "conv2d_35_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 17664,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 8.837375462055206,
+                "counters": [],
+                "percentage": 5.846458438502328,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_35",
+            "c_id": 28,
             "weight_sparsity": [
                 0.01083096590909094,
                 16896,
                 183
             ],
-            "layer_type": "conv2d",
             "m_id": 36
         },
         {
             "next": "conv2d_38",
-            "rom": 0,
             "op_by_type": {"smul_s8_s8": 0},
             "c_forward": "forward_pad",
-            "c_code_emit": true,
             "macc": 0,
-            "name": "conv2d_38_pad_before",
-            "c_id": 29,
             "tensors": {
                 "outputs": ["conv2d_38_pad_before_output"],
                 "inputs": ["conv2d_35_output"],
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "pad",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.024375000735744834,
+                "counters": [],
+                "percentage": 0.016125537423624926,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_38_pad_before",
+            "c_id": 29,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "pad",
             "m_id": 39
         },
         {
             "next": "conv2d_40",
-            "rom": 3584,
             "op_by_type": {"smul_s8_s8": 473344},
             "c_forward": "forward_dw_3x3_sssa8_ch",
-            "c_code_emit": true,
             "macc": 473344,
-            "name": "conv2d_38",
-            "c_id": 30,
             "tensors": {
                 "outputs": ["conv2d_38_output"],
                 "inputs": ["conv2d_38_pad_before_output"],
@@ -831,23 +1037,30 @@
                     "conv2d_38_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 3584,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 1.0273750498890877,
+                "counters": [],
+                "percentage": 0.6796707411290572,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_38",
+            "c_id": 30,
             "weight_sparsity": [
                 0.0010653409090909394,
                 2816,
                 3
             ],
-            "layer_type": "conv2d",
             "m_id": 37
         },
         {
             "next": "conv2d_41",
-            "rom": 33280,
             "op_by_type": {"smul_s8_s8": 5505152},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 5505152,
-            "name": "conv2d_40",
-            "c_id": 31,
             "tensors": {
                 "outputs": ["conv2d_40_output"],
                 "inputs": ["conv2d_38_output"],
@@ -857,23 +1070,30 @@
                     "conv2d_40_bias"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 33280,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 3.18562513589859,
+                "counters": [],
+                "percentage": 2.107483724964213,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_40",
+            "c_id": 31,
             "weight_sparsity": [
                 0.009970817120622533,
                 32896,
                 328
             ],
-            "layer_type": "conv2d",
             "m_id": 40
         },
         {
             "next": "conv2d_43_pad_before",
-            "rom": 34048,
             "op_by_type": {"smul_s8_s8": 5591296},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 5591296,
-            "name": "conv2d_41",
-            "c_id": 32,
             "tensors": {
                 "outputs": ["conv2d_41_output"],
                 "inputs": ["conv2d_40_output"],
@@ -887,46 +1107,60 @@
                     "conv2d_41_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 34048,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 3.8928751349449158,
+                "counters": [],
+                "percentage": 2.575372380686615,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_41",
+            "c_id": 32,
             "weight_sparsity": [
                 0.009465144230769273,
                 33280,
                 315
             ],
-            "layer_type": "conv2d",
             "m_id": 42
         },
         {
             "next": "conv2d_43",
-            "rom": 0,
             "op_by_type": {"smul_s8_s8": 0},
             "c_forward": "forward_pad",
-            "c_code_emit": true,
             "macc": 0,
-            "name": "conv2d_43_pad_before",
-            "c_id": 33,
             "tensors": {
                 "outputs": ["conv2d_43_pad_before_output"],
                 "inputs": ["conv2d_41_output"],
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "pad",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.011125000542961061,
+                "counters": [],
+                "percentage": 0.007359860807318426,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_43_pad_before",
+            "c_id": 33,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "pad",
             "m_id": 44
         },
         {
             "next": "conv2d_45",
-            "rom": 3584,
             "op_by_type": {"smul_s8_s8": 473344},
             "c_forward": "forward_dw_3x3_sssa8_ch",
-            "c_code_emit": true,
             "macc": 473344,
-            "name": "conv2d_43",
-            "c_id": 34,
             "tensors": {
                 "outputs": ["conv2d_43_output"],
                 "inputs": ["conv2d_43_pad_before_output"],
@@ -940,23 +1174,30 @@
                     "conv2d_43_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 3584,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 1.000375047326088,
+                "counters": [],
+                "percentage": 0.661808606211082,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_43",
+            "c_id": 34,
             "weight_sparsity": [
                 0.006747159090909061,
                 2816,
                 19
             ],
-            "layer_type": "conv2d",
             "m_id": 44
         },
         {
             "next": "eltwise_46",
-            "rom": 33280,
             "op_by_type": {"smul_s8_s8": 5505152},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 5505152,
-            "name": "conv2d_45",
-            "c_id": 35,
             "tensors": {
                 "outputs": ["conv2d_45_output"],
                 "inputs": ["conv2d_43_output"],
@@ -966,23 +1207,30 @@
                     "conv2d_45_bias"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 33280,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 3.7892501056194305,
+                "counters": [],
+                "percentage": 2.5068181555389666,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_45",
+            "c_id": 35,
             "weight_sparsity": [
                 0.010153210116731537,
                 32896,
                 334
             ],
-            "layer_type": "conv2d",
             "m_id": 45
         },
         {
             "next": "conv2d_47",
-            "rom": 0,
             "op_by_type": {"op_s8_s8": 21504},
             "c_forward": "forward_eltwise_integer_INT8",
-            "c_code_emit": true,
             "macc": 21504,
-            "name": "eltwise_46",
-            "c_id": 36,
             "tensors": {
                 "outputs": ["eltwise_46_output"],
                 "inputs": [
@@ -992,23 +1240,30 @@
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "eltwise_integer/sum",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.03662500157952309,
+                "counters": [],
+                "percentage": 0.024229653980885283,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "eltwise_46",
+            "c_id": 36,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "eltwise_integer/sum",
             "m_id": 46
         },
         {
             "next": "conv2d_49_pad_before",
-            "rom": 34048,
             "op_by_type": {"smul_s8_s8": 5591296},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 5591296,
-            "name": "conv2d_47",
-            "c_id": 37,
             "tensors": {
                 "outputs": ["conv2d_47_output"],
                 "inputs": ["eltwise_46_output"],
@@ -1022,46 +1277,60 @@
                     "conv2d_47_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 34048,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 3.744125157594681,
+                "counters": [],
+                "percentage": 2.4769652728251974,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_47",
+            "c_id": 37,
             "weight_sparsity": [
                 0.00871394230769229,
                 33280,
                 290
             ],
-            "layer_type": "conv2d",
             "m_id": 48
         },
         {
             "next": "conv2d_49",
-            "rom": 0,
             "op_by_type": {"smul_s8_s8": 0},
             "c_forward": "forward_pad",
-            "c_code_emit": true,
             "macc": 0,
-            "name": "conv2d_49_pad_before",
-            "c_id": 38,
             "tensors": {
                 "outputs": ["conv2d_49_pad_before_output"],
                 "inputs": ["conv2d_47_output"],
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "pad",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.00937500037252903,
+                "counters": [],
+                "percentage": 0.006202129837560184,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_49_pad_before",
+            "c_id": 38,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "pad",
             "m_id": 50
         },
         {
             "next": "conv2d_51",
-            "rom": 3584,
             "op_by_type": {"smul_s8_s8": 473344},
             "c_forward": "forward_dw_3x3_sssa8_ch",
-            "c_code_emit": true,
             "macc": 473344,
-            "name": "conv2d_49",
-            "c_id": 39,
             "tensors": {
                 "outputs": ["conv2d_49_output"],
                 "inputs": ["conv2d_49_pad_before_output"],
@@ -1075,23 +1344,30 @@
                     "conv2d_49_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 3584,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 1.2296250760555267,
+                "counters": [],
+                "percentage": 0.8134713674852794,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_49",
+            "c_id": 39,
             "weight_sparsity": [
                 0.006747159090909061,
                 2816,
                 19
             ],
-            "layer_type": "conv2d",
             "m_id": 50
         },
         {
             "next": "eltwise_52",
-            "rom": 33280,
             "op_by_type": {"smul_s8_s8": 5505152},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 5505152,
-            "name": "conv2d_51",
-            "c_id": 40,
             "tensors": {
                 "outputs": ["conv2d_51_output"],
                 "inputs": ["conv2d_49_output"],
@@ -1101,23 +1377,30 @@
                     "conv2d_51_bias"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 33280,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 3.7143751978874207,
+                "counters": [],
+                "percentage": 2.457283874912161,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_51",
+            "c_id": 40,
             "weight_sparsity": [
                 0.01006201361867709,
                 32896,
                 331
             ],
-            "layer_type": "conv2d",
             "m_id": 51
         },
         {
             "next": "conv2d_53",
-            "rom": 0,
             "op_by_type": {"op_s8_s8": 21504},
             "c_forward": "forward_eltwise_integer_INT8",
-            "c_code_emit": true,
             "macc": 21504,
-            "name": "eltwise_52",
-            "c_id": 41,
             "tensors": {
                 "outputs": ["eltwise_52_output"],
                 "inputs": [
@@ -1127,23 +1410,30 @@
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "eltwise_integer/sum",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.04237500159069896,
+                "counters": [],
+                "percentage": 0.02803362680415941,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "eltwise_52",
+            "c_id": 41,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "eltwise_integer/sum",
             "m_id": 52
         },
         {
             "next": "conv2d_55_pad_before",
-            "rom": 34048,
             "op_by_type": {"smul_s8_s8": 5591296},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 5591296,
-            "name": "conv2d_53",
-            "c_id": 42,
             "tensors": {
                 "outputs": ["conv2d_53_output"],
                 "inputs": ["eltwise_52_output"],
@@ -1157,46 +1447,60 @@
                     "conv2d_53_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 34048,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 3.81000018119812,
+                "counters": [],
+                "percentage": 2.5205455857004977,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_53",
+            "c_id": 42,
             "weight_sparsity": [
                 0.009765625,
                 33280,
                 325
             ],
-            "layer_type": "conv2d",
             "m_id": 54
         },
         {
             "next": "conv2d_55",
-            "rom": 0,
             "op_by_type": {"smul_s8_s8": 0},
             "c_forward": "forward_pad",
-            "c_code_emit": true,
             "macc": 0,
-            "name": "conv2d_55_pad_before",
-            "c_id": 43,
             "tensors": {
                 "outputs": ["conv2d_55_pad_before_output"],
                 "inputs": ["conv2d_53_output"],
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "pad",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.010375000420026481,
+                "counters": [],
+                "percentage": 0.006863690358700989,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_55_pad_before",
+            "c_id": 43,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "pad",
             "m_id": 56
         },
         {
             "next": "conv2d_57",
-            "rom": 3584,
             "op_by_type": {"smul_s8_s8": 473344},
             "c_forward": "forward_dw_3x3_sssa8_ch",
-            "c_code_emit": true,
             "macc": 473344,
-            "name": "conv2d_55",
-            "c_id": 44,
             "tensors": {
                 "outputs": ["conv2d_55_output"],
                 "inputs": ["conv2d_55_pad_before_output"],
@@ -1210,23 +1514,30 @@
                     "conv2d_55_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 3584,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 1.0198750495910645,
+                "counters": [],
+                "percentage": 0.6747090372590091,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_55",
+            "c_id": 44,
             "weight_sparsity": [
                 0.0074573863636363535,
                 2816,
                 21
             ],
-            "layer_type": "conv2d",
             "m_id": 56
         },
         {
             "next": "eltwise_58",
-            "rom": 33280,
             "op_by_type": {"smul_s8_s8": 5505152},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 5505152,
-            "name": "conv2d_57",
-            "c_id": 45,
             "tensors": {
                 "outputs": ["conv2d_57_output"],
                 "inputs": ["conv2d_55_output"],
@@ -1236,23 +1547,30 @@
                     "conv2d_57_bias"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 33280,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 3.412125200033188,
+                "counters": [],
+                "percentage": 2.257327218314339,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_57",
+            "c_id": 45,
             "weight_sparsity": [
                 0.009697227626459193,
                 32896,
                 319
             ],
-            "layer_type": "conv2d",
             "m_id": 57
         },
         {
             "next": "conv2d_59",
-            "rom": 0,
             "op_by_type": {"op_s8_s8": 21504},
             "c_forward": "forward_eltwise_integer_INT8",
-            "c_code_emit": true,
             "macc": 21504,
-            "name": "eltwise_58",
-            "c_id": 46,
             "tensors": {
                 "outputs": ["eltwise_58_output"],
                 "inputs": [
@@ -1262,23 +1580,30 @@
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "eltwise_integer/sum",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.03875000216066837,
+                "counters": [],
+                "percentage": 0.025635470405999575,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "eltwise_58",
+            "c_id": 46,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "eltwise_integer/sum",
             "m_id": 58
         },
         {
             "next": "conv2d_61_pad_before",
-            "rom": 34048,
             "op_by_type": {"smul_s8_s8": 5591296},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 5591296,
-            "name": "conv2d_59",
-            "c_id": 47,
             "tensors": {
                 "outputs": ["conv2d_59_output"],
                 "inputs": ["eltwise_58_output"],
@@ -1292,46 +1617,60 @@
                     "conv2d_59_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 34048,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 3.559875190258026,
+                "counters": [],
+                "percentage": 2.355072774203367,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_59",
+            "c_id": 47,
             "weight_sparsity": [
                 0.008984375000000044,
                 33280,
                 299
             ],
-            "layer_type": "conv2d",
             "m_id": 60
         },
         {
             "next": "conv2d_61",
-            "rom": 0,
             "op_by_type": {"smul_s8_s8": 0},
             "c_forward": "forward_pad",
-            "c_code_emit": true,
             "macc": 0,
-            "name": "conv2d_61_pad_before",
-            "c_id": 48,
             "tensors": {
                 "outputs": ["conv2d_61_pad_before_output"],
                 "inputs": ["conv2d_59_output"],
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "pad",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.010500000440515578,
+                "counters": [],
+                "percentage": 0.006946385433470562,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_61_pad_before",
+            "c_id": 48,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "pad",
             "m_id": 62
         },
         {
             "next": "conv2d_63",
-            "rom": 3584,
             "op_by_type": {"smul_s8_s8": 473344},
             "c_forward": "forward_dw_3x3_sssa8_ch",
-            "c_code_emit": true,
             "macc": 473344,
-            "name": "conv2d_61",
-            "c_id": 49,
             "tensors": {
                 "outputs": ["conv2d_61_output"],
                 "inputs": ["conv2d_61_pad_before_output"],
@@ -1345,23 +1684,30 @@
                     "conv2d_61_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 3584,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.9255000427365303,
+                "counters": [],
+                "percentage": 0.6122742615071491,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_61",
+            "c_id": 49,
             "weight_sparsity": [
                 0.005681818181818232,
                 2816,
                 16
             ],
-            "layer_type": "conv2d",
             "m_id": 62
         },
         {
             "next": "eltwise_64",
-            "rom": 33280,
             "op_by_type": {"smul_s8_s8": 5505152},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 5505152,
-            "name": "conv2d_63",
-            "c_id": 50,
             "tensors": {
                 "outputs": ["conv2d_63_output"],
                 "inputs": ["conv2d_61_output"],
@@ -1371,23 +1717,30 @@
                     "conv2d_63_bias"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 33280,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 3.774875193834305,
+                "counters": [],
+                "percentage": 2.4973082818587407,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_63",
+            "c_id": 50,
             "weight_sparsity": [
                 0.009879620622568086,
                 32896,
                 325
             ],
-            "layer_type": "conv2d",
             "m_id": 63
         },
         {
             "next": "conv2d_65",
-            "rom": 0,
             "op_by_type": {"op_s8_s8": 21504},
             "c_forward": "forward_eltwise_integer_INT8",
-            "c_code_emit": true,
             "macc": 21504,
-            "name": "eltwise_64",
-            "c_id": 51,
             "tensors": {
                 "outputs": ["eltwise_64_output"],
                 "inputs": [
@@ -1397,23 +1750,30 @@
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "eltwise_integer/sum",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.04125000163912773,
+                "counters": [],
+                "percentage": 0.02728937128526481,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "eltwise_64",
+            "c_id": 51,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "eltwise_integer/sum",
             "m_id": 64
         },
         {
             "next": "conv2d_67_pad_before",
-            "rom": 34048,
             "op_by_type": {"smul_s8_s8": 5591296},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 5591296,
-            "name": "conv2d_65",
-            "c_id": 52,
             "tensors": {
                 "outputs": ["conv2d_65_output"],
                 "inputs": ["eltwise_64_output"],
@@ -1427,46 +1787,60 @@
                     "conv2d_65_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 34048,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 4.088875204324722,
+                "counters": [],
+                "percentage": 2.705038282570354,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_65",
+            "c_id": 52,
             "weight_sparsity": [
                 0.008533653846153899,
                 33280,
                 284
             ],
-            "layer_type": "conv2d",
             "m_id": 66
         },
         {
             "next": "conv2d_67",
-            "rom": 0,
             "op_by_type": {"smul_s8_s8": 0},
             "c_forward": "forward_pad",
-            "c_code_emit": true,
             "macc": 0,
-            "name": "conv2d_67_pad_before",
-            "c_id": 53,
             "tensors": {
                 "outputs": ["conv2d_67_pad_before_output"],
                 "inputs": ["conv2d_65_output"],
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "pad",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.010125000611878932,
+                "counters": [],
+                "percentage": 0.006698300363193398,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_67_pad_before",
+            "c_id": 53,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "pad",
             "m_id": 68
         },
         {
             "next": "conv2d_69",
-            "rom": 3584,
             "op_by_type": {"smul_s8_s8": 473344},
             "c_forward": "forward_dw_3x3_sssa8_ch",
-            "c_code_emit": true,
             "macc": 473344,
-            "name": "conv2d_67",
-            "c_id": 54,
             "tensors": {
                 "outputs": ["conv2d_67_output"],
                 "inputs": ["conv2d_67_pad_before_output"],
@@ -1480,23 +1854,30 @@
                     "conv2d_67_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 3584,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.9978750422596931,
+                "counters": [],
+                "percentage": 0.6601547016350594,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_67",
+            "c_id": 54,
             "weight_sparsity": [
                 0.006036931818181768,
                 2816,
                 17
             ],
-            "layer_type": "conv2d",
             "m_id": 68
         },
         {
             "next": "eltwise_70",
-            "rom": 33280,
             "op_by_type": {"smul_s8_s8": 5505152},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 5505152,
-            "name": "conv2d_69",
-            "c_id": 55,
             "tensors": {
                 "outputs": ["conv2d_69_output"],
                 "inputs": ["conv2d_67_output"],
@@ -1506,23 +1887,30 @@
                     "conv2d_69_bias"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 33280,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 3.570125162601471,
+                "counters": [],
+                "percentage": 2.361853750926496,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_69",
+            "c_id": 55,
             "weight_sparsity": [
                 0.010001215953307385,
                 32896,
                 329
             ],
-            "layer_type": "conv2d",
             "m_id": 69
         },
         {
             "next": "conv2d_71",
-            "rom": 0,
             "op_by_type": {"op_s8_s8": 21504},
             "c_forward": "forward_eltwise_integer_INT8",
-            "c_code_emit": true,
             "macc": 21504,
-            "name": "eltwise_70",
-            "c_id": 56,
             "tensors": {
                 "outputs": ["eltwise_70_output"],
                 "inputs": [
@@ -1532,23 +1920,30 @@
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "eltwise_integer/sum",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.040750001557171345,
+                "counters": [],
+                "percentage": 0.02695859098618652,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "eltwise_70",
+            "c_id": 56,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "eltwise_integer/sum",
             "m_id": 70
         },
         {
             "next": "conv2d_73_pad_before",
-            "rom": 34048,
             "op_by_type": {"smul_s8_s8": 5591296},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 5591296,
-            "name": "conv2d_71",
-            "c_id": 57,
             "tensors": {
                 "outputs": ["conv2d_71_output"],
                 "inputs": ["eltwise_70_output"],
@@ -1562,46 +1957,60 @@
                     "conv2d_71_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 34048,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 3.998875230550766,
+                "counters": [],
+                "percentage": 2.645497855845815,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_71",
+            "c_id": 57,
             "weight_sparsity": [
                 0.009795673076923084,
                 33280,
                 326
             ],
-            "layer_type": "conv2d",
             "m_id": 72
         },
         {
             "next": "conv2d_73",
-            "rom": 0,
             "op_by_type": {"smul_s8_s8": 0},
             "c_forward": "forward_pad",
-            "c_code_emit": true,
             "macc": 0,
-            "name": "conv2d_73_pad_before",
-            "c_id": 58,
             "tensors": {
                 "outputs": ["conv2d_73_pad_before_output"],
                 "inputs": ["conv2d_71_output"],
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "pad",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.010500000440515578,
+                "counters": [],
+                "percentage": 0.006946385433470562,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_73_pad_before",
+            "c_id": 58,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "pad",
             "m_id": 74
         },
         {
             "next": "conv2d_75",
-            "rom": 3584,
             "op_by_type": {"smul_s8_s8": 473344},
             "c_forward": "forward_dw_3x3_sssa8_ch",
-            "c_code_emit": true,
             "macc": 473344,
-            "name": "conv2d_73",
-            "c_id": 59,
             "tensors": {
                 "outputs": ["conv2d_73_output"],
                 "inputs": ["conv2d_73_pad_before_output"],
@@ -1615,23 +2024,30 @@
                     "conv2d_73_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 3584,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 1.0667500719428062,
+                "counters": [],
+                "percentage": 0.7057197000015868,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_73",
+            "c_id": 59,
             "weight_sparsity": [
                 0.0074573863636363535,
                 2816,
                 21
             ],
-            "layer_type": "conv2d",
             "m_id": 74
         },
         {
             "next": "eltwise_76",
-            "rom": 33280,
             "op_by_type": {"smul_s8_s8": 5505152},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 5505152,
-            "name": "conv2d_75",
-            "c_id": 60,
             "tensors": {
                 "outputs": ["conv2d_75_output"],
                 "inputs": ["conv2d_73_output"],
@@ -1641,23 +2057,30 @@
                     "conv2d_75_bias"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 33280,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 3.1027501821517944,
+                "counters": [],
+                "percentage": 2.0526569299780957,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_75",
+            "c_id": 60,
             "weight_sparsity": [
                 0.009970817120622533,
                 32896,
                 328
             ],
-            "layer_type": "conv2d",
             "m_id": 75
         },
         {
             "next": "conv2d_77",
-            "rom": 0,
             "op_by_type": {"op_s8_s8": 21504},
             "c_forward": "forward_eltwise_integer_INT8",
-            "c_code_emit": true,
             "macc": 21504,
-            "name": "eltwise_76",
-            "c_id": 61,
             "tensors": {
                 "outputs": ["eltwise_76_output"],
                 "inputs": [
@@ -1667,23 +2090,30 @@
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "eltwise_integer/sum",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.041375001426786184,
+                "counters": [],
+                "percentage": 0.02737206620600283,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "eltwise_76",
+            "c_id": 61,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "eltwise_integer/sum",
             "m_id": 76
         },
         {
             "next": "conv2d_80_pad_before",
-            "rom": 68096,
             "op_by_type": {"smul_s8_s8": 11182592},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 11182592,
-            "name": "conv2d_77",
-            "c_id": 62,
             "tensors": {
                 "outputs": ["conv2d_77_output"],
                 "inputs": ["eltwise_76_output"],
@@ -1697,46 +2127,60 @@
                     "conv2d_77_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 68096,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 7.385125398635864,
+                "counters": [],
+                "percentage": 4.885707175353097,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_77",
+            "c_id": 62,
             "weight_sparsity": [
                 0.008608774038461497,
                 66560,
                 573
             ],
-            "layer_type": "conv2d",
             "m_id": 78
         },
         {
             "next": "conv2d_80",
-            "rom": 0,
             "op_by_type": {"smul_s8_s8": 0},
             "c_forward": "forward_pad",
-            "c_code_emit": true,
             "macc": 0,
-            "name": "conv2d_80_pad_before",
-            "c_id": 63,
             "tensors": {
                 "outputs": ["conv2d_80_pad_before_output"],
                 "inputs": ["conv2d_77_output"],
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "pad",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.014250000473111868,
+                "counters": [],
+                "percentage": 0.009427237291478858,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_80_pad_before",
+            "c_id": 63,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "pad",
             "m_id": 81
         },
         {
             "next": "conv2d_82",
-            "rom": 7168,
             "op_by_type": {"smul_s8_s8": 237056},
             "c_forward": "forward_dw_3x3_sssa8_ch",
-            "c_code_emit": true,
             "macc": 237056,
-            "name": "conv2d_80",
-            "c_id": 64,
             "tensors": {
                 "outputs": ["conv2d_80_output"],
                 "inputs": ["conv2d_80_pad_before_output"],
@@ -1750,23 +2194,30 @@
                     "conv2d_80_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 7168,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.5067500248551369,
+                "counters": [],
+                "percentage": 0.33524579460795934,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_80",
+            "c_id": 64,
             "weight_sparsity": [
                 0.0042613636363636465,
                 5632,
                 24
             ],
-            "layer_type": "conv2d",
             "m_id": 79
         },
         {
             "next": "conv2d_83",
-            "rom": 66048,
             "op_by_type": {"smul_s8_s8": 2752640},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 2752640,
-            "name": "conv2d_82",
-            "c_id": 65,
             "tensors": {
                 "outputs": ["conv2d_82_output"],
                 "inputs": ["conv2d_80_output"],
@@ -1776,23 +2227,30 @@
                     "conv2d_82_bias"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 66048,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 1.6365000903606415,
+                "counters": [],
+                "percentage": 1.082643801203139,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_82",
+            "c_id": 65,
             "weight_sparsity": [
                 0.010766934697855723,
                 65664,
                 707
             ],
-            "layer_type": "conv2d",
             "m_id": 82
         },
         {
             "next": "conv2d_85_pad_before",
-            "rom": 34048,
             "op_by_type": {"smul_s8_s8": 1398016},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 1398016,
-            "name": "conv2d_83",
-            "c_id": 66,
             "tensors": {
                 "outputs": ["conv2d_83_output"],
                 "inputs": ["conv2d_82_output"],
@@ -1806,46 +2264,60 @@
                     "conv2d_83_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 34048,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.8623750507831573,
+                "counters": [],
+                "percentage": 0.5705132609170077,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_83",
+            "c_id": 66,
             "weight_sparsity": [
                 0.008323317307692313,
                 33280,
                 277
             ],
-            "layer_type": "conv2d",
             "m_id": 84
         },
         {
             "next": "conv2d_85",
-            "rom": 0,
             "op_by_type": {"smul_s8_s8": 0},
             "c_forward": "forward_pad",
-            "c_code_emit": true,
             "macc": 0,
-            "name": "conv2d_85_pad_before",
-            "c_id": 67,
             "tensors": {
                 "outputs": ["conv2d_85_pad_before_output"],
                 "inputs": ["conv2d_83_output"],
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "pad",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.005625000223517418,
+                "counters": [],
+                "percentage": 0.0037212779025361103,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_85_pad_before",
+            "c_id": 67,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "pad",
             "m_id": 86
         },
         {
             "next": "conv2d_87",
-            "rom": 3584,
             "op_by_type": {"smul_s8_s8": 118528},
             "c_forward": "forward_dw_3x3_sssa8_ch",
-            "c_code_emit": true,
             "macc": 118528,
-            "name": "conv2d_85",
-            "c_id": 68,
             "tensors": {
                 "outputs": ["conv2d_85_output"],
                 "inputs": ["conv2d_85_pad_before_output"],
@@ -1859,23 +2331,30 @@
                     "conv2d_85_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 3584,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.2351250108331442,
+                "counters": [],
+                "percentage": 0.15554941731181138,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_85",
+            "c_id": 68,
             "weight_sparsity": [
                 0.007102272727272707,
                 2816,
                 20
             ],
-            "layer_type": "conv2d",
             "m_id": 86
         },
         {
             "next": "eltwise_88",
-            "rom": 33280,
             "op_by_type": {"smul_s8_s8": 1376384},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 1376384,
-            "name": "conv2d_87",
-            "c_id": 69,
             "tensors": {
                 "outputs": ["conv2d_87_output"],
                 "inputs": ["conv2d_85_output"],
@@ -1885,23 +2364,30 @@
                     "conv2d_87_bias"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 33280,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.7731250301003456,
+                "counters": [],
+                "percentage": 0.5114689735267124,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_87",
+            "c_id": 69,
             "weight_sparsity": [
                 0.01085238326848248,
                 32896,
                 357
             ],
-            "layer_type": "conv2d",
             "m_id": 87
         },
         {
             "next": "conv2d_89",
-            "rom": 0,
             "op_by_type": {"op_s8_s8": 5376},
             "c_forward": "forward_eltwise_integer_INT8",
-            "c_code_emit": true,
             "macc": 5376,
-            "name": "eltwise_88",
-            "c_id": 70,
             "tensors": {
                 "outputs": ["eltwise_88_output"],
                 "inputs": [
@@ -1911,23 +2397,30 @@
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "eltwise_integer/sum",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.011500000604428351,
+                "counters": [],
+                "percentage": 0.007607946031627144,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "eltwise_88",
+            "c_id": 70,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "eltwise_integer/sum",
             "m_id": 88
         },
         {
             "next": "conv2d_91_pad_before",
-            "rom": 34048,
             "op_by_type": {"smul_s8_s8": 1398016},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 1398016,
-            "name": "conv2d_89",
-            "c_id": 71,
             "tensors": {
                 "outputs": ["conv2d_89_output"],
                 "inputs": ["eltwise_88_output"],
@@ -1941,46 +2434,60 @@
                     "conv2d_89_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 34048,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 1.0252500623464584,
+                "counters": [],
+                "percentage": 0.67826493332971,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_89",
+            "c_id": 71,
             "weight_sparsity": [
                 0.009224759615384603,
                 33280,
                 307
             ],
-            "layer_type": "conv2d",
             "m_id": 90
         },
         {
             "next": "conv2d_91",
-            "rom": 0,
             "op_by_type": {"smul_s8_s8": 0},
             "c_forward": "forward_pad",
-            "c_code_emit": true,
             "macc": 0,
-            "name": "conv2d_91_pad_before",
-            "c_id": 72,
             "tensors": {
                 "outputs": ["conv2d_91_pad_before_output"],
                 "inputs": ["conv2d_89_output"],
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "pad",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.0050000002374872565,
+                "counters": [],
+                "percentage": 0.003307802605704024,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_91_pad_before",
+            "c_id": 72,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "pad",
             "m_id": 92
         },
         {
             "next": "conv2d_93",
-            "rom": 3584,
             "op_by_type": {"smul_s8_s8": 118528},
             "c_forward": "forward_dw_3x3_sssa8_ch",
-            "c_code_emit": true,
             "macc": 118528,
-            "name": "conv2d_91",
-            "c_id": 73,
             "tensors": {
                 "outputs": ["conv2d_91_output"],
                 "inputs": ["conv2d_91_pad_before_output"],
@@ -1994,23 +2501,30 @@
                     "conv2d_91_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 3584,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.2212500125169754,
+                "counters": [],
+                "percentage": 0.14637026663092523,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_91",
+            "c_id": 73,
             "weight_sparsity": [
                 0.0074573863636363535,
                 2816,
                 21
             ],
-            "layer_type": "conv2d",
             "m_id": 92
         },
         {
             "next": "eltwise_94",
-            "rom": 33280,
             "op_by_type": {"smul_s8_s8": 1376384},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 1376384,
-            "name": "conv2d_93",
-            "c_id": 74,
             "tensors": {
                 "outputs": ["conv2d_93_output"],
                 "inputs": ["conv2d_91_output"],
@@ -2020,23 +2534,30 @@
                     "conv2d_93_bias"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 33280,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.8303750455379486,
+                "counters": [],
+                "percentage": 0.5493433217759971,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_93",
+            "c_id": 74,
             "weight_sparsity": [
                 0.010366001945525283,
                 32896,
                 341
             ],
-            "layer_type": "conv2d",
             "m_id": 93
         },
         {
             "next": "conv2d_95",
-            "rom": 0,
             "op_by_type": {"op_s8_s8": 5376},
             "c_forward": "forward_eltwise_integer_INT8",
-            "c_code_emit": true,
             "macc": 5376,
-            "name": "eltwise_94",
-            "c_id": 75,
             "tensors": {
                 "outputs": ["eltwise_94_output"],
                 "inputs": [
@@ -2046,23 +2567,30 @@
                 "scratchs": [],
                 "weights": []
             },
+            "layer_type": "eltwise_integer/sum",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.011375000700354576,
+                "counters": [],
+                "percentage": 0.007525251033873349,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "eltwise_94",
+            "c_id": 75,
             "weight_sparsity": [
                 0,
                 1,
                 0
             ],
-            "layer_type": "eltwise_integer/sum",
             "m_id": 94
         },
         {
             "next": "conv2d_97",
-            "rom": 68096,
             "op_by_type": {"smul_s8_s8": 2796032},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 2796032,
-            "name": "conv2d_95",
-            "c_id": 76,
             "tensors": {
                 "outputs": ["conv2d_95_output"],
                 "inputs": ["eltwise_94_output"],
@@ -2076,23 +2604,30 @@
                     "conv2d_95_alpha"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 68096,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 1.9963751137256622,
+                "counters": [],
+                "percentage": 1.320722897897911,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_95",
+            "c_id": 76,
             "weight_sparsity": [
                 0.008308293269230771,
                 66560,
                 553
             ],
-            "layer_type": "conv2d",
             "m_id": 96
         },
         {
             "next": "conv2d_98",
-            "rom": 23552,
             "op_by_type": {"smul_s8_s8": 22016},
             "c_forward": "forward_dw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 22016,
-            "name": "conv2d_97",
-            "c_id": 77,
             "tensors": {
                 "outputs": ["conv2d_97_output"],
                 "inputs": ["conv2d_95_output"],
@@ -2102,23 +2637,30 @@
                     "conv2d_97_bias"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 23552,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.0703750029206276,
+                "counters": [],
+                "percentage": 0.04655732139610194,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_97",
+            "c_id": 77,
             "weight_sparsity": [
                 0.029115188953488413,
                 22016,
                 641
             ],
-            "layer_type": "conv2d",
             "m_id": 97
         },
         {
             "next": "conv2d_98",
-            "rom": 66048,
             "op_by_type": {"smul_s8_s8": 65664},
             "c_forward": "forward_pw_sssa8_ch",
-            "c_code_emit": true,
             "macc": 65664,
-            "name": "conv2d_98",
-            "c_id": 78,
             "tensors": {
                 "outputs": ["conv2d_98_output"],
                 "inputs": ["conv2d_97_output"],
@@ -2128,12 +2670,23 @@
                     "conv2d_98_bias"
                 ]
             },
+            "layer_type": "conv2d",
+            "rom": 66048,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.10212500393390656,
+                "counters": [],
+                "percentage": 0.06756186761500545,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conv2d_98",
+            "c_id": 78,
             "weight_sparsity": [
                 0.011939571150097472,
                 65664,
                 784
             ],
-            "layer_type": "conv2d",
             "m_id": 98
         }
     ],
@@ -49464,7 +50017,7 @@
         }
     ],
     "c_activations_count": 1,
-    "date_time": "Sun Jul  7 14:08:55 2024",
+    "date_time": "Mon Jul  8 22:11:50 2024",
     "model_name": "mobilefacenet_int8",
     "tool_version": {
         "major": 1,
@@ -49482,10 +50035,8 @@
     "c_weights_count": 1,
     "weights": {"weights_array": {
         "buffer_data_size": 1019136,
-        "buffer_crc": 0,
         "pool_size": 1019136,
-        "buffer_c_type": "u64",
-        "buffer_c_name": "s_network_1_weights_array_u64",
+        "buffer_c_name": "NULL",
         "buffer_offsets": [
             {
                 "lite_tag": null,
@@ -50419,10 +50970,8 @@
                 "buffer_name": "conv2d_80_alpha_array"
             }
         ],
-        "buffer_c_name_addr": "s_network_1_weights_array_u64",
-        "buffer_c_count": 127392,
-        "pool_id": 0,
-        "buffer_c_data": []
+        "buffer_c_name_addr": "NULL",
+        "pool_id": 0
     }},
     "memory_footprint": {
         "kernel_ram": 34204,
@@ -51593,6 +52142,12 @@
         "buffer_c_name_addr": "NULL",
         "pool_id": 0
     }},
+    "exec_time": {
+        "duration_ms": 151.15775738446973,
+        "cycles_by_macc": 0,
+        "cycles": 0,
+        "device": "AMD64 AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD (Windows)"
+    },
     "c_arrays_n": 296,
     "c_name": "network_1",
     "memory_pools": []

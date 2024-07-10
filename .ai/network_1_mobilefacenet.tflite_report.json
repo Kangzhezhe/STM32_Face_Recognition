@@ -1,7 +1,7 @@
 {
     "_allocate_inputs": 4,
     "_allocate_outputs": 4,
-    "cli_parameters": "validate --name network_1 -m D:/linux/MobileFaceNet_Pytorch/mobilefacenet.tflite --type tflite --compression none --verbosity 1 --workspace C:\\Users\\19178\\AppData\\Local\\Temp\\mxAI_workspace6120440348340018130655307962145126 --output C:\\Users\\19178\\.stm32cubemx\\network_output --allocate-inputs --allocate-outputs",
+    "cli_parameters": "analyze --name network_1 -m D:/linux/MobileFaceNet_Pytorch/model/mobilefacenet.tflite --type tflite --compression none --verbosity 1 --workspace C:\\Users\\19178\\AppData\\Local\\Temp\\mxAI_workspace452625007750008892464595409174554 --output C:\\Users\\19178\\.stm32cubemx\\network_output --allocate-inputs --series stm32h7 --allocate-outputs",
     "cli_version": {
         "major": 1,
         "micro": 0,
@@ -13,12 +13,12 @@
         "factor": null,
         "layers": {}
     },
-    "date_time": "Mon Jul  1 11:00:41 2024",
+    "date_time": "Sun Jul  7 22:31:54 2024",
     "error": 0,
     "error_str": [],
-    "exec_cmd": "validate",
+    "exec_cmd": "analyze",
     "exec_duration": 0.0,
-    "hash": "d773603dada1adbdbd2e118acf55fa3c",
+    "hash": "45f85e8a5c366c55cf09d0e5f065bc08",
     "inputs": [
         "serving_default_input_10"
     ],
@@ -72,7 +72,7 @@
             "extras": {
                 "n_macc": 4644928,
                 "n_params": 1792,
-                "psize": 1984,
+                "psize": 7168,
                 "rom_output": {
                     "c_size": 688128,
                     "fmt": {
@@ -192,7 +192,7 @@
             "extras": {
                 "n_macc": 22020224,
                 "n_params": 8320,
-                "psize": 8704,
+                "psize": 33280,
                 "rom_output": {
                     "c_size": 1376256,
                     "fmt": {
@@ -268,7 +268,7 @@
             "extras": {
                 "n_macc": 774272,
                 "n_params": 1280,
-                "psize": 1664,
+                "psize": 5120,
                 "rom_output": {
                     "c_size": 344064,
                     "fmt": {
@@ -328,7 +328,7 @@
             "extras": {
                 "n_macc": 5505088,
                 "n_params": 8256,
-                "psize": 8448,
+                "psize": 33024,
                 "rom_output": {
                     "c_size": 172032,
                     "fmt": {
@@ -358,7 +358,7 @@
             "extras": {
                 "n_macc": 5505152,
                 "n_params": 8320,
-                "psize": 8704,
+                "psize": 33280,
                 "rom_output": {
                     "c_size": 344064,
                     "fmt": {
@@ -418,7 +418,7 @@
             "extras": {
                 "n_macc": 774272,
                 "n_params": 1280,
-                "psize": 1664,
+                "psize": 5120,
                 "rom_output": {
                     "c_size": 344064,
                     "fmt": {
@@ -478,7 +478,7 @@
             "extras": {
                 "n_macc": 5505088,
                 "n_params": 8256,
-                "psize": 8448,
+                "psize": 33024,
                 "rom_output": {
                     "c_size": 172032,
                     "fmt": {
@@ -539,7 +539,7 @@
             "extras": {
                 "n_macc": 5505152,
                 "n_params": 8320,
-                "psize": 8704,
+                "psize": 33280,
                 "rom_output": {
                     "c_size": 344064,
                     "fmt": {
@@ -599,7 +599,7 @@
             "extras": {
                 "n_macc": 774272,
                 "n_params": 1280,
-                "psize": 1664,
+                "psize": 5120,
                 "rom_output": {
                     "c_size": 344064,
                     "fmt": {
@@ -659,7 +659,7 @@
             "extras": {
                 "n_macc": 5505088,
                 "n_params": 8256,
-                "psize": 8448,
+                "psize": 33024,
                 "rom_output": {
                     "c_size": 172032,
                     "fmt": {
@@ -720,7 +720,7 @@
             "extras": {
                 "n_macc": 5505152,
                 "n_params": 8320,
-                "psize": 8704,
+                "psize": 33280,
                 "rom_output": {
                     "c_size": 344064,
                     "fmt": {
@@ -780,7 +780,7 @@
             "extras": {
                 "n_macc": 774272,
                 "n_params": 1280,
-                "psize": 1664,
+                "psize": 5120,
                 "rom_output": {
                     "c_size": 344064,
                     "fmt": {
@@ -840,7 +840,7 @@
             "extras": {
                 "n_macc": 5505088,
                 "n_params": 8256,
-                "psize": 8448,
+                "psize": 33024,
                 "rom_output": {
                     "c_size": 172032,
                     "fmt": {
@@ -901,7 +901,7 @@
             "extras": {
                 "n_macc": 5505152,
                 "n_params": 8320,
-                "psize": 8704,
+                "psize": 33280,
                 "rom_output": {
                     "c_size": 344064,
                     "fmt": {
@@ -961,7 +961,7 @@
             "extras": {
                 "n_macc": 774272,
                 "n_params": 1280,
-                "psize": 1664,
+                "psize": 5120,
                 "rom_output": {
                     "c_size": 344064,
                     "fmt": {
@@ -1021,7 +1021,7 @@
             "extras": {
                 "n_macc": 5505088,
                 "n_params": 8256,
-                "psize": 8448,
+                "psize": 33024,
                 "rom_output": {
                     "c_size": 172032,
                     "fmt": {
@@ -1082,7 +1082,7 @@
             "extras": {
                 "n_macc": 11010304,
                 "n_params": 16640,
-                "psize": 17408,
+                "psize": 66560,
                 "rom_output": {
                     "c_size": 688128,
                     "fmt": {
@@ -1158,7 +1158,7 @@
             "extras": {
                 "n_macc": 387328,
                 "n_params": 2560,
-                "psize": 3328,
+                "psize": 10240,
                 "rom_output": {
                     "c_size": 172032,
                     "fmt": {
@@ -1218,7 +1218,7 @@
             "extras": {
                 "n_macc": 5505152,
                 "n_params": 32896,
-                "psize": 33280,
+                "psize": 131584,
                 "rom_output": {
                     "c_size": 86016,
                     "fmt": {
@@ -1248,7 +1248,7 @@
             "extras": {
                 "n_macc": 5505280,
                 "n_params": 33024,
-                "psize": 33792,
+                "psize": 132096,
                 "rom_output": {
                     "c_size": 172032,
                     "fmt": {
@@ -1308,7 +1308,7 @@
             "extras": {
                 "n_macc": 387328,
                 "n_params": 2560,
-                "psize": 3328,
+                "psize": 10240,
                 "rom_output": {
                     "c_size": 172032,
                     "fmt": {
@@ -1368,7 +1368,7 @@
             "extras": {
                 "n_macc": 5505152,
                 "n_params": 32896,
-                "psize": 33280,
+                "psize": 131584,
                 "rom_output": {
                     "c_size": 86016,
                     "fmt": {
@@ -1429,7 +1429,7 @@
             "extras": {
                 "n_macc": 5505280,
                 "n_params": 33024,
-                "psize": 33792,
+                "psize": 132096,
                 "rom_output": {
                     "c_size": 172032,
                     "fmt": {
@@ -1489,7 +1489,7 @@
             "extras": {
                 "n_macc": 387328,
                 "n_params": 2560,
-                "psize": 3328,
+                "psize": 10240,
                 "rom_output": {
                     "c_size": 172032,
                     "fmt": {
@@ -1549,7 +1549,7 @@
             "extras": {
                 "n_macc": 5505152,
                 "n_params": 32896,
-                "psize": 33280,
+                "psize": 131584,
                 "rom_output": {
                     "c_size": 86016,
                     "fmt": {
@@ -1610,7 +1610,7 @@
             "extras": {
                 "n_macc": 5505280,
                 "n_params": 33024,
-                "psize": 33792,
+                "psize": 132096,
                 "rom_output": {
                     "c_size": 172032,
                     "fmt": {
@@ -1670,7 +1670,7 @@
             "extras": {
                 "n_macc": 387328,
                 "n_params": 2560,
-                "psize": 3328,
+                "psize": 10240,
                 "rom_output": {
                     "c_size": 172032,
                     "fmt": {
@@ -1730,7 +1730,7 @@
             "extras": {
                 "n_macc": 5505152,
                 "n_params": 32896,
-                "psize": 33280,
+                "psize": 131584,
                 "rom_output": {
                     "c_size": 86016,
                     "fmt": {
@@ -1791,7 +1791,7 @@
             "extras": {
                 "n_macc": 5505280,
                 "n_params": 33024,
-                "psize": 33792,
+                "psize": 132096,
                 "rom_output": {
                     "c_size": 172032,
                     "fmt": {
@@ -1851,7 +1851,7 @@
             "extras": {
                 "n_macc": 387328,
                 "n_params": 2560,
-                "psize": 3328,
+                "psize": 10240,
                 "rom_output": {
                     "c_size": 172032,
                     "fmt": {
@@ -1911,7 +1911,7 @@
             "extras": {
                 "n_macc": 5505152,
                 "n_params": 32896,
-                "psize": 33280,
+                "psize": 131584,
                 "rom_output": {
                     "c_size": 86016,
                     "fmt": {
@@ -1972,7 +1972,7 @@
             "extras": {
                 "n_macc": 5505280,
                 "n_params": 33024,
-                "psize": 33792,
+                "psize": 132096,
                 "rom_output": {
                     "c_size": 172032,
                     "fmt": {
@@ -2032,7 +2032,7 @@
             "extras": {
                 "n_macc": 387328,
                 "n_params": 2560,
-                "psize": 3328,
+                "psize": 10240,
                 "rom_output": {
                     "c_size": 172032,
                     "fmt": {
@@ -2092,7 +2092,7 @@
             "extras": {
                 "n_macc": 5505152,
                 "n_params": 32896,
-                "psize": 33280,
+                "psize": 131584,
                 "rom_output": {
                     "c_size": 86016,
                     "fmt": {
@@ -2153,7 +2153,7 @@
             "extras": {
                 "n_macc": 5505280,
                 "n_params": 33024,
-                "psize": 33792,
+                "psize": 132096,
                 "rom_output": {
                     "c_size": 172032,
                     "fmt": {
@@ -2213,7 +2213,7 @@
             "extras": {
                 "n_macc": 387328,
                 "n_params": 2560,
-                "psize": 3328,
+                "psize": 10240,
                 "rom_output": {
                     "c_size": 172032,
                     "fmt": {
@@ -2273,7 +2273,7 @@
             "extras": {
                 "n_macc": 5505152,
                 "n_params": 32896,
-                "psize": 33280,
+                "psize": 131584,
                 "rom_output": {
                     "c_size": 86016,
                     "fmt": {
@@ -2334,7 +2334,7 @@
             "extras": {
                 "n_macc": 11010560,
                 "n_params": 66048,
-                "psize": 67584,
+                "psize": 264192,
                 "rom_output": {
                     "c_size": 344064,
                     "fmt": {
@@ -2410,7 +2410,7 @@
             "extras": {
                 "n_macc": 194048,
                 "n_params": 5120,
-                "psize": 6656,
+                "psize": 20480,
                 "rom_output": {
                     "c_size": 86016,
                     "fmt": {
@@ -2470,7 +2470,7 @@
             "extras": {
                 "n_macc": 2752640,
                 "n_params": 65664,
-                "psize": 66048,
+                "psize": 262656,
                 "rom_output": {
                     "c_size": 21504,
                     "fmt": {
@@ -2500,7 +2500,7 @@
             "extras": {
                 "n_macc": 1376512,
                 "n_params": 33024,
-                "psize": 33792,
+                "psize": 132096,
                 "rom_output": {
                     "c_size": 43008,
                     "fmt": {
@@ -2560,7 +2560,7 @@
             "extras": {
                 "n_macc": 97024,
                 "n_params": 2560,
-                "psize": 3328,
+                "psize": 10240,
                 "rom_output": {
                     "c_size": 43008,
                     "fmt": {
@@ -2620,7 +2620,7 @@
             "extras": {
                 "n_macc": 1376384,
                 "n_params": 32896,
-                "psize": 33280,
+                "psize": 131584,
                 "rom_output": {
                     "c_size": 21504,
                     "fmt": {
@@ -2681,7 +2681,7 @@
             "extras": {
                 "n_macc": 1376512,
                 "n_params": 33024,
-                "psize": 33792,
+                "psize": 132096,
                 "rom_output": {
                     "c_size": 43008,
                     "fmt": {
@@ -2741,7 +2741,7 @@
             "extras": {
                 "n_macc": 97024,
                 "n_params": 2560,
-                "psize": 3328,
+                "psize": 10240,
                 "rom_output": {
                     "c_size": 43008,
                     "fmt": {
@@ -2801,7 +2801,7 @@
             "extras": {
                 "n_macc": 1376384,
                 "n_params": 32896,
-                "psize": 33280,
+                "psize": 131584,
                 "rom_output": {
                     "c_size": 21504,
                     "fmt": {
@@ -2862,7 +2862,7 @@
             "extras": {
                 "n_macc": 2753024,
                 "n_params": 66048,
-                "psize": 67584,
+                "psize": 264192,
                 "rom_output": {
                     "c_size": 86016,
                     "fmt": {
@@ -2922,7 +2922,7 @@
             "extras": {
                 "n_macc": 22016,
                 "n_params": 22016,
-                "psize": 23552,
+                "psize": 88064,
                 "rom_output": {
                     "c_size": 2048,
                     "fmt": {
@@ -2952,7 +2952,7 @@
             "extras": {
                 "n_macc": 65664,
                 "n_params": 65664,
-                "psize": 66048,
+                "psize": 262656,
                 "rom_output": {
                     "c_size": 512,
                     "fmt": {
@@ -2993,11 +2993,11 @@
         }
     ],
     "model_files": [
-        "D:\\linux\\MobileFaceNet_Pytorch\\mobilefacenet.tflite"
+        "D:\\linux\\MobileFaceNet_Pytorch\\model\\mobilefacenet.tflite"
     ],
     "model_n_params": 989760,
     "model_name": "mobilefacenet",
-    "model_size": 1043520,
+    "model_size": 3959040,
     "model_type": "tflite",
     "name": "network_1",
     "outputs": [
@@ -3042,20 +3042,7 @@
         "micro": 0,
         "minor": 1
     },
-    "val_error": 1.0066707134246826,
-    "val_error_desc": "x-cross (l2r) #1",
-    "val_metrics": [
-        {
-            "acc": "n.a.",
-            "cos": -0.0843380019068718,
-            "desc": "X-cross #1",
-            "l2r": 1.0066707134246826,
-            "mae": 2.587606906890869,
-            "mean": 0.23080186545848846,
-            "nse": -293.59056498276806,
-            "rmse": 3.2727911472320557,
-            "std": 3.265918731689453,
-            "ts_name": "conv2d_98, ai_float, (1,1,1,128), m_id=[98]"
-        }
-    ]
+    "val_error": -1.0,
+    "val_error_desc": "None (None) #-1",
+    "val_metrics": []
 }
