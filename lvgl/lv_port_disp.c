@@ -75,8 +75,8 @@ void lv_port_disp_init(void)
     /* Example 2
     //  * Two buffers for partial rendering
     //  * In flush_cb DMA or similar hardware should be used to update the display in the background.*/
-    // static lv_color_t buf_2_1[MY_DISP_HOR_RES * 10];
-    // static lv_color_t buf_2_2[MY_DISP_HOR_RES * 10];
+    // static lv_color_t buf_2_1[MY_DISP_HOR_RES * 48]__attribute__((section(".RAM_D2")));
+    // static lv_color_t buf_2_2[MY_DISP_HOR_RES * 48]__attribute__((section(".RAM_D2")));
     // lv_display_set_buffers(disp, buf_2_1, buf_2_2, sizeof(buf_2_1), LV_DISPLAY_RENDER_MODE_PARTIAL);
 
     // /* Example 3

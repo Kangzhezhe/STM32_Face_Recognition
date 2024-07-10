@@ -446,6 +446,16 @@ void post_process()
                             int max_index = post_process_facenet();
                             snprintf(logStr,30,"确认身份!");
                             lv_label_set_text(ui_Label4, logStr);
+                            if (score[max_index]<0.4)
+                            {
+                                snprintf(logStr,30,"置信度:%4.2f,请再试一次",score[max_index]);
+                                lv_label_set_text(ui_Label18, logStr);
+                                 _ui_flag_modify(ui_Label18, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+                                xSemaphoreGive(Sem_lvglHandle);
+                                cnt_detected=0;
+                                return;
+                            }
+                            
                             snprintf(logStr,30,"置信度:%4.2f",score[max_index]);
                             lv_label_set_text(ui_Label18, logStr);
                             _ui_flag_modify(ui_Label18, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
@@ -509,9 +519,9 @@ void post_process()
                                     if(cur_persion.id>*cnt-1){
                                         *cnt = cur_persion.id+1;
                                     }     
-																		memcpy(cur_persion.feature+i_feature*128,out_data1,128);
-																		i_feature++;
-																		snprintf(logStr,30,"调整角度再来一次:%d/4",i_feature);
+                                    memcpy(cur_persion.feature+i_feature*128,out_data1,128);
+                                    i_feature++;
+                                    snprintf(logStr,30,"调整角度再来一次:%d/4",i_feature);
                                     xSemaphoreGive(Sem_lvglHandle);
                                 }else if(i_feature<FEATURE_PER_PERSION-1){
                                     memcpy(cur_persion.feature+i_feature*128,out_data1,128);
@@ -520,7 +530,7 @@ void post_process()
                                     lv_label_set_text(ui_Label18, logStr);
                                     xSemaphoreGive(Sem_lvglHandle);
                                 }else {
-																		memcpy(cur_persion.feature+i_feature*128,out_data1,128);
+                                    memcpy(cur_persion.feature+i_feature*128,out_data1,128);
                                     i_feature=0;
                                     memcpy(buf_common,features_buf,128*512);
                                     Flash_Erase_and_Write(FLASH_USER_START_ADDR,(uint32_t*)buf_common,128*512/4);

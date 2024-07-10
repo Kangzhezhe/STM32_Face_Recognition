@@ -567,7 +567,7 @@ void ui_Screen1_screen_init(void)
     ui_Label18 = lv_label_create(ui_Screen1);
     lv_obj_set_width(ui_Label18, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_Label18, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_Label18, -30);
+    lv_obj_set_x(ui_Label18, -35);
     lv_obj_set_y(ui_Label18, -5);
     lv_obj_set_align(ui_Label18, LV_ALIGN_CENTER);
     lv_label_set_text(ui_Label18, "置信度:");
