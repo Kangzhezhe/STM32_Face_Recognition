@@ -209,7 +209,7 @@ typedef struct
 }Persion;
 Persion cur_persion;
 
-
+#define MAX_FEATURE_SIZE 128*512
 #define W_SCALE (255/55)
 #define H_SCALE (255/55)
 uint8_t cnt_detected = 0;
@@ -217,13 +217,13 @@ extern u8 ai_state;
 extern osThreadId myTask_aiHandle;
 char logStr[1024]__attribute__((section(".RW_IRAM1")));
 static int i_feature = 0;
-u8 features_buf[128*512]__attribute__((section(".RAM_D3")));
+u8 features_buf[MAX_FEATURE_SIZE]__attribute__((section(".RAM_D3")));
 u8* get_feature_ptr(int id){
     return  (u8*)features_buf + id*FEATURE_PER_PERSION*128;
 }
 
 int32_t* get_cnt_ptr(){
-    return (int32_t*)((u8*)features_buf + 128*512-4);
+    return (int32_t*)((u8*)features_buf + MAX_FEATURE_SIZE-4);
 }
 
 void prepare_yolo_data()
@@ -297,12 +297,12 @@ double cosine_similarity(int8_t* vec1, int8_t* vec2, int size) {
     return dot_product / (magnitude1 * magnitude2);
 }
 
-double score[2];
-int post_process_facenet(){
+double score[MAX_ID];
+int post_process_facenet(int *second_max_index){
 	for(int i = 0;i<128;i++){
 		out_data1[i] += 10;
 	}
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < MAX_ID; i++)
     {
         // score[i] = cosine_similarity(out_data1, database + i * 128, 128);
         score[i]=0;
@@ -315,11 +315,14 @@ int post_process_facenet(){
     }
 
     int max_index = 0;
-    for (int i = 1; i < 2; i++)
+    for (int i = 1; i < MAX_ID; i++)
     {
         if (score[i] > score[max_index])
         {
+            *second_max_index = max_index;
             max_index = i;
+        } else if (*second_max_index == -1 || score[i] > score[*second_max_index]) {
+            *second_max_index = i;
         }
     }
     return max_index;
@@ -425,7 +428,7 @@ void post_process()
             // sigmod((conf+15)*0.14218327403068542) < 0.7 ==> conf > -9
             snprintf(logStr,13,"conf = %3.2f",conf);
             // LCD_ShowString(10,350,200,16,16,(u8*)logStr);
-			if(conf > 2)
+			if(conf > 3)
 			{
                 lvgl_set_txt(ui_Label4, "识别到人脸");
                 cnt_detected++;
@@ -442,25 +445,29 @@ void post_process()
                         } 
                         if (temp_state == 0)
                         {
-                            Flash_Read(FLASH_USER_START_ADDR,(uint32_t*)features_buf,128*512/4);
-                            int max_index = post_process_facenet();
+                            Flash_Read(FLASH_USER_START_ADDR,(uint32_t*)features_buf,MAX_FEATURE_SIZE/4);
+                            int second_max_index = -1;
+                            int max_index = post_process_facenet(&second_max_index);
                             snprintf(logStr,30,"确认身份!");
                             lv_label_set_text(ui_Label4, logStr);
-                            if (score[max_index]<0.4)
+                            snprintf(logStr,30,"%4.2f",score[second_max_index]);
+                            lv_label_set_text(ui_Labelname,logStr );
+                            snprintf(logStr,30,"%d",max_index);
+                            lv_label_set_text(ui_Labelid, logStr);
+                            if (score[max_index]<0.35||(score[max_index]-score[second_max_index])<0.28)
                             {
-                                snprintf(logStr,30,"置信度:%4.2f,请再试一次",score[max_index]);
+                                snprintf(logStr,30,"置信度:%4.2f,再试一次",score[max_index]);
                                 lv_label_set_text(ui_Label18, logStr);
                                  _ui_flag_modify(ui_Label18, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
                                 xSemaphoreGive(Sem_lvglHandle);
                                 cnt_detected=0;
                                 return;
                             }
-                            
+                           
                             snprintf(logStr,30,"置信度:%4.2f",score[max_index]);
                             lv_label_set_text(ui_Label18, logStr);
                             _ui_flag_modify(ui_Label18, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
-                            snprintf(logStr,30,"%d",max_index);
-                            lv_label_set_text(ui_Labelid, logStr);
+                            
 
                             // TODO 从云端获取数�???
                             Clear_Buffer();
@@ -513,7 +520,7 @@ void post_process()
                            }
                            else{
                                 if(i_feature==0){
-                                    Flash_Read(FLASH_USER_START_ADDR,(uint32_t*)features_buf,128*512/4);
+                                    Flash_Read(FLASH_USER_START_ADDR,(uint32_t*)features_buf,MAX_FEATURE_SIZE/4);
                                     cur_persion.feature =get_feature_ptr(cur_persion.id);
                                     int32_t* cnt = get_cnt_ptr();
                                     if(cur_persion.id>*cnt-1){
@@ -532,14 +539,14 @@ void post_process()
                                 }else {
                                     memcpy(cur_persion.feature+i_feature*128,out_data1,128);
                                     i_feature=0;
-                                    memcpy(buf_common,features_buf,128*512);
-                                    Flash_Erase_and_Write(FLASH_USER_START_ADDR,(uint32_t*)buf_common,128*512/4);
+                                    memcpy(buf_common,features_buf,MAX_FEATURE_SIZE);
+                                    Flash_Erase_and_Write(FLASH_USER_START_ADDR,(uint32_t*)buf_common,MAX_FEATURE_SIZE/4);
                                     //test flash
                                     uint32_t MemoryProgramStatus = 0;
                                     MemoryProgramStatus = 0;
-                                    u8*address=buf_common+128*512;
-                                    Flash_Read(FLASH_USER_START_ADDR,(uint32_t*)address,128*512/4);
-                                    for (int i = 0; i < 128*512; i++)
+                                    u8*address=buf_common+MAX_FEATURE_SIZE;
+                                    Flash_Read(FLASH_USER_START_ADDR,(uint32_t*)address,MAX_FEATURE_SIZE/4);
+                                    for (int i = 0; i < MAX_FEATURE_SIZE; i++)
                                     {
                                         if (features_buf[i] != address[i])
                                         {
