@@ -18,22 +18,27 @@ void Clear_Buffer(void)
 }
 
 void L610_test(void){
-    printf("ATI\r\n");
-	HAL_Delay(1000);
-	strx=strstr((const char*)RxBuffer,(const char*)"Fibocom");
-	if(strx==NULL)
-	{
+    
 	Clear_Buffer();
-	// printf("Fall\r\n");
-	// HAL_Delay(1000);
+	while(strx==NULL){
+		printf("ATI\r\n");
+		HAL_Delay(1000);
+		strx=strstr((const char*)RxBuffer,(const char*)"Fibocom");
+		Clear_Buffer();
 	}
-	else
-	{
-	Clear_Buffer();
-	// printf("Success\r\n");
-	// HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_13);
-	// HAL_Delay(1000);
-	}
+//	if(strx==NULL)
+//	{
+//	Clear_Buffer();
+//	// printf("Fall\r\n");
+//	// HAL_Delay(1000);
+//	}
+//	else
+//	{
+//	Clear_Buffer();
+//	 //printf("Success\r\n");
+//	// HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_13);
+//	// HAL_Delay(1000);
+//	}
     printf("AT+MIPCALL=1\r\n");
 	HAL_Delay(1000);
 	strx=strstr((const char*)RxBuffer,(const char*)"+MIPCALL:");

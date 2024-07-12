@@ -3,5 +3,6 @@
 
 #include "main.h"
 extern uint8_t Res;
+extern char *strx;
 void L610_test(void);
 #endif

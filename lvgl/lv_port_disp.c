@@ -124,7 +124,6 @@ static void disp_flush(lv_display_t * disp_drv, const lv_area_t * area, uint8_t 
         if(disp_flush_enabled) {
             /*The most simple case (but also the slowest) to put all pixels to the screen one-by-one*/
 
-        
             LCD_Color_Fill(area->x1,area->y1,area->x2,area->y2,(uint16_t*)px_map);  
                 //u16* px_16 = (u16*)px_map;
 

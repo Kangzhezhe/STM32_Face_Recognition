@@ -195,8 +195,6 @@ uint16_t isok=0;
 u8 get_state();
 void set_state(u8 temp);
 
-#define FEATURE_PER_PERSION 4
-#define MAX_ID 128
 typedef struct 
 {
     int32_t id;
@@ -210,6 +208,8 @@ typedef struct
 Persion cur_persion;
 
 #define MAX_FEATURE_SIZE 128*512
+#define FEATURE_PER_PERSION 4
+#define MAX_ID 128
 #define W_SCALE (255/55)
 #define H_SCALE (255/55)
 uint8_t cnt_detected = 0;
@@ -334,7 +334,7 @@ extern osSemaphoreId Sem_lvglHandle;
 extern osSemaphoreId Sem_imgbufHandle;
 extern osSemaphoreId Sem_stateHandle;
 extern osThreadId myTask_measureHandle;
-void HAL_DCMI_VsyncEventCallback(DCMI_HandleTypeDef *hdcmi)
+void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
 {
     
 //     HAL_DCMI_Suspend(hdcmi);
@@ -410,6 +410,25 @@ void lvgl_set_txt(lv_obj_t * label, char * txt){
     } 
 }
 
+void parseAndGetValue(char *buffer, char *keyword, char *result) {
+    char *q = strstr(buffer, keyword);
+    if (q != NULL) {
+        char *start = strchr(q, ':') + 1;
+        char *end = strchr(start, ',');
+        if (end == NULL) {
+            end = strchr(start, '\"');
+            if (end == NULL) {
+                end = strchr(start, '\0');
+            }
+        }
+        int length = end - start;
+        strncpy(result, start, length);
+        result[length] = '\0';
+    } else {
+        result[0] = '\0'; // Set result to empty string if keyword not found
+    }
+}
+
 extern char RxBuffer[200],Rxcouter;
 void Clear_Buffer(void);
 void post_process()
@@ -428,7 +447,7 @@ void post_process()
             // sigmod((conf+15)*0.14218327403068542) < 0.7 ==> conf > -9
             snprintf(logStr,13,"conf = %3.2f",conf);
             // LCD_ShowString(10,350,200,16,16,(u8*)logStr);
-			if(conf > 3)
+			if(conf > 2.8)
 			{
                 lvgl_set_txt(ui_Label4, "识别到人脸");
                 cnt_detected++;
@@ -454,7 +473,7 @@ void post_process()
                             lv_label_set_text(ui_Labelname,logStr );
                             snprintf(logStr,30,"%d",max_index);
                             lv_label_set_text(ui_Labelid, logStr);
-                            if (score[max_index]<0.35||(score[max_index]-score[second_max_index])<0.28)
+                            if (score[max_index]<0.35||(score[max_index]-score[second_max_index])<0.25)
                             {
                                 snprintf(logStr,30,"置信度:%4.2f,再试一次",score[max_index]);
                                 lv_label_set_text(ui_Label18, logStr);
@@ -470,35 +489,52 @@ void post_process()
                             
 
                             // TODO 从云端获取数�???
+                            snprintf(logStr,30,"正在连接云端");
+                            lv_label_set_text(ui_Label4, logStr);
+                            xSemaphoreGive(Sem_lvglHandle);
+
                             Clear_Buffer();
                             printf("AT+HMPUB=1,\"$oc/devices/6685084786799a26c45e16f9_L610/sys/properties/report\",59,\"{\\\"services\\\":[{\\\"service_id\\\":\\\"%d\\\",\\\"properties\\\":{\\\"faceid\\\":%d}}]}\"\r\n",cur_persion.id+1,cur_persion.id+1);
-                            HAL_Delay(100);
+                            HAL_Delay(1000);
                             Clear_Buffer();
                             printf("AT+HMPUB=1,\"/test/M2M/aa\",8,\"faceid:%d\"\r\n",cur_persion.id+1);
-                            Clear_Buffer();
                             HAL_Delay(1000);
-                            //处理信息
-                            if (strstr((char*)&RxBuffer[0], "test/M2M"))
+                            strx = strstr((char*)&RxBuffer[0], "test/M2M/hh");
+                            
+                            while (strx==NULL)
                             {
-                                char* q = NULL;
-                                q = strstr((char*)&RxBuffer[0], "xingming");
-                                strncpy(cur_persion.name, q + 9, 9);
-                                cur_persion.name[9] = '\0';
-                                q = strstr((char*)&RxBuffer[0], "xingbie");
-                                strncpy(cur_persion.sex, q + 8, 3);
-                                cur_persion.sex[3] = '\0';
-                                q = strstr((char*)&RxBuffer[0], "nianling");
-                                strncpy(cur_persion.age, q + 9, 2);
-                                cur_persion.age[2] = '\0';
-                                q = strstr((char*)&RxBuffer[0], "zhengduan");
-                                strncpy(cur_persion.judge, q + 10, 9);
-                                cur_persion.judge[9] = '\0';
-
-                                lv_label_set_text(ui_Labelname, cur_persion.name);
-                                lv_label_set_text(ui_Labelsex, cur_persion.sex);
-                                lv_label_set_text(ui_Labelage, cur_persion.age);
-                                lv_label_set_text(ui_Labeljudge, cur_persion.judge);
+                                Clear_Buffer();
+                                printf("AT+HMPUB=1,\"/test/M2M/aa\",8,\"faceid:%d\"\r\n",cur_persion.id+1);
+                                HAL_Delay(1000);
+                                strx = strstr((char*)&RxBuffer[0], "test/M2M/hh");
                             }
+                            
+                            // char* q = NULL;
+                            // q = strstr((char*)&RxBuffer[0], "xingming");
+                            // strncpy(cur_persion.name, q + 9, 9);
+                            // cur_persion.name[9] = '\0';
+                            // q = strstr((char*)&RxBuffer[0], "xingbie");
+                            // strncpy(cur_persion.sex, q + 8, 3);
+                            // cur_persion.sex[3] = '\0';
+                            // q = strstr((char*)&RxBuffer[0], "nianling");
+                            // strncpy(cur_persion.age, q + 9, 2);
+                            // cur_persion.age[2] = '\0';
+                            // q = strstr((char*)&RxBuffer[0], "zhengduan");
+                            // strncpy(cur_persion.judge, q + 10, 9);
+                            // cur_persion.judge[9] = '\0';
+
+                            parseAndGetValue((char*)&RxBuffer[0],"xingming",cur_persion.name);
+                            parseAndGetValue((char*)&RxBuffer[0],"xingbie",cur_persion.sex);
+                            parseAndGetValue((char*)&RxBuffer[0],"nianling",cur_persion.age);
+                            parseAndGetValue((char*)&RxBuffer[0],"zhengduan",cur_persion.judge);
+
+                            xSemaphoreTake(Sem_lvglHandle,portMAX_DELAY);
+                            snprintf(logStr,30,"连接成功");
+                            lv_label_set_text(ui_Label4, logStr);
+                            lv_label_set_text(ui_Labelname, cur_persion.name);
+                            lv_label_set_text(ui_Labelsex, cur_persion.sex);
+                            lv_label_set_text(ui_Labelage, cur_persion.age);
+                            lv_label_set_text(ui_Labeljudge, cur_persion.judge);
                             // void get data 
                             cnt_detected=0;
                             lv_label_set_text(ui_Label19, "继续");
@@ -515,7 +551,7 @@ void post_process()
                             // xSemaphoreGive(Sem_lvglHandle);
                             // 录入人脸
                            if (cur_persion.id > MAX_ID-1) {
-                               lv_label_set_text(ui_Label4,"ID太大");
+                               lv_label_set_text(ui_Label18,"ID太大");
                                xSemaphoreGive(Sem_lvglHandle);
                            }
                            else{
@@ -725,6 +761,7 @@ int main(void)
     
   max30102_init();
   SMBus_Init();
+  L610_test();
 	//max30102_test();
 //	while(1){
 //		 float temp = SMBus_ReadTemp();

@@ -220,7 +220,7 @@ void StartTask(void const * argument)
         my_ui_init();
         xSemaphoreGive(Sem_lvglHandle);
     }
-    L610_test();
+    
     osThreadResume(myTask_lvglHandle);
 		
     //vTaskDelay(1000);
