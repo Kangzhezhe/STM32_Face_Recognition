@@ -1,4 +1,8 @@
 AT+HMPUB=1,"/test/M2M/aa",8,"faceid:1"
++HMREC: "/test/M2M/hh",161,""xingming:丁柯逸,xingbie:男,nianling:21,zhengduan:多睡觉tiwen:36.7,xueyang:91,xinlv:120,time:7 12 18 54tiwen:37.2,xueyang:97,xinlv:120,time:7 12 19 17""
+
+
 +HMPUB OK
 
-1
+
++HMR
