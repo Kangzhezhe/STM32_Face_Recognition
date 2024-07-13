@@ -116,6 +116,20 @@ void ui_event_Switch3_update(lv_event_t * e)
     }
 }
 
+
+void ui_event_Button4(lv_event_t * e){
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        char name[1024];
+        lv_dropdown_get_selected_str(ui_Dropdown2,name,1024);
+        char std[1024];
+        snprintf(std,1024,"faceid:%d,yao:%s",cur_persion.id+1,name);
+        int length = strlen(std);
+        printf("AT+HMPUB=1,\"/test/M2M/aa\",%d,\"%s\"\r\n",length,std);
+    }
+}
+
 void my_ui_init(void){
     lv_label_set_text(ui_Label16, LV_SYMBOL_PLUS);
     lv_label_set_text(ui_Label15, LV_SYMBOL_MINUS);
@@ -164,4 +178,5 @@ void my_ui_init(void){
     lv_obj_add_event_cb(ui_Button7, ui_event_Button7, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Switch3, ui_event_Switch3_update, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Button3, ui_event_Button3, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_Button4, ui_event_Button4, LV_EVENT_ALL, NULL);
 }
