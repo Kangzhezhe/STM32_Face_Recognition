@@ -203,8 +203,10 @@ typedef struct
     char sex[16];
     char age[16];
     char judge[16];
-    u8* record;
+    char yijian[1024];
+    char yao[1024];
 }Persion;
+
 Persion cur_persion;
 
 #define MAX_FEATURE_SIZE 128*512
@@ -461,6 +463,8 @@ void update_info(void){
     parseAndGetValue(record,"xingbie",cur_persion.sex);
     parseAndGetValue(record,"nianling",cur_persion.age);
     parseAndGetValue(record,"zhengduan",cur_persion.judge);
+    parseAndGetValue(record,"yijian",cur_persion.yijian);
+    parseAndGetValue(record,"yao",cur_persion.yao);
 
     int row = 1;
     record = strtok(NULL, ";");
@@ -491,6 +495,26 @@ void update_info(void){
     lv_label_set_text(ui_Labelsex, cur_persion.sex);
     lv_label_set_text(ui_Labelage, cur_persion.age);
     lv_label_set_text(ui_Labeljudge, cur_persion.judge);
+    lv_textarea_set_text(ui_TextArea2, cur_persion.yijian);
+
+    logStr[0] = '\0';
+    record = strtok(cur_persion.yao, " ");
+    while (record != NULL&&record[0] != '\"') {
+        // char yao[20],freq[20];
+
+        // sscanf(record, "%d %d", &yao, &freq);
+				
+        strncat(logStr,record,strlen(record));
+        strncat(logStr,"\n",1);
+        record = strtok(NULL, " ");
+    }
+		
+		char *last_newline = strrchr(logStr, '\n');
+		if (last_newline != NULL) {
+				*last_newline = '\0';
+		}
+		
+    lv_dropdown_set_options(ui_Dropdown2, logStr);
 }
 
 void post_process()
