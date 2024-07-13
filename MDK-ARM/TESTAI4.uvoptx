@@ -152,9 +152,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>553</LineNumber>
+          <LineNumber>488</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134496826</Address>
+          <Address>134552284</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -163,14 +163,14 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>../Core/Src/main.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\TESTAI4\../Core/Src/main.c\553</Expression>
+          <Expression>\\TESTAI4\../Core/Src/main.c\488</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>448</LineNumber>
+          <LineNumber>444</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134352782</Address>
+          <Address>134551946</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -179,7 +179,7 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>../Core/Src/main.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\TESTAI4\../Core/Src/main.c\448</Expression>
+          <Expression>\\TESTAI4\../Core/Src/main.c\444</Expression>
         </Bp>
         <Bp>
           <Number>2</Number>
@@ -200,34 +200,18 @@
         <Bp>
           <Number>3</Number>
           <Type>0</Type>
-          <LineNumber>452</LineNumber>
+          <LineNumber>97</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134352814</Address>
+          <Address>134550276</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>../Core/Src/main.c</Filename>
+          <Filename>..\ui\my_ui.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\TESTAI4\../Core/Src/main.c\452</Expression>
-        </Bp>
-        <Bp>
-          <Number>4</Number>
-          <Type>0</Type>
-          <LineNumber>450</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134352802</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>../Core/Src/main.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\TESTAI4\../Core/Src/main.c\450</Expression>
+          <Expression>\\TESTAI4\../ui/my_ui.c\97</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -266,12 +250,22 @@
           <WinNumber>1</WinNumber>
           <ItemText>img_data</ItemText>
         </Ww>
+        <Ww>
+          <count>7</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>cur_persion</ItemText>
+        </Ww>
       </WatchWindow1>
       <WatchWindow2>
         <Ww>
           <count>0</count>
           <WinNumber>2</WinNumber>
           <ItemText>out_data1</ItemText>
+        </Ww>
+        <Ww>
+          <count>1</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>Rxcouter</ItemText>
         </Ww>
       </WatchWindow2>
       <MemoryWindow1>
@@ -4776,7 +4770,7 @@
 
   <Group>
     <GroupName>ui</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

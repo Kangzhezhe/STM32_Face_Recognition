@@ -429,9 +429,70 @@ void parseAndGetValue(char *buffer, char *keyword, char *result) {
     }
 }
 
-extern char RxBuffer[1024],Rxcouter;
+extern char RxBuffer[10240];
+extern int	Rxcouter;
 void Clear_Buffer(void);
 extern lv_obj_t* table;
+void update_info(void){
+    // TODO 从云端获取数�???
+    snprintf(logStr,30,"正在连接云端");
+    lv_label_set_text(ui_Label4, logStr);
+    xSemaphoreGive(Sem_lvglHandle);
+
+    Clear_Buffer();
+    //printf("AT+HMPUB=1,\"$oc/devices/6685084786799a26c45e16f9_L610/sys/properties/report\",59,\"{\\\"services\\\":[{\\\"service_id\\\":\\\"%d\\\",\\\"properties\\\":{\\\"faceid\\\":%d}}]}\"\r\n",cur_persion.id+1,cur_persion.id+1);
+    HAL_Delay(1000);
+    Clear_Buffer();
+    printf("AT+HMPUB=1,\"/test/M2M/aa\",8,\"faceid:%d\"\r\n",cur_persion.id+1);
+    HAL_Delay(1000);
+    strx = strstr((char*)&RxBuffer[0], "test/M2M/hh");
+    
+    while (strx==NULL)
+    {
+        Clear_Buffer();
+        printf("AT+HMPUB=1,\"/test/M2M/aa\",8,\"faceid:%d\"\r\n",cur_persion.id+1);
+        HAL_Delay(1000);
+        strx = strstr((char*)&RxBuffer[0], "test/M2M/hh");
+    }
+    xSemaphoreTake(Sem_lvglHandle,portMAX_DELAY);
+    
+    char *record = strtok(RxBuffer, ";");
+    parseAndGetValue(record,"xingming",cur_persion.name);
+    parseAndGetValue(record,"xingbie",cur_persion.sex);
+    parseAndGetValue(record,"nianling",cur_persion.age);
+    parseAndGetValue(record,"zhengduan",cur_persion.judge);
+
+    int row = 1;
+    record = strtok(NULL, ";");
+    while (record != NULL&&record[0] != '\"') {
+        char tiwen[10], xueyang[10], xinlv[10], time[20];
+        
+        parseAndGetValue(record, "tiwen", tiwen);
+        parseAndGetValue(record, "xueyang", xueyang);
+        parseAndGetValue(record, "xinlv", xinlv);
+        parseAndGetValue(record, "time", time);
+        
+        // 填充表格数据
+        int month, day, hour, minute;
+        sscanf(time, "%d %d %d %d", &month, &day, &hour, &minute);
+        
+        lv_table_set_cell_value_fmt(table, row, 0, "%d月%d日 %02d:%02d", month, day, hour, minute);
+        lv_table_set_cell_value_fmt(table, row, 1, "%s", tiwen);
+        lv_table_set_cell_value_fmt(table, row, 2, "%s", xinlv);
+        lv_table_set_cell_value_fmt(table, row, 3, "%s", xueyang);
+        
+        row++;
+        record = strtok(NULL, ";");
+    }
+
+    snprintf(logStr,30,"连接成功");
+    lv_label_set_text(ui_Label4, logStr);
+    lv_label_set_text(ui_Labelname, cur_persion.name);
+    lv_label_set_text(ui_Labelsex, cur_persion.sex);
+    lv_label_set_text(ui_Labelage, cur_persion.age);
+    lv_label_set_text(ui_Labeljudge, cur_persion.judge);
+}
+
 void post_process()
 {
 	int grid_x, grid_y;
@@ -488,69 +549,12 @@ void post_process()
                             lv_label_set_text(ui_Label18, logStr);
                             _ui_flag_modify(ui_Label18, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
                             
-
-                            // TODO 从云端获取数�???
-                            snprintf(logStr,30,"正在连接云端");
-                            lv_label_set_text(ui_Label4, logStr);
-                            xSemaphoreGive(Sem_lvglHandle);
-
-                            Clear_Buffer();
-                            printf("AT+HMPUB=1,\"$oc/devices/6685084786799a26c45e16f9_L610/sys/properties/report\",59,\"{\\\"services\\\":[{\\\"service_id\\\":\\\"%d\\\",\\\"properties\\\":{\\\"faceid\\\":%d}}]}\"\r\n",cur_persion.id+1,cur_persion.id+1);
-                            HAL_Delay(1000);
-                            Clear_Buffer();
-                            printf("AT+HMPUB=1,\"/test/M2M/aa\",8,\"faceid:%d\"\r\n",cur_persion.id+1);
-                            HAL_Delay(1000);
-                            strx = strstr((char*)&RxBuffer[0], "test/M2M/hh");
-                            
-                            while (strx==NULL)
-                            {
-                                Clear_Buffer();
-                                printf("AT+HMPUB=1,\"/test/M2M/aa\",8,\"faceid:%d\"\r\n",cur_persion.id+1);
-                                HAL_Delay(1000);
-                                strx = strstr((char*)&RxBuffer[0], "test/M2M/hh");
-                            }
-                            xSemaphoreTake(Sem_lvglHandle,portMAX_DELAY);
-                            
-                            char *record = strtok(RxBuffer, ";");
-                            parseAndGetValue(record,"xingming",cur_persion.name);
-                            parseAndGetValue(record,"xingbie",cur_persion.sex);
-                            parseAndGetValue(record,"nianling",cur_persion.age);
-                            parseAndGetValue(record,"zhengduan",cur_persion.judge);
-
-                            int row = 1;
-                            record = strtok(NULL, ";");
-                            while (record != NULL&&record[0] != '\"') {
-                                char tiwen[10], xueyang[10], xinlv[10], time[20];
-                                
-                                parseAndGetValue(record, "tiwen", tiwen);
-                                parseAndGetValue(record, "xueyang", xueyang);
-                                parseAndGetValue(record, "xinlv", xinlv);
-                                parseAndGetValue(record, "time", time);
-                                
-                                // 填充表格数据
-                                int month, day, hour, minute;
-                                sscanf(time, "%d %d %d %d", &month, &day, &hour, &minute);
-                                
-                                lv_table_set_cell_value_fmt(table, row, 0, "%d月%d日 %02d:%02d", month, day, hour, minute);
-                                lv_table_set_cell_value_fmt(table, row, 1, "%s", tiwen);
-                                lv_table_set_cell_value_fmt(table, row, 2, "%s", xinlv);
-                                lv_table_set_cell_value_fmt(table, row, 3, "%s", xueyang);
-                                
-                                row++;
-                                record = strtok(NULL, ";");
-                            }
-
-                            snprintf(logStr,30,"连接成功");
-                            lv_label_set_text(ui_Label4, logStr);
-                            lv_label_set_text(ui_Labelname, cur_persion.name);
-                            lv_label_set_text(ui_Labelsex, cur_persion.sex);
-                            lv_label_set_text(ui_Labelage, cur_persion.age);
-                            lv_label_set_text(ui_Labeljudge, cur_persion.judge);
-                            xSemaphoreGive(Sem_lvglHandle);
+                            update_info();
                             
                             // void get data 
                             cnt_detected=0;
                             lv_label_set_text(ui_Label19, "继续");
+                            xSemaphoreGive(Sem_lvglHandle);
                             vTaskSuspend(myTask_aiHandle);
                         }
                         else if(temp_state==2){

@@ -5,14 +5,14 @@
 
 
 char *strx,*extstrx,*Readystrx;
-char RxBuffer[10240],Rxcouter;
+char RxBuffer[10240];
+int	Rxcouter;
 
 uint8_t Res;
 
 void Clear_Buffer(void)
 {
-    uint8_t i;
-    for(i=0;i<Rxcouter;i++)
+    for(int i=0;i<Rxcouter;i++)
     RxBuffer[i]=0;
     Rxcouter=0;
 }

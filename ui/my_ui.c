@@ -65,7 +65,6 @@ void ui_event_Button7(lv_event_t * e){
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
-        // TODO 由ID号从云端获取个人信息
         cur_persion.id = lv_spinbox_get_value(ui_Spinbox5);
         lv_label_set_text(ui_Label17, "OK");
         snprintf(logStr1,30,"%d",cur_persion.id);
@@ -75,9 +74,11 @@ void ui_event_Button7(lv_event_t * e){
     }
 }
 
+#include "main.h"
 extern uint8_t cur_dis_hr;
 extern uint8_t cur_dis_spo2;
 extern float cur_temp;
+void update_info(void);
 void ui_event_Button3(lv_event_t * e){
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
@@ -92,6 +93,8 @@ void ui_event_Button3(lv_event_t * e){
 
         // printf("AT+HMPUB=1,\"/test/M2M/aa\",40,\"faceid:%d,tiwen:%2.1f,xueyang:%02d,xinlv:%03d\"\r\n",cur_persion.id+1,cur_temp,cur_dis_spo2,cur_dis_hr);
         // printf("AT+HMPUB=1,\"/test/M2M/aa\",40,\"faceid:1,tiwen:37.1,xueyang:12,xinlv:123\"\r\n");
+        HAL_Delay(1000);
+        update_info();
     }
 }
 

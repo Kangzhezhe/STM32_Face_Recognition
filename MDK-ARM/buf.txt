@@ -1,7 +1,5 @@
-ang:97,xinlv:103,time:7 12 20 44""
-
-
+AT+HMPUB=1,"/test/M2M/aa",8,"faceid:1"
 +HMPUB OK
 
 
-+HMREC: "/test/M2M/hh",206,""xingming:丁柯逸,xingbie:男,nianling:21,zhengduan:发烧tiwen:36.7,xueyang:91,xinlv:120,time:7 12 18 54;tiwen:37.2,xueyang:97,xinlv:120,time:7 12 19 17;tiwen:31.5,xuey
++HMREC: "/test/M2M/hh",206,""xingming:康哲豪,xingbie:男,nianling:21,zhengduan:发烧tiwen:36.8,xueyang:66,xinlv:111,time:7 13 14 15;tiwen:36.9,xueyang:88,xinlv:100,time:7 13 14 19;tiwen:32.8,xuey
