@@ -127,6 +127,8 @@ void ui_event_Button4(lv_event_t * e){
         snprintf(std,1024,"faceid:%d,yao:%s",cur_persion.id+1,name);
         int length = strlen(std);
         printf("AT+HMPUB=1,\"/test/M2M/aa\",%d,\"%s\"\r\n",length,std);
+        HAL_Delay(1000);
+        update_info();
     }
 }
 

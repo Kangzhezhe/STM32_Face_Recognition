@@ -435,6 +435,7 @@ extern char RxBuffer[10240];
 extern int	Rxcouter;
 void Clear_Buffer(void);
 extern lv_obj_t* table;
+extern lv_obj_t* table1;
 void update_info(void){
     // TODO 从云端获取数�???
     snprintf(logStr,30,"正在连接云端");
@@ -475,6 +476,10 @@ void update_info(void){
         parseAndGetValue(record, "xueyang", xueyang);
         parseAndGetValue(record, "xinlv", xinlv);
         parseAndGetValue(record, "time", time);
+
+        if (tiwen[0] == '\0' || xueyang[0] == '\0' || xinlv[0] == '\0') {
+            break;
+        }
         
         // 填充表格数据
         int month, day, hour, minute;
@@ -484,6 +489,28 @@ void update_info(void){
         lv_table_set_cell_value_fmt(table, row, 1, "%s", tiwen);
         lv_table_set_cell_value_fmt(table, row, 2, "%s", xinlv);
         lv_table_set_cell_value_fmt(table, row, 3, "%s", xueyang);
+        
+        row++;
+        record = strtok(NULL, ";");
+    }
+
+    row = 1;
+    //record = strtok(NULL, ";");
+    while (record != NULL&&record[0] != '\"') {
+        char yao[20], time[20];
+        
+        parseAndGetValue(record, "yao", yao);
+        parseAndGetValue(record, "time", time);
+
+        if (yao[0] == '\0') {
+            break;
+        }
+        // 填充表格数据
+        int month, day, hour, minute;
+        sscanf(time, "%d %d %d %d", &month, &day, &hour, &minute);
+        
+        lv_table_set_cell_value_fmt(table1, row, 0, "%d月%d日 %02d:%02d", month, day, hour, minute);
+        lv_table_set_cell_value_fmt(table1, row, 1, "%s", yao);
         
         row++;
         record = strtok(NULL, ";");
