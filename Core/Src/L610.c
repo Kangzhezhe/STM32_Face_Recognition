@@ -5,7 +5,7 @@
 
 
 char *strx,*extstrx,*Readystrx;
-char RxBuffer[200],Rxcouter;
+char RxBuffer[10240],Rxcouter;
 
 uint8_t Res;
 

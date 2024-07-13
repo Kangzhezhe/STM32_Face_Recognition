@@ -6,6 +6,7 @@ extern osThreadId myTask_aiHandle;
 lv_obj_t* table;
 lv_obj_t* table1;
 extern osThreadId myTask_measureHandle;
+
 void ui_event_Switch1_update(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -15,6 +16,7 @@ void ui_event_Switch1_update(lv_event_t * e)
         if (lv_obj_has_flag(table, LV_OBJ_FLAG_HIDDEN))
         {
             osThreadResume(myTask_measureHandle);
+            lv_label_set_text(ui_Label11, "确认");
         }else{
             osThreadSuspend(myTask_measureHandle);
         }
@@ -58,6 +60,7 @@ typedef struct
 extern Persion cur_persion;
 void set_state(uint8_t temp);
 static char logStr1[30];
+
 void ui_event_Button7(lv_event_t * e){
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);

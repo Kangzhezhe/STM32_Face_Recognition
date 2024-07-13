@@ -429,8 +429,9 @@ void parseAndGetValue(char *buffer, char *keyword, char *result) {
     }
 }
 
-extern char RxBuffer[200],Rxcouter;
+extern char RxBuffer[1024],Rxcouter;
 void Clear_Buffer(void);
+extern lv_obj_t* table;
 void post_process()
 {
 	int grid_x, grid_y;
@@ -508,37 +509,48 @@ void post_process()
                                 HAL_Delay(1000);
                                 strx = strstr((char*)&RxBuffer[0], "test/M2M/hh");
                             }
-                            
-                            // char* q = NULL;
-                            // q = strstr((char*)&RxBuffer[0], "xingming");
-                            // strncpy(cur_persion.name, q + 9, 9);
-                            // cur_persion.name[9] = '\0';
-                            // q = strstr((char*)&RxBuffer[0], "xingbie");
-                            // strncpy(cur_persion.sex, q + 8, 3);
-                            // cur_persion.sex[3] = '\0';
-                            // q = strstr((char*)&RxBuffer[0], "nianling");
-                            // strncpy(cur_persion.age, q + 9, 2);
-                            // cur_persion.age[2] = '\0';
-                            // q = strstr((char*)&RxBuffer[0], "zhengduan");
-                            // strncpy(cur_persion.judge, q + 10, 9);
-                            // cur_persion.judge[9] = '\0';
-
-                            parseAndGetValue((char*)&RxBuffer[0],"xingming",cur_persion.name);
-                            parseAndGetValue((char*)&RxBuffer[0],"xingbie",cur_persion.sex);
-                            parseAndGetValue((char*)&RxBuffer[0],"nianling",cur_persion.age);
-                            parseAndGetValue((char*)&RxBuffer[0],"zhengduan",cur_persion.judge);
-
                             xSemaphoreTake(Sem_lvglHandle,portMAX_DELAY);
+                            
+                            char *record = strtok(RxBuffer, ";");
+                            parseAndGetValue(record,"xingming",cur_persion.name);
+                            parseAndGetValue(record,"xingbie",cur_persion.sex);
+                            parseAndGetValue(record,"nianling",cur_persion.age);
+                            parseAndGetValue(record,"zhengduan",cur_persion.judge);
+
+                            int row = 1;
+                            record = strtok(NULL, ";");
+                            while (record != NULL&&record[0] != '\"') {
+                                char tiwen[10], xueyang[10], xinlv[10], time[20];
+                                
+                                parseAndGetValue(record, "tiwen", tiwen);
+                                parseAndGetValue(record, "xueyang", xueyang);
+                                parseAndGetValue(record, "xinlv", xinlv);
+                                parseAndGetValue(record, "time", time);
+                                
+                                // 填充表格数据
+                                int month, day, hour, minute;
+                                sscanf(time, "%d %d %d %d", &month, &day, &hour, &minute);
+                                
+                                lv_table_set_cell_value_fmt(table, row, 0, "%d月%d日 %02d:%02d", month, day, hour, minute);
+                                lv_table_set_cell_value_fmt(table, row, 1, "%s", tiwen);
+                                lv_table_set_cell_value_fmt(table, row, 2, "%s", xinlv);
+                                lv_table_set_cell_value_fmt(table, row, 3, "%s", xueyang);
+                                
+                                row++;
+                                record = strtok(NULL, ";");
+                            }
+
                             snprintf(logStr,30,"连接成功");
                             lv_label_set_text(ui_Label4, logStr);
                             lv_label_set_text(ui_Labelname, cur_persion.name);
                             lv_label_set_text(ui_Labelsex, cur_persion.sex);
                             lv_label_set_text(ui_Labelage, cur_persion.age);
                             lv_label_set_text(ui_Labeljudge, cur_persion.judge);
+                            xSemaphoreGive(Sem_lvglHandle);
+                            
                             // void get data 
                             cnt_detected=0;
                             lv_label_set_text(ui_Label19, "继续");
-                            xSemaphoreGive(Sem_lvglHandle);
                             vTaskSuspend(myTask_aiHandle);
                         }
                         else if(temp_state==2){
