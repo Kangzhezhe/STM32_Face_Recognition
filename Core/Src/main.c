@@ -544,35 +544,56 @@ void update_info(void){
     lv_dropdown_set_options(ui_Dropdown2, logStr);
 }
 
-void get_data_from_remote(){
+void get_data_from_remote() {
     Clear_Buffer();
-    Flash_Read(FLASH_USER_START_ADDR,(uint32_t*)features_buf,MAX_FEATURE_SIZE/4);
+    Flash_Read(FLASH_USER_START_ADDR, (uint32_t*)features_buf, MAX_FEATURE_SIZE / 4);
     HAL_Delay(1000);
-    strx = strstr((char*)&RxBuffer[0], "test/M2M/hh");
-    while (strx==NULL)
-    {
-        Clear_Buffer();
-        HAL_Delay(1000);
-        strx = strstr((char*)&RxBuffer[0], "test/M2M/hh");
-    }
+    
+    int packets_parsed = 0;
+    char *strx;
     char max_num_str[10];
     char num_id_str[10];
-    char *record = strtok(RxBuffer, ";");
-    parseAndGetValue(record,"num_id",num_id_str);
-    parseAndGetValue(record,"max_num",max_num_str);
-    int num_id=atoi(num_id_str);
-    int max_num=atoi(max_num_str);
-    char* ptr = (char*)get_feature_ptr(num_id);
-    // parseAndGetValue(record, "data", buf_common);
-    record = strstr(record, "data");
-    record = record+5;
-    record = strtok(record, " ");
-    int i = 0;
-    while (record != NULL&&record[0] != '\"'&&record[0] != ';') {
-        char data = atoi(record);
-        ptr[i] = data;
-        record = strtok(NULL, " ");
-        i++;
+    int num_id;
+    int max_num=65536;
+    while (packets_parsed < max_num) {
+        snprintf(logStr,1024,"record,pkg_id:%d",packets_parsed);  
+        printf("AT+HMPUB=1,\"/test/M2M/aa\",%d,\"%s\"\r\n",strlen(logStr),logStr);
+				Clear_Buffer();
+        HAL_Delay(1000);
+        strx = strstr((char*)&RxBuffer[0], "test/M2M/hh");
+        while (strx == NULL) {
+            snprintf(logStr,1024,"record,pkg_id:%d",packets_parsed);  
+            printf("AT+HMPUB=1,\"/test/M2M/aa\",%d,\"%s\"\r\n",strlen(logStr),logStr);
+            Clear_Buffer();
+            HAL_Delay(1000);
+            strx = strstr((char*)&RxBuffer[0], "test/M2M/hh");
+        }
+        
+        char *record = strtok(RxBuffer, ";");
+        parseAndGetValue(record, "num_id", num_id_str);
+        parseAndGetValue(record, "max_num", max_num_str);
+        num_id = atoi(num_id_str);
+        max_num = atoi(max_num_str);
+        char *ptr = (char*)get_feature_ptr(num_id);
+        
+        // Skip to "data"
+        record = strstr(record, "data");
+        record = record + 5; // Skip "data:"
+        record = strtok(record, ",");
+        
+        int i = 0;
+        while (record!=NULL&&i<128*4) {
+            char data = atoi(record);
+            ptr[i] = data;
+            record = strtok(NULL, ",");
+            i++;
+        }
+				
+        if(packets_parsed==num_id)
+					packets_parsed++;
+        
+        Clear_Buffer();
+        HAL_Delay(100);
     }
 }
 
