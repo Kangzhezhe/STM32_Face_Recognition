@@ -214,7 +214,7 @@ void StartTask(void const * argument)
         lv_init();
         lv_port_disp_init();
         lv_port_indev_init();
-        lv_example_get_started_1();
+        // lv_example_get_started_1();
         ui_init();
         lv_cam_canvas();
         my_ui_init();

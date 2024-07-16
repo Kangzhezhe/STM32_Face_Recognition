@@ -132,6 +132,15 @@ void ui_event_Button4(lv_event_t * e){
     }
 }
 
+extern void get_data_from_remote();
+void ui_event_Button2(lv_event_t * e){
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        get_data_from_remote();
+    }
+}
+
 void my_ui_init(void){
     lv_label_set_text(ui_Label16, LV_SYMBOL_PLUS);
     lv_label_set_text(ui_Label15, LV_SYMBOL_MINUS);
@@ -181,4 +190,5 @@ void my_ui_init(void){
     lv_obj_add_event_cb(ui_Switch3, ui_event_Switch3_update, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Button3, ui_event_Button3, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Button4, ui_event_Button4, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_Button2, ui_event_Button2, LV_EVENT_ALL, NULL);
 }
