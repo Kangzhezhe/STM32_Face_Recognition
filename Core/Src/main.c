@@ -467,6 +467,8 @@ void update_info(void){
     parseAndGetValue(record,"yijian",cur_persion.yijian);
     parseAndGetValue(record,"yao",cur_persion.yao);
 
+    lv_table_set_row_cnt(table, 1);
+    lv_table_set_row_cnt(table1, 1);
     int row = 1;
     record = strtok(NULL, ";");
     while (record != NULL&&record[0] != '\"') {
@@ -572,6 +574,7 @@ void get_data_from_remote() {
         char *record = strtok(RxBuffer, ";");
         parseAndGetValue(record, "num_id", num_id_str);
         parseAndGetValue(record, "max_num", max_num_str);
+				if(max_num_str[0]==NULL||num_id_str[0]==NULL) continue;
         num_id = atoi(num_id_str);
         max_num = atoi(max_num_str);
         char *ptr = (char*)get_feature_ptr(num_id);
@@ -595,6 +598,25 @@ void get_data_from_remote() {
         Clear_Buffer();
         HAL_Delay(100);
     }
+    memcpy(buf_common,features_buf,MAX_FEATURE_SIZE);
+    Flash_Erase_and_Write(FLASH_USER_START_ADDR,(uint32_t*)buf_common,MAX_FEATURE_SIZE/4);
+    //test flash
+    uint32_t MemoryProgramStatus = 0;
+    MemoryProgramStatus = 0;
+    u8*address=buf_common+MAX_FEATURE_SIZE;
+    Flash_Read(FLASH_USER_START_ADDR,(uint32_t*)address,MAX_FEATURE_SIZE/4);
+    for (int i = 0; i < MAX_FEATURE_SIZE; i++)
+    {
+        if (features_buf[i] != address[i])
+        {
+            MemoryProgramStatus++;
+        }
+    }
+    if(MemoryProgramStatus==0)
+        lv_label_set_text(ui_Label18, "录入成功!");
+    else 
+        lv_label_set_text(ui_Label18, "录入失败!");
+    _ui_flag_modify(ui_Label18, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
 }
 
 void post_process()
@@ -639,7 +661,7 @@ void post_process()
                             lv_label_set_text(ui_Labelname,logStr );
                             snprintf(logStr,30,"%d",max_index);
                             lv_label_set_text(ui_Labelid, logStr);
-                            if (score[max_index]<0.35||(score[max_index]-score[second_max_index])<0.25)
+                            if (score[max_index]<0.35||(score[max_index]-score[second_max_index])<0.12)
                             {
                                 snprintf(logStr,30,"置信度:%4.2f,再试一次",score[max_index]);
                                 lv_label_set_text(ui_Label18, logStr);
@@ -648,7 +670,7 @@ void post_process()
                                 cnt_detected=0;
                                 return;
                             }
-                           
+                            cur_persion.id = max_index;
                             snprintf(logStr,30,"置信度:%4.2f",score[max_index]);
                             lv_label_set_text(ui_Label18, logStr);
                             _ui_flag_modify(ui_Label18, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
@@ -679,9 +701,6 @@ void post_process()
                                     Flash_Read(FLASH_USER_START_ADDR,(uint32_t*)features_buf,MAX_FEATURE_SIZE/4);
                                     cur_persion.feature =get_feature_ptr(cur_persion.id);
                                     int32_t* cnt = get_cnt_ptr();
-                                    if(cur_persion.id>*cnt-1){
-                                        *cnt = cur_persion.id+1;
-                                    }     
                                     memcpy(cur_persion.feature+i_feature*128,out_data1,128);
                                     i_feature++;
                                     snprintf(logStr,30,"调整角度再来一次:%d/4",i_feature);
