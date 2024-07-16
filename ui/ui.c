@@ -56,19 +56,27 @@ lv_obj_t * ui_Container7update1;
 lv_obj_t * ui_Dropdown2;
 lv_obj_t * ui_Button4;
 lv_obj_t * ui_Label12;
+lv_obj_t * ui_Image4;
 lv_obj_t * ui_Container7;
-lv_obj_t * ui_TextArea5;
-lv_obj_t * ui_Spinbox5;
-lv_obj_t * ui_Label14;
-void ui_event_Button5(lv_event_t * e);
-lv_obj_t * ui_Button5;
-lv_obj_t * ui_Label16;
+void ui_event_Switch5(lv_event_t * e);
+lv_obj_t * ui_Switch5;
+lv_obj_t * ui_Label21;
+lv_obj_t * ui_Container11;
+lv_obj_t * ui_Button7;
+lv_obj_t * ui_Label17;
 void ui_event_Button6(lv_event_t * e);
 lv_obj_t * ui_Button6;
 lv_obj_t * ui_Label15;
-lv_obj_t * ui_Button7;
-lv_obj_t * ui_Label17;
-lv_obj_t * ui_Image4;
+void ui_event_Button5(lv_event_t * e);
+lv_obj_t * ui_Button5;
+lv_obj_t * ui_Label16;
+lv_obj_t * ui_Label14;
+lv_obj_t * ui_Spinbox5;
+lv_obj_t * ui_TextArea5;
+lv_obj_t * ui_Container12;
+lv_obj_t * ui_TextArea6;
+lv_obj_t * ui_Button2;
+lv_obj_t * ui_Label20;
 lv_obj_t * ui_Container8;
 lv_obj_t * ui_Container9;
 lv_obj_t * ui_Container10;
@@ -76,6 +84,7 @@ lv_obj_t * ui_Label18;
 lv_obj_t * ui_Button1;
 lv_obj_t * ui_Label19;
 lv_obj_t * ui____initial_actions0;
+//const lv_image_dsc_t * ui_imgset_[1] = {&ui_img_2_png};
 const lv_image_dsc_t * ui_imgset_backgroud[4] = {&ui_img_backgroud1_png, &ui_img_backgroud2_png, &ui_img_backgroud3_png, &ui_img_backgroud4_png};
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
@@ -116,12 +125,14 @@ void ui_event_Switch2(lv_event_t * e)
         _ui_flag_modify(ui_Container7update1, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_TOGGLE);
     }
 }
-void ui_event_Button5(lv_event_t * e)
+void ui_event_Switch5(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
-        _ui_spinbox_step(ui_Spinbox5, 1);
+        _ui_checked_set_text_value(ui_Label21, target, "远程录入", "本地录入");
+        _ui_flag_modify(ui_Container11, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_TOGGLE);
+        _ui_flag_modify(ui_Container12, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_TOGGLE);
     }
 }
 void ui_event_Button6(lv_event_t * e)
@@ -130,6 +141,14 @@ void ui_event_Button6(lv_event_t * e)
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
         _ui_spinbox_step(ui_Spinbox5, -1);
+    }
+}
+void ui_event_Button5(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        _ui_spinbox_step(ui_Spinbox5, 1);
     }
 }
 

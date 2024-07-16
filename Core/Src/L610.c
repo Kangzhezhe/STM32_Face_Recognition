@@ -54,8 +54,6 @@ void L610_test(void){
 	//printf("AT+HMPUB=1,\"/test/M2M/aa\",8,\"faceid:1\"\r\n");
 }
 
-
-
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) 
 { 
  UNUSED(huart); 
