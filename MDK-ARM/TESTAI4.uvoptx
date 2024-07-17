@@ -152,34 +152,34 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>593</LineNumber>
+          <LineNumber>286</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134352532</Address>
+          <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
+          <BreakIfRCount>0</BreakIfRCount>
           <Filename>../Core/Src/main.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\TESTAI4\../Core/Src/main.c\593</Expression>
+          <Expression></Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>617</LineNumber>
+          <LineNumber>594</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134352660</Address>
+          <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>../Core/Src/main.c</Filename>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>startup_stm32h753xx.s</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\TESTAI4\../Core/Src/main.c\617</Expression>
+          <Expression></Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -242,6 +242,31 @@
           <count>11</count>
           <WinNumber>1</WinNumber>
           <ItemText>data</ItemText>
+        </Ww>
+        <Ww>
+          <count>12</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>buf_1_1</ItemText>
+        </Ww>
+        <Ww>
+          <count>13</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>ucHeap</ItemText>
+        </Ww>
+        <Ww>
+          <count>14</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>temp</ItemText>
+        </Ww>
+        <Ww>
+          <count>15</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>img</ItemText>
+        </Ww>
+        <Ww>
+          <count>16</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>hsv_img</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>
@@ -328,7 +353,7 @@
 
   <Group>
     <GroupName>Application/MDK-ARM</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1188,7 +1213,7 @@
 
   <Group>
     <GroupName>GUI</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

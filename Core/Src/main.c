@@ -257,11 +257,16 @@ void prepare_yolo_data()
 // input :3 x 112 x 96   C:H:W
 
 // permute
-static int8_t* temp=(int8_t *)buf_common + AI_NETWORK_1_IN_1_SIZE;
+extern int hist[256];
+static uint8_t* temp=(uint8_t *)buf_common + AI_NETWORK_1_IN_1_SIZE;
+static u8* img=(u8 *)buf_common + AI_NETWORK_1_IN_1_SIZE + 236*167*3;
+static float* hsv_img=(float*)((u8 *)buf_common + AI_NETWORK_1_IN_1_SIZE + 236*167*3 + 112*96*3);
 void prepare_facenet_data(u8 x1, u8 y1, u8 x2, u8 y2)
 {
+    //s8 in_data1[112,96,3], u8 temp[h,w,3],u8 img[112,96,3], float hsv_img[112,96,3]
 	u8 h = y2-y1+1; //236
 	u8 w = x2-x1+1;	//167
+	
 	for(int i = 0; i < h; i++)
 	{
 		for(int j = 0; j < w; j++)
@@ -269,12 +274,22 @@ void prepare_facenet_data(u8 x1, u8 y1, u8 x2, u8 y2)
 			// u16 color=LCD_ReadPoint(j+x1,i+y1);
 			u16 color=img_data[(j+x1)+(i+y1)*256];
 			// img_data[j+i*256] = color;
-			temp[(i*w + j)*3] = (int8_t)((color&0xF800)>>8) - 128;
-			temp[(i*w + j)*3+1] = (int8_t)((color&0x07E0)>>3) - 128;
-			temp[(i*w + j)*3+2] = (int8_t)((color&0x001F)<<3) - 128;
+			temp[(i*w + j)*3] = (u8)((color&0xF800)>>8);
+			temp[(i*w + j)*3+1] = (u8)((color&0x07E0)>>3) ;
+			temp[(i*w + j)*3+2] = (u8)((color&0x001F)<<3) ;
+//			temp[(i*w + j)*3] = (color >> 11) & 0x1F;
+//      temp[(i*w + j)*3+1] = (color >> 5) & 0x3F;
+//      temp[(i*w + j)*3+2] = color & 0x1F;
 		}
 	}
-	cv_resize_s8(temp,h,w,in_data1,112,96);
+    cv_resize_u8(temp,h,w,img,112,96);
+    for (int i = 0; i < 256; i++)
+    {
+        hist[i] = 0;
+    }
+    cv_enhanceImageUsingHSV(img,112,96,hsv_img,img);
+    cv_U82S8(img,in_data1,112,96);
+	// cv_resize_s8(temp,h,w,in_data1,112,96);
 }
 #define N 4
 const int8_t database[N*128];
