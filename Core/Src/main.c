@@ -682,7 +682,7 @@ void post_process()
                                 if(last_person != max_index){
                                     last_person = max_index;
                                     last_person_cnt=0;
-                                }else if(score[max_index]-score[second_max_index]>0.03){
+                                }else {
                                     last_person_cnt++;
                                 }
                                 if((last_person_cnt<3))
