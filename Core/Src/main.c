@@ -446,14 +446,21 @@ void update_info(void){
     //printf("AT+HMPUB=1,\"$oc/devices/6685084786799a26c45e16f9_L610/sys/properties/report\",59,\"{\\\"services\\\":[{\\\"service_id\\\":\\\"%d\\\",\\\"properties\\\":{\\\"faceid\\\":%d}}]}\"\r\n",cur_persion.id+1,cur_persion.id+1);
     HAL_Delay(1000);
     Clear_Buffer();
-    printf("AT+HMPUB=1,\"/test/M2M/aa\",8,\"faceid:%d\"\r\n",cur_persion.id+1);
+    char std[1024];
+    snprintf(std,1024,"faceid:%d",cur_persion.id+1);
+    int length = strlen(std);
+    printf("AT+HMPUB=1,\"/test/M2M/aa\",%d,\"%s\"\r\n",length,std);
+    // printf("AT+HMPUB=1,\"/test/M2M/aa\",8,\"faceid:%d\"\r\n",cur_persion.id+1);
     HAL_Delay(1000);
     strx = strstr((char*)&RxBuffer[0], "test/M2M/hh");
     
     while (strx==NULL)
     {
         Clear_Buffer();
-        printf("AT+HMPUB=1,\"/test/M2M/aa\",8,\"faceid:%d\"\r\n",cur_persion.id+1);
+        // printf("AT+HMPUB=1,\"/test/M2M/aa\",8,\"faceid:%d\"\r\n",cur_persion.id+1);
+        snprintf(std,1024,"faceid:%d",cur_persion.id+1);
+        int length = strlen(std);
+        printf("AT+HMPUB=1,\"/test/M2M/aa\",%d,\"%s\"\r\n",length,std);
         HAL_Delay(1000);
         strx = strstr((char*)&RxBuffer[0], "test/M2M/hh");
     }
@@ -622,6 +629,8 @@ void get_data_from_remote() {
 void post_process()
 {
 	int grid_x, grid_y;
+    static int last_person = -1;
+    static int last_person_cnt = 0;
 	float x, y, w ,h;
     if(get_state() == 1){
         cnt_detected = 0;
@@ -635,7 +644,7 @@ void post_process()
             // sigmod((conf+15)*0.14218327403068542) < 0.7 ==> conf > -9
             snprintf(logStr,13,"conf = %3.2f",conf);
             // LCD_ShowString(10,350,200,16,16,(u8*)logStr);
-			if(conf > 2.8)
+			if(conf > 2.0)
 			{
                 lvgl_set_txt(ui_Label4, "识别到人脸");
                 cnt_detected++;
@@ -661,15 +670,28 @@ void post_process()
                             lv_label_set_text(ui_Labelname,logStr );
                             snprintf(logStr,30,"%d",max_index);
                             lv_label_set_text(ui_Labelid, logStr);
-                            if (score[max_index]<0.35||(score[max_index]-score[second_max_index])<0.12)
+                            snprintf(logStr,30,"%d",last_person_cnt);
+                            lv_label_set_text(ui_Labelsex, logStr);
+                            if ((score[max_index]<0.35||(score[max_index]-score[second_max_index])<0.18))
                             {
                                 snprintf(logStr,30,"置信度:%4.2f,再试一次",score[max_index]);
                                 lv_label_set_text(ui_Label18, logStr);
                                  _ui_flag_modify(ui_Label18, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
                                 xSemaphoreGive(Sem_lvglHandle);
                                 cnt_detected=0;
-                                return;
-                            }
+                                if(last_person != max_index){
+                                    last_person = max_index;
+                                    last_person_cnt=0;
+                                }else{
+                                    last_person_cnt++;
+                                }
+                                if((last_person_cnt<3))
+                                    return;
+                            }               
+                            last_person_cnt = 0;             
+                            last_person = -1;
+
+
                             cur_persion.id = max_index;
                             snprintf(logStr,30,"置信度:%4.2f",score[max_index]);
                             lv_label_set_text(ui_Label18, logStr);
