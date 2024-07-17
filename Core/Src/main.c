@@ -648,7 +648,7 @@ void post_process()
 			{
                 lvgl_set_txt(ui_Label4, "识别到人脸");
                 cnt_detected++;
-                if(cnt_detected == 5){
+                if(cnt_detected == 3){
                     prepare_facenet_data(50,10,216,245);
                     AI_Run1(in_data1,out_data1);
                     if(pdTRUE == xSemaphoreTake(Sem_lvglHandle,portMAX_DELAY))    
@@ -682,7 +682,7 @@ void post_process()
                                 if(last_person != max_index){
                                     last_person = max_index;
                                     last_person_cnt=0;
-                                }else{
+                                }else if(score[max_index]-score[second_max_index]>0.03){
                                     last_person_cnt++;
                                 }
                                 if((last_person_cnt<3))
