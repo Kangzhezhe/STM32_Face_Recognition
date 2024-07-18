@@ -75,7 +75,7 @@ typedef struct
 #define D2U_L2R  6 		//���µ���,������
 #define D2U_R2L  7		//���µ���,���ҵ���	 
 
-#define DFT_SCAN_DIR  L2R_U2D  //Ĭ�ϵ�ɨ�跽��
+#define DFT_SCAN_DIR  R2L_D2U  //Ĭ�ϵ�ɨ�跽��
 
 //������ɫ
 #define WHITE         	 0xFFFF
