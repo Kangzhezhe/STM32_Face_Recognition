@@ -489,6 +489,49 @@ void cv_enhanceImageUsingHSV(uint8_t *img, int height, int width,float *hsv_img,
     hsv2rgb_u8(hsv_img, height, width, img_out);
 }
 
+void findCDFThresholds(float *cdf, int *minGrayLevel, int *maxGrayLevel) {
+    for(int i = 0; i < 256; i++) {
+        if (cdf[i] >= 0.1) {
+            *minGrayLevel = i;
+            break;
+        }
+    }
+
+    for(int i = 255; i >= 0; i--) {
+        if (cdf[i] <= 0.9) {
+            *maxGrayLevel = i;
+            break;
+        }
+    }
+}
+
+void cv_lightEnhanceImageUsingHSV(uint8_t *img, int height, int width,float *hsv_img, uint8_t* img_out) {
+    rgb2hsv_u8(img, height, width, hsv_img);
+
+    // 步骤2: 计算直方图
+    for (int i = 0; i < height * width; i++) {
+        unsigned char v_value = (unsigned char)(hsv_img[i*3 + 2] * 255); // 提取V值并量化至0-255
+        hist[v_value]++;
+    }
+
+    // 步骤3: 计算累计分布函数
+    calculateCDF(hist, cdf, height * width);
+
+    int minGrayLevel = 0, maxGrayLevel = 0;
+    findCDFThresholds(cdf, &minGrayLevel, &maxGrayLevel);
+
+    // 步骤4: 应用直方图均衡
+    for (int i = 0; i < height * width; i++) {
+        unsigned char v_value = (unsigned char)(hsv_img[i*3 + 2] * 255);
+        if(v_value > maxGrayLevel) v_value = maxGrayLevel;
+        else if(v_value < minGrayLevel) v_value = minGrayLevel;
+        v_value = (v_value - minGrayLevel) * 255 / (maxGrayLevel - minGrayLevel);
+        unsigned char equalized_v = (unsigned char)(v_value);
+        hsv_img[i*3 + 2] = (float)equalized_v / 255.0; // 更新V值，转换回0.0-1.0范围
+    }
+
+    hsv2rgb_u8(hsv_img, height, width, img_out);
+}
 
 // int8到uint8的转换
 // void cv_S82U8(int8_t* src, uint8_t* dest, int height, int width) {

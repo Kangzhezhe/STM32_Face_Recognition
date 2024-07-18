@@ -287,7 +287,8 @@ void prepare_facenet_data(u8 x1, u8 y1, u8 x2, u8 y2)
     {
         hist[i] = 0;
     }
-    cv_enhanceImageUsingHSV(img,112,96,hsv_img,img);
+    // cv_enhanceImageUsingHSV(img,112,96,hsv_img,img);
+    cv_lightEnhanceImageUsingHSV(img,112,96,hsv_img,img);
     cv_U82S8(img,in_data1,112,96);
 	// cv_resize_s8(temp,h,w,in_data1,112,96);
 }
