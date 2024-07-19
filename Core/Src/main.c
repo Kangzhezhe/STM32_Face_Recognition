@@ -316,11 +316,12 @@ double cosine_similarity(int8_t* vec1, int8_t* vec2, int size) {
 }
 
 double score[MAX_ID];
+int max_num = 25;
 int post_process_facenet(int *second_max_index){
 	for(int i = 0;i<128;i++){
 		out_data1[i] += 10;
 	}
-    for (int i = 0; i < MAX_ID; i++)
+    for (int i = 0; i < max_num; i++)
     {
         // score[i] = cosine_similarity(out_data1, database + i * 128, 128);
         score[i]=0;
@@ -333,7 +334,7 @@ int post_process_facenet(int *second_max_index){
     }
 
     int max_index = 0;
-    for (int i = 1; i < MAX_ID; i++)
+    for (int i = 1; i < max_num; i++)
     {
         if (score[i] > score[max_index])
         {
