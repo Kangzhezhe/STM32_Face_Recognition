@@ -2,6 +2,7 @@
 #include "string.h"
 #include "FreeRTOS.h"
 #include "cmsis_os.h"
+#include <stdio.h>
 extern osThreadId myTask_aiHandle;
 lv_obj_t* table;
 lv_obj_t* table1;
@@ -74,6 +75,17 @@ void ui_event_Button7(lv_event_t * e){
     }
 }
 
+extern int max_num;
+void ui_event_Button8(lv_event_t * e){
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        max_num = lv_spinbox_get_value(ui_Spinbox5);
+        snprintf(logStr1, 30, "%d", max_num);
+        lv_label_set_text(ui_Labelid1, logStr1);
+    }
+}
+
 #include "main.h"
 extern uint8_t cur_dis_hr;
 extern uint8_t cur_dis_spo2;
@@ -104,10 +116,12 @@ void ui_event_Switch3_update(lv_event_t * e)
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_CLICKED) {
         if(lv_obj_has_flag(ui_TabView4, LV_OBJ_FLAG_HIDDEN)){
-            lv_label_set_text(ui_Label17, "确认");
+            lv_label_set_text(ui_Label17, "开始录入");
             vTaskSuspend(myTask_aiHandle);
             lv_label_set_text(ui_Label19, "继续");
             set_state(1);
+            snprintf(logStr1, 30, "%d", max_num);
+            lv_label_set_text(ui_Labelid1, logStr1);
         }else{
             vTaskResume(myTask_aiHandle);
             lv_label_set_text(ui_Label19, "暂停");
@@ -191,4 +205,5 @@ void my_ui_init(void){
     lv_obj_add_event_cb(ui_Button3, ui_event_Button3, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Button4, ui_event_Button4, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_Button2, ui_event_Button2, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_Button8, ui_event_Button8, LV_EVENT_ALL, NULL);
 }
