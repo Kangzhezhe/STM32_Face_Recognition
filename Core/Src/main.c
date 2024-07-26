@@ -47,6 +47,7 @@
 #include "ui.h"
 #include "L610.h"
 #include "flash.h"
+#include "stdlib.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -317,34 +318,129 @@ double cosine_similarity(int8_t* vec1, int8_t* vec2, int size) {
 
 double score[MAX_ID];
 int max_num = 25;
-int post_process_facenet(int *second_max_index){
-	for(int i = 0;i<128;i++){
-		out_data1[i] += 10;
-	}
-    for (int i = 0; i < max_num; i++)
-    {
-        // score[i] = cosine_similarity(out_data1, database + i * 128, 128);
-        score[i]=0;
-        u8* featrues = get_feature_ptr(i);
-        for (int j = 0; j < FEATURE_PER_PERSION; j++)
-        {
-            score[i] += cosine_similarity(out_data1, featrues + j * 128, 128);
+typedef struct {
+    int index;
+    double score;
+} IndexScore;
+
+int compareIndexScore(const void *a, const void *b) {
+    IndexScore *ia = (IndexScore *)a;
+    IndexScore *ib = (IndexScore *)b;
+    return (ib->score - ia->score > 0) - (ib->score - ia->score < 0);
+}
+// int post_process_facenet(int *second_max_index){
+// 	for(int i = 0;i<128;i++){
+// 		out_data1[i] += 10;
+// 	}
+//     for (int i = 0; i < max_num; i++)
+//     {
+//         // score[i] = cosine_similarity(out_data1, database + i * 128, 128);
+//         score[i]=0;
+//         u8* featrues = get_feature_ptr(i);
+//         for (int j = 0; j < FEATURE_PER_PERSION; j++)
+//         {
+//             score[i] += cosine_similarity(out_data1, featrues + j * 128, 128);
+//         }
+//         score[i]/=FEATURE_PER_PERSION;
+//     }
+
+//     int max_index = 0;
+//     for (int i = 1; i < max_num; i++)
+//     {
+//         if (score[i] > score[max_index])
+//         {
+//             *second_max_index = max_index;
+//             max_index = i;
+//         } else if (*second_max_index == -1 || score[i] > score[*second_max_index]) {
+//             *second_max_index = i;
+//         }
+//     }
+//     return max_index;
+// }
+
+// 冒泡排序函数
+void bubble_sort(IndexScore * scores, int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (scores[j].score < scores[j + 1].score) {
+                // 交换 scores
+                IndexScore temp_score = scores[j];
+                scores[j] = scores[j + 1];
+                scores[j + 1] = temp_score;
+            }
         }
-        score[i]/=FEATURE_PER_PERSION;
+    }
+}
+
+#define K 5
+static IndexScore *indexScores = (IndexScore*) buf_common ;
+int topKIndices[K];
+int voteCount[MAX_ID] = {0};
+int post_process_facenet(int *second_max_index) {
+    for (int i = 0; i < 128; i++) {
+        out_data1[i] += 10;
     }
 
-    int max_index = 0;
-    for (int i = 1; i < max_num; i++)
+    for (int i = 0; i < max_num; i++) {
+        score[i] = 0;
+        u8 *features = get_feature_ptr(i);
+        for (int j = 0; j < FEATURE_PER_PERSION; j++) {
+            indexScores[i*FEATURE_PER_PERSION+j].score = cosine_similarity(out_data1, features + j * 128, 128);
+            indexScores[i*FEATURE_PER_PERSION+j].index = i;
+            score[i] +=  indexScores[i*FEATURE_PER_PERSION+j].score ;
+        }
+        score[i] /= FEATURE_PER_PERSION;
+    }
+
+    // for (int i = 0; i < max_num; i++) {
+    //     indexScores[i].index = i;
+    //     indexScores[i].score = score[i];
+    // }
+
+    // qsort(indexScores, max_num, sizeof(IndexScore), compareIndexScore);
+    // bubble_sort(indexScores,max_num);
+    for (int i = 0; i < max_num *FEATURE_PER_PERSION- 1; i++) {
+        for (int j = 0; j < max_num *FEATURE_PER_PERSION- i - 1; j++) {
+            if (indexScores[j].score < indexScores[j + 1].score) {
+                IndexScore temp_score = indexScores[j];
+                indexScores[j] = indexScores[j + 1];
+                indexScores[j + 1] = temp_score;
+            }
+        }
+    }
+
+    for (int i = 0; i < K; i++) {
+        topKIndices[i] = indexScores[i].index;
+    }
+
+    for (int i = 0; i < MAX_ID; i++)
     {
-        if (score[i] > score[max_index])
-        {
-            *second_max_index = max_index;
-            max_index = i;
-        } else if (*second_max_index == -1 || score[i] > score[*second_max_index]) {
+        voteCount[i] = 0;
+    }
+    
+
+    for (int i = 0; i < K; i++) {
+        voteCount[topKIndices[i]]++;
+    }
+
+    int max_votes_index = 0;
+    for (int i = 1; i < max_num; i++) {
+        if (voteCount[i] > voteCount[max_votes_index]) {
+            max_votes_index = i;
+        }
+    }
+
+    *second_max_index = -1;
+    for (int i = 0; i < max_num; i++) {
+        if (i != max_votes_index && (*second_max_index == -1 || voteCount[i] > voteCount[*second_max_index])) {
             *second_max_index = i;
         }
     }
-    return max_index;
+    snprintf(logStr,30,"%d",voteCount[*second_max_index]);
+    lv_label_set_text(ui_Labeljudge,logStr );
+    snprintf(logStr,30,"%d",voteCount[max_votes_index]);
+    lv_label_set_text(ui_Labelage,logStr );
+    return max_votes_index;
 }
 
 u8 ram_ready = 0;
@@ -460,7 +556,7 @@ void update_info(void){
     xSemaphoreGive(Sem_lvglHandle);
 
     Clear_Buffer();
-    //printf("AT+HMPUB=1,\"$oc/devices/6685084786799a26c45e16f9_L610/sys/properties/report\",59,\"{\\\"services\\\":[{\\\"service_id\\\":\\\"%d\\\",\\\"properties\\\":{\\\"faceid\\\":%d}}]}\"\r\n",cur_persion.id+1,cur_persion.id+1);
+    // printf("AT+HMPUB=1,\"$oc/devices/6685084786799a26c45e16f9_L610/sys/properties/report\",59,\"{\\\"services\\\":[{\\\"service_id\\\":\\\"%d\\\",\\\"properties\\\":{\\\"faceid\\\":%d}}]}\"\r\n",cur_persion.id+1,cur_persion.id+1);
     HAL_Delay(1000);
     Clear_Buffer();
     char std[1024];
