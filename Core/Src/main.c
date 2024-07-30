@@ -52,18 +52,18 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-// 公共缓冲区
+// 公共缓冲�??
 AI_ALIGNED(32) ai_u8 buf_common[AI_NETWORK_1_DATA_ACTIVATIONS_SIZE]__attribute__((section(".RW_IRAM2")));
 
-// 激活层
+// �??活层
 const ai_handle activations[] = { buf_common };
 const ai_handle activations1[] = { buf_common };
 
-// 输入缓冲区
+// 输入缓冲�??
 static float*in_data=(float*)buf_common;
 static int8_t*in_data1=(int8_t*)buf_common;
 
-// 输出缓冲区
+// 输出缓冲�??
 AI_ALIGNED(32)
 static float out_data[AI_NETWORK_OUT_1_SIZE]__attribute__((section(".RW_IRAM2")));
 AI_ALIGNED(32) 
@@ -180,7 +180,7 @@ void MX_FREERTOS_Init(void);
 void post_process();
 
 
-// �������������������������???????
+// �������������������������?????????
 int x1, y1, x2, y2;
 // yoloface��anchor�ߴ�
 uint8_t anchors[3][2] = {{9, 14}, {12, 17}, {22, 21}};
@@ -317,7 +317,7 @@ double cosine_similarity(int8_t* vec1, int8_t* vec2, int size) {
 }
 
 double score[MAX_ID];
-int max_num = 25;
+int max_num = 20;
 typedef struct {
     int index;
     double score;
@@ -550,7 +550,7 @@ void Clear_Buffer(void);
 extern lv_obj_t* table;
 extern lv_obj_t* table1;
 void update_info(void){
-    // TODO 从云端获取数�???
+    // TODO 从云端获取数�?????
     snprintf(logStr,30,"正在连接云端");
     lv_label_set_text(ui_Label4, logStr);
     xSemaphoreGive(Sem_lvglHandle);
@@ -895,7 +895,7 @@ struct __FILE
 FILE __stdout;
 int fputc(int ch, FILE *f)
 {
-    HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);//����ʵ�������������???????
+    HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);//����ʵ�������������?????????
     return (ch);
 }
 
@@ -1022,7 +1022,7 @@ int main(void)
 	OV5640_Color_Saturation(3);//ɫ�ʱ��Ͷ�0
 	OV5640_Brightness(4);	//����0
 	OV5640_Contrast(3);		//�Աȶ�0
-	OV5640_Sharpness(33);	//�Զ����???????????
+	OV5640_Sharpness(33);	//�Զ����?????????????
 	OV5640_Focus_Constant();//���������Խ�
 //   LCD_Set_Window(0,0,256,400);
 	OV5640_OutSize_Set(16,4,256,256);

@@ -1,7 +1,7 @@
 {
     "_allocate_inputs": 4,
     "_allocate_outputs": 4,
-    "cli_parameters": "validate --name network -m D:/linux/yoloface-50k/tflite/yoloface.tflite --type tflite --compression none --verbosity 1 --workspace C:\\Users\\19178\\AppData\\Local\\Temp\\mxAI_workspace1301592724863005410710341670546898 --output C:\\Users\\19178\\.stm32cubemx\\network_output --allocate-inputs --allocate-outputs",
+    "cli_parameters": "generate --name network -m D:/linux/yoloface-50k/tflite/yoloface.tflite --type tflite --compression none --verbosity 1 --workspace C:\\Users\\19178\\AppData\\Local\\Temp\\mxAI_workspace2157270564705007329555091323720881 --output C:\\Users\\19178\\.stm32cubemx\\network_output --allocate-inputs --series stm32h7 --allocate-outputs",
     "cli_version": {
         "major": 1,
         "micro": 0,
@@ -13,10 +13,10 @@
         "factor": null,
         "layers": {}
     },
-    "date_time": "Mon Jul  8 22:07:34 2024",
+    "date_time": "Sun Jul 28 22:21:17 2024",
     "error": 0,
     "error_str": [],
-    "exec_cmd": "validate",
+    "exec_cmd": "generate",
     "exec_duration": 0.0,
     "hash": "68dd343f8c4694d2c81577d480b0e349",
     "inputs": [
@@ -1545,20 +1545,7 @@
         "micro": 0,
         "minor": 1
     },
-    "val_error": 2.799473008963105e-07,
-    "val_error_desc": "x-cross (l2r) #1",
-    "val_metrics": [
-        {
-            "acc": "n.a.",
-            "cos": 1.0,
-            "desc": "X-cross #1",
-            "l2r": 2.799473008963105e-07,
-            "mae": 7.674007633795554e-07,
-            "mean": -1.0353332413615135e-08,
-            "nse": 0.9999999999999212,
-            "rmse": 1.256002747140883e-06,
-            "std": 1.2560312825371511e-06,
-            "ts_name": "conv2d_47, ai_float, (1,7,7,18), m_id=[47]"
-        }
-    ]
+    "val_error": -1.0,
+    "val_error_desc": "None (None) #-1",
+    "val_metrics": []
 }

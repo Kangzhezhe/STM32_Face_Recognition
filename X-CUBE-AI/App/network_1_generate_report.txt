@@ -1,32 +1,32 @@
 Neural Network Tools for STM32 family v1.7.0 (stm.ai v8.1.0-19520)
-Created date          : 2024-07-07 14:08:56
-Parameters            : generate --name network_1 -m D:/linux/MobileFaceNet_Pytorch/model/mobilefacenet_int8.tflite --type tflite --compression none --verbosity 1 --workspace C:\Users\19178\AppData\Local\Temp\mxAI_workspace150758814142006219551046457487908 --output C:\Users\19178\.stm32cubemx\network_output --allocate-inputs --series stm32h7 --allocate-outputs
+Created date          : 2024-07-30 18:09:48
+Parameters            : generate --name network_1 -m D:/linux/MobileFaceNet_Pytorch/model/mobilefacenet_int8.tflite --type tflite --compression none --verbosity 1 --workspace C:\Users\19178\AppData\Local\Temp\mxAI_workspace2893152593580018104504544325998940 --output C:\Users\19178\.stm32cubemx\network_output --allocate-inputs --series stm32h7 --allocate-outputs
 
 Exec/report summary (generate)
------------------------------------------------------------------------------------------------------------
-model file         :   D:\linux\MobileFaceNet_Pytorch\model\mobilefacenet_int8.tflite                      
-type               :   tflite                                                                              
-c_name             :   network_1                                                                           
-compression        :   none                                                                                
-options            :   allocate-inputs, allocate-outputs                                                   
-optimization       :   balanced                                                                            
-target/series      :   stm32h7                                                                             
-workspace dir      :   C:\Users\19178\AppData\Local\Temp\mxAI_workspace150758814142006219551046457487908   
-output dir         :   C:\Users\19178\.stm32cubemx\network_output                                          
-model_fmt          :   sa/sa per tensor                                                                    
-model_name         :   mobilefacenet_int8                                                                  
-model_hash         :   e6432b76c75a87b29403ea7ed086b587                                                    
-params #           :   989,760 items (995.25 KiB)                                                          
------------------------------------------------------------------------------------------------------------
-input 1/1          :   'serving_default_input_10' (domain:activations/**default**)                         
-                   :   32256 items, 31.50 KiB, ai_i8, s=0.00781250, zp=-1, (1,112,96,3)                    
-output 1/1         :   'conv2d_98' (domain:activations/**default**)                                        
-                   :   128 items, 128 B, ai_i8, s=0.01379778, zp=-10, (1,1,1,128)                          
-macc               :   194,460,736                                                                         
-weights (ro)       :   1,019,136 B (995.25 KiB) (1 segment) / -2,939,904(-74.3%) vs float model            
-activations (rw)   :   380,416 B (371.50 KiB) (1 segment) *                                                
-ram (total)        :   380,416 B (371.50 KiB) = 380,416 + 0 + 0                                            
------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------
+model file         :   D:\linux\MobileFaceNet_Pytorch\model\mobilefacenet_int8.tflite                       
+type               :   tflite                                                                               
+c_name             :   network_1                                                                            
+compression        :   none                                                                                 
+options            :   allocate-inputs, allocate-outputs                                                    
+optimization       :   balanced                                                                             
+target/series      :   stm32h7                                                                              
+workspace dir      :   C:\Users\19178\AppData\Local\Temp\mxAI_workspace2893152593580018104504544325998940   
+output dir         :   C:\Users\19178\.stm32cubemx\network_output                                           
+model_fmt          :   sa/sa per tensor                                                                     
+model_name         :   mobilefacenet_int8                                                                   
+model_hash         :   d6f30a79a2f99597c6508db1f46aefce                                                     
+params #           :   989,760 items (995.25 KiB)                                                           
+------------------------------------------------------------------------------------------------------------
+input 1/1          :   'serving_default_input_10' (domain:activations/**default**)                          
+                   :   32256 items, 31.50 KiB, ai_i8, s=0.00781250, zp=-1, (1,112,96,3)                     
+output 1/1         :   'conv2d_98' (domain:activations/**default**)                                         
+                   :   128 items, 128 B, ai_i8, s=0.01527676, zp=11, (1,1,1,128)                            
+macc               :   194,460,736                                                                          
+weights (ro)       :   1,019,136 B (995.25 KiB) (1 segment) / -2,939,904(-74.3%) vs float model             
+activations (rw)   :   380,416 B (371.50 KiB) (1 segment) *                                                 
+ram (total)        :   380,416 B (371.50 KiB) = 380,416 + 0 + 0                                             
+------------------------------------------------------------------------------------------------------------
 (*) 'input'/'output' buffers can be used from the activations buffer
 
 Model name - mobilefacenet_int8 ['serving_default_input_10'] ['conv2d_98']
@@ -289,7 +289,7 @@ c_id   name (*_array)                    item/size       domain/mem-pool        
 20     conv2d_8_pad_before_output        371200/371200   activations/**default**   int8_t          sa8                      
 21     conv2d_8_output                   86016/86016     activations/**default**   int8_t          sa8                      
 22     conv2d_91_bias                    256/1024        weights/weights           const int32_t   ss32/ch(256)             
-23     conv2d_10_output                  43008/43008     activations/**default**   int8_t          sa8                      
+23     conv2d_10_output                  43008/43008     activations/**default**   int8_t          ss8                      
 24     conv2d_91_alpha                   256/256         weights/weights           const int8_t    ss8                      
 25     conv2d_11_output                  86016/86016     activations/**default**   int8_t          sa8                      
 26     conv2d_13_pad_before_output       99840/99840     activations/**default**   int8_t          sa8                      
@@ -333,7 +333,7 @@ c_id   name (*_array)                    item/size       domain/mem-pool        
 64     conv2d_43_output                  43008/43008     activations/**default**   int8_t          sa8                      
 65     conv2d_5_scratch0                 1536/1536       activations/**default**   int8_t          s8                       
 66     conv2d_45_output                  21504/21504     activations/**default**   int8_t          sa8                      
-67     eltwise_46_output                 21504/21504     activations/**default**   int8_t          ss8                      
+67     eltwise_46_output                 21504/21504     activations/**default**   int8_t          sa8                      
 68     conv2d_5_scratch1                 344064/344064   activations/**default**   int8_t          sa8                      
 69     conv2d_47_output                  43008/43008     activations/**default**   int8_t          sa8                      
 70     conv2d_49_pad_before_output       57344/57344     activations/**default**   int8_t          sa8                      
@@ -1041,86 +1041,86 @@ Number of operations per c-layer
 c_id    m_id   name (type)                                  #op         type    #param   sparsity 
 ------- ------ ---------------------------------- ------------- ------------ --------- ---------- 
 0       0      pad_0 (pad)                                    0   smul_s8_s8           
-1       2      conv2d_1 (conv2d)                      4,988,992   smul_s8_s8     1,856     0.0075 
+1       2      conv2d_1 (conv2d)                      4,988,992   smul_s8_s8     1,856     0.0065 
 2       4      conv2d_3_pad_before (pad)                      0   smul_s8_s8           
 3       4      conv2d_3 (conv2d)                      1,892,416   smul_s8_s8       704     0.0114 
-4       6      conv2d_5 (conv2d)                     22,708,352   smul_s8_s8     8,448     0.0230 
+4       6      conv2d_5 (conv2d)                     22,708,352   smul_s8_s8     8,448     0.0228 
 5       9      conv2d_8_pad_before (pad)                      0   smul_s8_s8           
-6       7      conv2d_8 (conv2d)                        946,304   smul_s8_s8     1,408     0.0021 
-7       10     conv2d_10 (conv2d)                     5,505,088   smul_s8_s8     8,256     0.0102 
-8       12     conv2d_11 (conv2d)                     5,677,184   smul_s8_s8     8,448     0.0058 
+6       7      conv2d_8 (conv2d)                        946,304   smul_s8_s8     1,408     0.0028 
+7       10     conv2d_10 (conv2d)                     5,505,088   smul_s8_s8     8,256     0.0079 
+8       12     conv2d_11 (conv2d)                     5,677,184   smul_s8_s8     8,448     0.0072 
 9       14     conv2d_13_pad_before (pad)                     0   smul_s8_s8           
-10      14     conv2d_13 (conv2d)                       946,304   smul_s8_s8     1,408     0.0043 
-11      15     conv2d_15 (conv2d)                     5,505,088   smul_s8_s8     8,256     0.0097 
+10      14     conv2d_13 (conv2d)                       946,304   smul_s8_s8     1,408     0.0036 
+11      15     conv2d_15 (conv2d)                     5,505,088   smul_s8_s8     8,256     0.0091 
 12      16     eltwise_16 (eltwise_integer/sum)          43,008     op_s8_s8           
-13      18     conv2d_17 (conv2d)                     5,677,184   smul_s8_s8     8,448     0.0095 
+13      18     conv2d_17 (conv2d)                     5,677,184   smul_s8_s8     8,448     0.0090 
 14      20     conv2d_19_pad_before (pad)                     0   smul_s8_s8           
-15      20     conv2d_19 (conv2d)                       946,304   smul_s8_s8     1,408     0.0043 
-16      21     conv2d_21 (conv2d)                     5,505,088   smul_s8_s8     8,256     0.0092 
+15      20     conv2d_19 (conv2d)                       946,304   smul_s8_s8     1,408     0.0071 
+16      21     conv2d_21 (conv2d)                     5,505,088   smul_s8_s8     8,256     0.0104 
 17      22     eltwise_22 (eltwise_integer/sum)          43,008     op_s8_s8           
-18      24     conv2d_23 (conv2d)                     5,677,184   smul_s8_s8     8,448     0.0108 
+18      24     conv2d_23 (conv2d)                     5,677,184   smul_s8_s8     8,448     0.0099 
 19      26     conv2d_25_pad_before (pad)                     0   smul_s8_s8           
-20      26     conv2d_25 (conv2d)                       946,304   smul_s8_s8     1,408     0.0071 
-21      27     conv2d_27 (conv2d)                     5,505,088   smul_s8_s8     8,256     0.0091 
+20      26     conv2d_25 (conv2d)                       946,304   smul_s8_s8     1,408     0.0092 
+21      27     conv2d_27 (conv2d)                     5,505,088   smul_s8_s8     8,256     0.0098 
 22      28     eltwise_28 (eltwise_integer/sum)          43,008     op_s8_s8           
-23      30     conv2d_29 (conv2d)                     5,677,184   smul_s8_s8     8,448     0.0117 
+23      30     conv2d_29 (conv2d)                     5,677,184   smul_s8_s8     8,448     0.0116 
 24      32     conv2d_31_pad_before (pad)                     0   smul_s8_s8           
-25      32     conv2d_31 (conv2d)                       946,304   smul_s8_s8     1,408     0.0099 
-26      33     conv2d_33 (conv2d)                     5,505,088   smul_s8_s8     8,256     0.0093 
+25      32     conv2d_31 (conv2d)                       946,304   smul_s8_s8     1,408     0.0085 
+26      33     conv2d_33 (conv2d)                     5,505,088   smul_s8_s8     8,256     0.0099 
 27      34     eltwise_34 (eltwise_integer/sum)          43,008     op_s8_s8           
-28      36     conv2d_35 (conv2d)                    11,354,368   smul_s8_s8    16,896     0.0108 
+28      36     conv2d_35 (conv2d)                    11,354,368   smul_s8_s8    16,896     0.0103 
 29      39     conv2d_38_pad_before (pad)                     0   smul_s8_s8           
-30      37     conv2d_38 (conv2d)                       473,344   smul_s8_s8     2,816     0.0011 
-31      40     conv2d_40 (conv2d)                     5,505,152   smul_s8_s8    32,896     0.0100 
-32      42     conv2d_41 (conv2d)                     5,591,296   smul_s8_s8    33,280     0.0095 
+30      37     conv2d_38 (conv2d)                       473,344   smul_s8_s8     2,816     0.0025 
+31      40     conv2d_40 (conv2d)                     5,505,152   smul_s8_s8    32,896     0.0099 
+32      42     conv2d_41 (conv2d)                     5,591,296   smul_s8_s8    33,280     0.0087 
 33      44     conv2d_43_pad_before (pad)                     0   smul_s8_s8           
-34      44     conv2d_43 (conv2d)                       473,344   smul_s8_s8     2,816     0.0067 
+34      44     conv2d_43 (conv2d)                       473,344   smul_s8_s8     2,816     0.0057 
 35      45     conv2d_45 (conv2d)                     5,505,152   smul_s8_s8    32,896     0.0102 
 36      46     eltwise_46 (eltwise_integer/sum)          21,504     op_s8_s8           
-37      48     conv2d_47 (conv2d)                     5,591,296   smul_s8_s8    33,280     0.0087 
+37      48     conv2d_47 (conv2d)                     5,591,296   smul_s8_s8    33,280     0.0090 
 38      50     conv2d_49_pad_before (pad)                     0   smul_s8_s8           
-39      50     conv2d_49 (conv2d)                       473,344   smul_s8_s8     2,816     0.0067 
-40      51     conv2d_51 (conv2d)                     5,505,152   smul_s8_s8    32,896     0.0101 
+39      50     conv2d_49 (conv2d)                       473,344   smul_s8_s8     2,816     0.0078 
+40      51     conv2d_51 (conv2d)                     5,505,152   smul_s8_s8    32,896     0.0097 
 41      52     eltwise_52 (eltwise_integer/sum)          21,504     op_s8_s8           
-42      54     conv2d_53 (conv2d)                     5,591,296   smul_s8_s8    33,280     0.0098 
+42      54     conv2d_53 (conv2d)                     5,591,296   smul_s8_s8    33,280     0.0096 
 43      56     conv2d_55_pad_before (pad)                     0   smul_s8_s8           
-44      56     conv2d_55 (conv2d)                       473,344   smul_s8_s8     2,816     0.0075 
-45      57     conv2d_57 (conv2d)                     5,505,152   smul_s8_s8    32,896     0.0097 
+44      56     conv2d_55 (conv2d)                       473,344   smul_s8_s8     2,816     0.0078 
+45      57     conv2d_57 (conv2d)                     5,505,152   smul_s8_s8    32,896     0.0096 
 46      58     eltwise_58 (eltwise_integer/sum)          21,504     op_s8_s8           
-47      60     conv2d_59 (conv2d)                     5,591,296   smul_s8_s8    33,280     0.0090 
+47      60     conv2d_59 (conv2d)                     5,591,296   smul_s8_s8    33,280     0.0087 
 48      62     conv2d_61_pad_before (pad)                     0   smul_s8_s8           
-49      62     conv2d_61 (conv2d)                       473,344   smul_s8_s8     2,816     0.0057 
-50      63     conv2d_63 (conv2d)                     5,505,152   smul_s8_s8    32,896     0.0099 
+49      62     conv2d_61 (conv2d)                       473,344   smul_s8_s8     2,816     0.0053 
+50      63     conv2d_63 (conv2d)                     5,505,152   smul_s8_s8    32,896     0.0098 
 51      64     eltwise_64 (eltwise_integer/sum)          21,504     op_s8_s8           
 52      66     conv2d_65 (conv2d)                     5,591,296   smul_s8_s8    33,280     0.0085 
 53      68     conv2d_67_pad_before (pad)                     0   smul_s8_s8           
-54      68     conv2d_67 (conv2d)                       473,344   smul_s8_s8     2,816     0.0060 
-55      69     conv2d_69 (conv2d)                     5,505,152   smul_s8_s8    32,896     0.0100 
+54      68     conv2d_67 (conv2d)                       473,344   smul_s8_s8     2,816     0.0071 
+55      69     conv2d_69 (conv2d)                     5,505,152   smul_s8_s8    32,896     0.0101 
 56      70     eltwise_70 (eltwise_integer/sum)          21,504     op_s8_s8           
-57      72     conv2d_71 (conv2d)                     5,591,296   smul_s8_s8    33,280     0.0098 
+57      72     conv2d_71 (conv2d)                     5,591,296   smul_s8_s8    33,280     0.0088 
 58      74     conv2d_73_pad_before (pad)                     0   smul_s8_s8           
-59      74     conv2d_73 (conv2d)                       473,344   smul_s8_s8     2,816     0.0075 
-60      75     conv2d_75 (conv2d)                     5,505,152   smul_s8_s8    32,896     0.0100 
+59      74     conv2d_73 (conv2d)                       473,344   smul_s8_s8     2,816     0.0067 
+60      75     conv2d_75 (conv2d)                     5,505,152   smul_s8_s8    32,896     0.0098 
 61      76     eltwise_76 (eltwise_integer/sum)          21,504     op_s8_s8           
-62      78     conv2d_77 (conv2d)                    11,182,592   smul_s8_s8    66,560     0.0086 
+62      78     conv2d_77 (conv2d)                    11,182,592   smul_s8_s8    66,560     0.0088 
 63      81     conv2d_80_pad_before (pad)                     0   smul_s8_s8           
-64      79     conv2d_80 (conv2d)                       237,056   smul_s8_s8     5,632     0.0043 
-65      82     conv2d_82 (conv2d)                     2,752,640   smul_s8_s8    65,664     0.0108 
-66      84     conv2d_83 (conv2d)                     1,398,016   smul_s8_s8    33,280     0.0083 
+64      79     conv2d_80 (conv2d)                       237,056   smul_s8_s8     5,632     0.0028 
+65      82     conv2d_82 (conv2d)                     2,752,640   smul_s8_s8    65,664     0.0111 
+66      84     conv2d_83 (conv2d)                     1,398,016   smul_s8_s8    33,280     0.0081 
 67      86     conv2d_85_pad_before (pad)                     0   smul_s8_s8           
-68      86     conv2d_85 (conv2d)                       118,528   smul_s8_s8     2,816     0.0071 
-69      87     conv2d_87 (conv2d)                     1,376,384   smul_s8_s8    32,896     0.0109 
+68      86     conv2d_85 (conv2d)                       118,528   smul_s8_s8     2,816     0.0067 
+69      87     conv2d_87 (conv2d)                     1,376,384   smul_s8_s8    32,896     0.0115 
 70      88     eltwise_88 (eltwise_integer/sum)           5,376     op_s8_s8           
-71      90     conv2d_89 (conv2d)                     1,398,016   smul_s8_s8    33,280     0.0092 
+71      90     conv2d_89 (conv2d)                     1,398,016   smul_s8_s8    33,280     0.0087 
 72      92     conv2d_91_pad_before (pad)                     0   smul_s8_s8           
-73      92     conv2d_91 (conv2d)                       118,528   smul_s8_s8     2,816     0.0075 
-74      93     conv2d_93 (conv2d)                     1,376,384   smul_s8_s8    32,896     0.0104 
+73      92     conv2d_91 (conv2d)                       118,528   smul_s8_s8     2,816     0.0050 
+74      93     conv2d_93 (conv2d)                     1,376,384   smul_s8_s8    32,896     0.0102 
 75      94     eltwise_94 (eltwise_integer/sum)           5,376     op_s8_s8           
-76      96     conv2d_95 (conv2d)                     2,796,032   smul_s8_s8    66,560     0.0083 
-77      97     conv2d_97 (conv2d)                        22,016   smul_s8_s8    22,016     0.0291 
-78      98     conv2d_98 (conv2d)                        65,664   smul_s8_s8    65,664     0.0119 
+76      96     conv2d_95 (conv2d)                     2,796,032   smul_s8_s8    66,560     0.0089 
+77      97     conv2d_97 (conv2d)                        22,016   smul_s8_s8    22,016     0.0305 
+78      98     conv2d_98 (conv2d)                        65,664   smul_s8_s8    65,664     0.0112 
 ------- ------ ---------------------------------- ------------- ------------ --------- ---------- 
-total                                               194,460,736                989,760     0.0101 
+total                                               194,460,736                989,760     0.0100 
 
 Number of operation types
 ---------------- ------------- ----------- 
