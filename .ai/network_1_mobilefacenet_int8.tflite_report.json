@@ -1,7 +1,7 @@
 {
     "_allocate_inputs": 4,
     "_allocate_outputs": 4,
-    "cli_parameters": "generate --name network_1 -m D:/linux/MobileFaceNet_Pytorch/model/mobilefacenet_int8.tflite --type tflite --compression none --verbosity 1 --workspace C:\\Users\\19178\\AppData\\Local\\Temp\\mxAI_workspace156416154600010703191183369622820 --output C:\\Users\\19178\\.stm32cubemx\\network_output --allocate-inputs --series stm32h7 --allocate-outputs",
+    "cli_parameters": "generate --name network_1 -m D:/linux/MobileFaceNet_Pytorch/model/mobilefacenet_int8.tflite --type tflite --compression none --verbosity 1 --workspace C:\\Users\\19178\\AppData\\Local\\Temp\\mxAI_workspace4257176426570014348342250357515563 --output C:\\Users\\19178\\.stm32cubemx\\network_output --allocate-inputs --series stm32h7 --allocate-outputs",
     "cli_version": {
         "major": 1,
         "micro": 0,
@@ -13,14 +13,14 @@
         "factor": null,
         "layers": {}
     },
-    "date_time": "Wed Jul 31 10:36:39 2024",
+    "date_time": "Wed Jul 31 22:00:03 2024",
     "error": 0,
     "error_str": [],
     "exec_cmd": "generate",
     "exec_duration": 0.0,
-    "hash": "51ca94988b1dd64c340a6f2c787417e9",
+    "hash": "65ade14314a63b18db5601d757ec9fb3",
     "inputs": [
-        "serving_default_input_10"
+        "serving_default_input_30"
     ],
     "layers": [
         {
@@ -47,7 +47,7 @@
             },
             "id": 0,
             "inputs": [],
-            "name": "serving_default_input_10",
+            "name": "serving_default_input_30",
             "original": "",
             "type": "Input"
         },
@@ -73,7 +73,7 @@
             },
             "id": 0,
             "inputs": [
-                "serving_default_input_10"
+                "serving_default_input_30"
             ],
             "name": "pad_0",
             "original": "PAD",
@@ -2589,7 +2589,7 @@
         {
             "c_size": 32256,
             "c_type": "int8_t",
-            "name": "serving_default_input_10"
+            "name": "serving_default_input_30"
         }
     ],
     "rom_n_macc": 194460736,

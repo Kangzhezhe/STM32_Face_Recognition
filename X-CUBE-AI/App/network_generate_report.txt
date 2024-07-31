@@ -1,6 +1,6 @@
 Neural Network Tools for STM32 family v1.7.0 (stm.ai v8.1.0-19520)
-Created date          : 2024-07-31 10:36:23
-Parameters            : generate --name network -m D:/linux/yoloface-50k/tflite/yoloface.tflite --type tflite --compression none --verbosity 1 --workspace C:\Users\19178\AppData\Local\Temp\mxAI_workspace15511619786005792548046673784576 --output C:\Users\19178\.stm32cubemx\network_output --allocate-inputs --series stm32h7 --allocate-outputs
+Created date          : 2024-07-31 21:59:47
+Parameters            : generate --name network -m D:/linux/yoloface-50k/tflite/yoloface.tflite --type tflite --compression none --verbosity 1 --workspace C:\Users\19178\AppData\Local\Temp\mxAI_workspace42559438486900647478725422729352 --output C:\Users\19178\.stm32cubemx\network_output --allocate-inputs --series stm32h7 --allocate-outputs
 
 Exec/report summary (generate)
 ----------------------------------------------------------------------------------------------------------
@@ -11,7 +11,7 @@ compression        :   none
 options            :   allocate-inputs, allocate-outputs                                                  
 optimization       :   balanced                                                                           
 target/series      :   stm32h7                                                                            
-workspace dir      :   C:\Users\19178\AppData\Local\Temp\mxAI_workspace15511619786005792548046673784576   
+workspace dir      :   C:\Users\19178\AppData\Local\Temp\mxAI_workspace42559438486900647478725422729352   
 output dir         :   C:\Users\19178\.stm32cubemx\network_output                                         
 model_fmt          :   float                                                                              
 model_name         :   yoloface                                                                           
