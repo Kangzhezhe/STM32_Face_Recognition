@@ -560,7 +560,7 @@ void update_info(void){
     HAL_Delay(1000);
     Clear_Buffer();
     char std[1024];
-    snprintf(std,1024,"faceid:%d",cur_persion.id+1);
+    snprintf(std,1024,"faceid:%d",cur_persion.id);
     int length = strlen(std);
     printf("AT+HMPUB=1,\"/test/M2M/aa\",%d,\"%s\"\r\n",length,std);
     // printf("AT+HMPUB=1,\"/test/M2M/aa\",8,\"faceid:%d\"\r\n",cur_persion.id+1);
@@ -571,7 +571,7 @@ void update_info(void){
     {
         Clear_Buffer();
         // printf("AT+HMPUB=1,\"/test/M2M/aa\",8,\"faceid:%d\"\r\n",cur_persion.id+1);
-        snprintf(std,1024,"faceid:%d",cur_persion.id+1);
+        snprintf(std,1024,"faceid:%d",cur_persion.id);
         int length = strlen(std);
         printf("AT+HMPUB=1,\"/test/M2M/aa\",%d,\"%s\"\r\n",length,std);
         HAL_Delay(1000);

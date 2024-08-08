@@ -98,12 +98,12 @@ void ui_event_Button3(lv_event_t * e){
         lv_label_set_text(ui_Label11, "OK");
         osThreadSuspend(myTask_measureHandle);
         char std[100];
-        snprintf(std,100,"faceid:%d,tiwen:%2.1f,xueyang:%02d,xinlv:%03d",cur_persion.id+1,cur_temp,cur_dis_spo2,cur_dis_hr);
+        snprintf(std,100,"faceid:%d,tiwen:%2.1f,xueyang:%02d,xinlv:%03d",cur_persion.id,cur_temp,cur_dis_spo2,cur_dis_hr);
         int length = strlen(std);
 
         printf("AT+HMPUB=1,\"/test/M2M/aa\",%d,\"%s\"\r\n",length,std);
 
-        // printf("AT+HMPUB=1,\"/test/M2M/aa\",40,\"faceid:%d,tiwen:%2.1f,xueyang:%02d,xinlv:%03d\"\r\n",cur_persion.id+1,cur_temp,cur_dis_spo2,cur_dis_hr);
+        // printf("AT+HMPUB=1,\"/test/M2M/aa\",40,\"faceid:%d,tiwen:%2.1f,xueyang:%02d,xinlv:%03d\"\r\n",cur_persion.id,cur_temp,cur_dis_spo2,cur_dis_hr);
         // printf("AT+HMPUB=1,\"/test/M2M/aa\",40,\"faceid:1,tiwen:37.1,xueyang:12,xinlv:123\"\r\n");
         HAL_Delay(1000);
         update_info();
@@ -138,7 +138,7 @@ void ui_event_Button4(lv_event_t * e){
         char name[1024];
         lv_dropdown_get_selected_str(ui_Dropdown2,name,1024);
         char std[1024];
-        snprintf(std,1024,"faceid:%d,yao:%s",cur_persion.id+1,name);
+        snprintf(std,1024,"faceid:%d,yao:%s",cur_persion.id,name);
         int length = strlen(std);
         printf("AT+HMPUB=1,\"/test/M2M/aa\",%d,\"%s\"\r\n",length,std);
         HAL_Delay(1000);
